@@ -16,7 +16,7 @@ Introduction
 
 This high level library provides objects that represent CircuitPlayground hardware.
 
-.. image :: /_static/3333.jpg
+.. image :: /_static/circuitplayground_express.jpg
     :target: https://adafruit.com/product/3333
     :alt: CircuitPlayground Express
 
