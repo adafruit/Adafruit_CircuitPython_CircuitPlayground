@@ -103,7 +103,7 @@ class Express:
           ``True`` when the switch is to the left next to the music notes.
           ``False`` when it is to the right towards the ear.
 
-          .. image :: /_static/slide_switch.jpg
+          .. image :: ../_static/slide_switch.jpg
             :alt: NeoPixel order diagram
 
           .. code-block:: python
