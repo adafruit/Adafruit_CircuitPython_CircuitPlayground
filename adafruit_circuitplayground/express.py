@@ -20,7 +20,7 @@ class Express:
        a time."""
     def __init__(self):
         # Only create the circuit module member when we're aren't being imported by Sphinx
-        if digitalio.DigitalInOut.__module__ == "sphinx.ext.autodoc":
+        if "__module__" in dir(digitalio.DigitalInOut) and digitalio.DigitalInOut.__module__ == "sphinx.ext.autodoc":
             return
         self._a = digitalio.DigitalInOut(board.BUTTON_A)
         self._a.switch_to_input(pull=digitalio.Pull.DOWN)
