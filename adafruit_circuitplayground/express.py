@@ -1,10 +1,13 @@
-import math
-
-import board
-import analogio
-import digitalio
-import neopixel
 import adafruit_thermistor
+import analogio
+import array
+import audioio
+import board
+import digitalio
+import math
+import neopixel
+import time
+
 
 class Photocell:
     def __init__(self, pin):
@@ -62,6 +65,10 @@ class Express:
         # Define sensors:
         self._temp = adafruit_thermistor.Thermistor(board.TEMPERATURE, 10000, 10000, 25, 3950)
         self._light = Photocell(board.LIGHT)
+
+        # Define audio:
+        self.speaker_enable = digitalio.DigitalInOut(board.SPEAKER_ENABLE)
+        self.speaker_enable.switch_to_output(value=True)
 
     @property
     def button_a(self):
@@ -183,6 +190,30 @@ class Express:
     @red_led.setter
     def red_led(self, value):
         self._led.value = value
+
+    def play_tone(self, frequency, duration):
+        """ Produce a tone using the speaker.
+
+        .. image :: /_static/speaker.jpg
+            The two numbers are frequency and duration. Duration is how long it
+            plays in seconds. Try changing frequency to change the pitch of the
+            tone.
+        ..code-block:python
+
+            from adafruit_circuitplayground.express import circuit
+
+            circuit.play_tone(440, 1)
+        """
+        length = 8000 // frequency
+        sine_wave = array.array("H", [0] * length)
+        for i in range(length):
+            sine_wave[i] = int(math.sin(math.pi * 2 * i / 18) * (2 ** 15) + 2 ** 15)
+
+        sample = audioio.AudioOut(board.SPEAKER, sine_wave)
+
+        sample.play(loop=True)
+        time.sleep(duration)
+        sample.stop()
 
 circuit = Express()
 """Object that is automatically created on import.
