@@ -68,7 +68,7 @@ class Express:
 
         # Define audio:
         self.speaker_enable = digitalio.DigitalInOut(board.SPEAKER_ENABLE)
-        self.speaker_enable.switch_to_output(value=True)
+        self.speaker_enable.switch_to_output(value=False)
 
     @property
     def button_a(self):
@@ -192,12 +192,18 @@ class Express:
         self._led.value = value
 
     def play_tone(self, frequency, duration):
+        self.speaker_enable.value = True
         """ Produce a tone using the speaker.
 
+        :param frequency: The frequency of the tone in Hz
+        :param duration: The duration of the tone in seconds
+
         .. image :: /_static/speaker.jpg
+
             The two numbers are frequency and duration. Duration is how long it
             plays in seconds. Try changing frequency to change the pitch of the
             tone.
+
         ..code-block:python
 
             from adafruit_circuitplayground.express import circuit
@@ -214,6 +220,9 @@ class Express:
         sample.play(loop=True)
         time.sleep(duration)
         sample.stop()
+
+        self.speaker_enable.value = False
+
 
 circuit = Express()
 """Object that is automatically created on import.
