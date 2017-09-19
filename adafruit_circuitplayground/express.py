@@ -192,11 +192,10 @@ class Express:
         self._led.value = value
 
     def play_tone(self, frequency, duration):
-        self.speaker_enable.value = True
         """ Produce a tone using the speaker.
 
-        :param frequency: The frequency of the tone in Hz
-        :param duration: The duration of the tone in seconds
+        :param int frequency: The frequency of the tone in Hz
+        :param float duration: The duration of the tone in seconds
 
         .. image :: /_static/speaker.jpg
 
@@ -216,6 +215,8 @@ class Express:
             sine_wave[i] = int(math.sin(math.pi * 2 * i / 18) * (2 ** 15) + 2 ** 15)
 
         sample = audioio.AudioOut(board.SPEAKER, sine_wave)
+
+        self.speaker_enable.value = True
 
         sample.play(loop=True)
         time.sleep(duration)
