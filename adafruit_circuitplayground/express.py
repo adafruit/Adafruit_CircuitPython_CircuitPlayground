@@ -70,6 +70,9 @@ class Express:
         self.speaker_enable = digitalio.DigitalInOut(board.SPEAKER_ENABLE)
         self.speaker_enable.switch_to_output(value=False)
 
+        self.sample = None
+        self.sine_wave = None
+
     @property
     def button_a(self):
         """``True`` when Button A is pressed. ``False`` if not.
@@ -191,17 +194,18 @@ class Express:
     def red_led(self, value):
         self._led.value = value
 
-    def sine_sample(length):
+    def sine_sample(self, length):
         TONE_VOLUME = (2 ** 15) - 1
         shift = 2 ** 15
         for i in range(length):
             yield int(TONE_VOLUME * math.sin(2*math.pi*(i / length)) + shift)
 
-    length = 100  # Amount of samples in the sine wave.
-    sine_wave = array.array("H", sine_sample(length))
-
-    # Initialize the audio output to play the generated sine wave.
-    sample = audioio.AudioOut(board.SPEAKER, sine_wave)
+    def _generate_sample(self):
+        if self.sample is not None:
+            return
+        length = 100
+        self.sine_wave = array.array("H", self.sine_sample(length))
+        self.sample = audioio.AudioOut(board.SPEAKER, self.sine_wave)
 
     def play_tone(self, frequency, duration):
         """ Produce a tone using the speaker. Try changing frequency to change
@@ -220,6 +224,7 @@ class Express:
         """
 
         self.speaker_enable.value = True
+        self._generate_sample()
 
         # Play a tone of the specified frequency (hz).
         self.sample.frequency = int(len(self.sine_wave) * frequency)
@@ -251,6 +256,7 @@ class Express:
                      circuit.stop_tone()
         """
         self.speaker_enable.value = True
+        self._generate_sample()
         # Start playing a tone of the specified frequency (hz).
         self.sample.frequency = int(len(self.sine_wave) * frequency)
         if not self.sample.playing:
@@ -274,7 +280,7 @@ class Express:
                      circuit.stop_tone()
         """
         # Stop playing any tones.
-        if self.sample.playing:
+        if self.sample is not None and self.sample.playing:
             self.sample.stop()
         self.speaker_enable.value = False
 
