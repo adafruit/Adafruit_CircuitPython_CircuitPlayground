@@ -194,7 +194,8 @@ class Express:
     def red_led(self, value):
         self._led.value = value
 
-    def sine_sample(self, length):
+    @staticmethod
+    def _sine_sample(length):
         TONE_VOLUME = (2 ** 15) - 1
         shift = 2 ** 15
         for i in range(length):
@@ -204,7 +205,7 @@ class Express:
         if self.sample is not None:
             return
         length = 100
-        self.sine_wave = array.array("H", self.sine_sample(length))
+        self.sine_wave = array.array("H", Express._sine_sample(length))
         self.sample = audioio.AudioOut(board.SPEAKER, self.sine_wave)
 
     def play_tone(self, frequency, duration):
