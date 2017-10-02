@@ -222,18 +222,10 @@ class Express:
 
             circuit.play_tone(440, 1)
         """
-
-        self.speaker_enable.value = True
-        self._generate_sample()
-
         # Play a tone of the specified frequency (hz).
-        self.sample.frequency = int(len(self.sine_wave) * frequency)
-        if not self.sample.playing:
-            self.sample.play(loop=True)
+        self.start_tone(frequency)
         time.sleep(duration)
-        if self.sample.playing:
-            self.sample.stop()
-        self.speaker_enable.value = False
+        self.stop_tone()
 
     def start_tone(self, frequency):
         """ Produce a tone using the speaker. Try changing frequency to change
