@@ -5,4 +5,4 @@ dist
 _build/
 *.mpy
 build/
-
+.DS_Store
