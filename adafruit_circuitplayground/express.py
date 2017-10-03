@@ -70,6 +70,9 @@ class Express:
         self.speaker_enable = digitalio.DigitalInOut(board.SPEAKER_ENABLE)
         self.speaker_enable.switch_to_output(value=False)
 
+        self.sample = None
+        self.sine_wave = None
+
     @property
     def button_a(self):
         """``True`` when Button A is pressed. ``False`` if not.
@@ -191,6 +194,20 @@ class Express:
     def red_led(self, value):
         self._led.value = value
 
+    @staticmethod
+    def _sine_sample(length):
+        TONE_VOLUME = (2 ** 15) - 1
+        shift = 2 ** 15
+        for i in range(length):
+            yield int(TONE_VOLUME * math.sin(2*math.pi*(i / length)) + shift)
+
+    def _generate_sample(self):
+        if self.sample is not None:
+            return
+        length = 100
+        self.sine_wave = array.array("H", Express._sine_sample(length))
+        self.sample = audioio.AudioOut(board.SPEAKER, self.sine_wave)
+
     def play_tone(self, frequency, duration):
         """ Produce a tone using the speaker. Try changing frequency to change
         the pitch of the tone.
@@ -206,19 +223,58 @@ class Express:
 
             circuit.play_tone(440, 1)
         """
-        length = 8000 // frequency
-        sine_wave = array.array("H", [0] * length)
-        for i in range(length):
-            sine_wave[i] = int(math.sin(math.pi * 2 * i / 18) * (2 ** 15) + 2 ** 15)
-
-        sample = audioio.AudioOut(board.SPEAKER, sine_wave)
-
-        self.speaker_enable.value = True
-
-        sample.play(loop=True)
+        # Play a tone of the specified frequency (hz).
+        self.start_tone(frequency)
         time.sleep(duration)
-        sample.stop()
+        self.stop_tone()
 
+    def start_tone(self, frequency):
+        """ Produce a tone using the speaker. Try changing frequency to change
+        the pitch of the tone.
+
+        :param int frequency: The frequency of the tone in Hz
+
+        .. image :: /_static/speaker.jpg
+
+        .. code-block:: python
+
+             from adafruit_circuitplayground.express import circuit
+
+             while True:
+                 if circuit.button_a:
+                     circuit.start_tone(262)
+                 elif circuit.button_b:
+                     circuit.start_tone(294)
+                 else:
+                     circuit.stop_tone()
+        """
+        self.speaker_enable.value = True
+        self._generate_sample()
+        # Start playing a tone of the specified frequency (hz).
+        self.sample.frequency = int(len(self.sine_wave) * frequency)
+        if not self.sample.playing:
+            self.sample.play(loop=True)
+
+    def stop_tone(self):
+        """ Use with start_tone to stop the tone produced.
+
+        .. image :: /_static/speaker.jpg
+
+        .. code-block:: python
+
+             from adafruit_circuitplayground.express import circuit
+
+             while True:
+                 if circuit.button_a:
+                     circuit.start_tone(262)
+                 elif circuit.button_b:
+                     circuit.start_tone(294)
+                 else:
+                     circuit.stop_tone()
+        """
+        # Stop playing any tones.
+        if self.sample is not None and self.sample.playing:
+            self.sample.stop()
         self.speaker_enable.value = False
 
 
