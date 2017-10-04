@@ -67,8 +67,8 @@ class Express:
         self._light = Photocell(board.LIGHT)
 
         # Define audio:
-        self.speaker_enable = digitalio.DigitalInOut(board.SPEAKER_ENABLE)
-        self.speaker_enable.switch_to_output(value=False)
+        self._speaker_enable = digitalio.DigitalInOut(board.SPEAKER_ENABLE)
+        self._speaker_enable.switch_to_output(value=False)
 
         self.sample = None
         self.sine_wave = None
@@ -248,7 +248,7 @@ class Express:
                  else:
                      circuit.stop_tone()
         """
-        self.speaker_enable.value = True
+        self._speaker_enable.value = True
         self._generate_sample()
         # Start playing a tone of the specified frequency (hz).
         self.sample.frequency = int(len(self.sine_wave) * frequency)
@@ -275,7 +275,7 @@ class Express:
         # Stop playing any tones.
         if self.sample is not None and self.sample.playing:
             self.sample.stop()
-        self.speaker_enable.value = False
+        self._speaker_enable.value = False
 
 
 circuit = Express()
