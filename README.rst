@@ -32,12 +32,12 @@ and then use it.
 
 .. code-block :: python
 
-    from adafruit_circuitplayground.express import circuit
+    from adafruit_circuitplayground.express import cpx
 
     while True:
-        if circuit.button_a:
-            print("Temperature:", circuit.temperature)
-        circuit.red_led = circuit.button_b
+        if cpx.button_a:
+            print("Temperature:", cpx.temperature)
+        cpx.red_led = cpx.button_b
 
 Contributing
 ============
