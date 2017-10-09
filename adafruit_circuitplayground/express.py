@@ -52,10 +52,10 @@ class Express:
 
         .. code-block:: python
 
-          from adafruit_circuitplayground.express import circuit
+          from adafruit_circuitplayground.express import cpx
 
-          circuit.pixels[0] = 0x000300
-          circuit.pixels[9] = 0x030000
+          cpx.pixels[0] = 0x000300
+          cpx.pixels[9] = 0x030000
 
           # Wait forever. CTRL-C to quit.
           while True:
@@ -82,10 +82,10 @@ class Express:
 
             .. code-block:: python
 
-              from adafruit_circuitplayground.express import circuit
+              from adafruit_circuitplayground.express import cpx
 
               while True:
-                  if circuit.button_a:
+                  if cpx.button_a:
                       print("Button A pressed!")
         """
         return self._a.value
@@ -99,10 +99,10 @@ class Express:
 
             .. code-block:: python
 
-              from adafruit_circuitplayground.express import circuit
+              from adafruit_circuitplayground.express import cpx
 
               while True:
-                  if circuit.button_b:
+                  if cpx.button_b:
                       print("Button B pressed!")
         """
         return self._b.value
@@ -118,11 +118,11 @@ class Express:
 
           .. code-block:: python
 
-            from adafruit_circuitplayground.express import circuit
+            from adafruit_circuitplayground.express import cpx
             import time
 
             while True:
-                print("Slide switch:", circuit.switch)
+                print("Slide switch:", cpx.switch)
                 time.sleep(1)
             """
         return self._switch.value
@@ -138,11 +138,11 @@ class Express:
 
             .. code-block:: python
 
-              from adafruit_circuitplayground.express import circuit
+              from adafruit_circuitplayground.express import cpx
               import time
 
               while True:
-                  temperature_c = circuit.temperature
+                  temperature_c = cpx.temperature
                   temperature_f = temperature_c * 1.8 + 32
                   print("Temperature celsius:", temperature_c)
                   print("Temperature farenheit:", temperature_f)
@@ -161,11 +161,11 @@ class Express:
 
            .. code-block:: python
 
-             from adafruit_circuitplayground.express import circuit
+             from adafruit_circuitplayground.express import cpx
              import time
 
              while True:
-                 print("Lux:", circuit.light)
+                 print("Lux:", cpx.light)
                  time.sleep(1)
         """
         return self._light.value
@@ -179,13 +179,13 @@ class Express:
 
            .. code-block:: python
 
-             from adafruit_circuitplayground.express import circuit
+             from adafruit_circuitplayground.express import cpx
              import time
 
              while True:
-                 circuit.red_led = True
+                 cpx.red_led = True
                  time.sleep(1)
-                 circuit.red_led = False
+                 cpx.red_led = False
                  time.sleep(1)
         """
         return self._led.value
@@ -219,9 +219,9 @@ class Express:
 
         .. code-block:: python
 
-            from adafruit_circuitplayground.express import circuit
+            from adafruit_circuitplayground.express import cpx
 
-            circuit.play_tone(440, 1)
+            cpx.play_tone(440, 1)
         """
         # Play a tone of the specified frequency (hz).
         self.start_tone(frequency)
@@ -238,15 +238,15 @@ class Express:
 
         .. code-block:: python
 
-             from adafruit_circuitplayground.express import circuit
+             from adafruit_circuitplayground.express import cpx
 
              while True:
-                 if circuit.button_a:
-                     circuit.start_tone(262)
-                 elif circuit.button_b:
-                     circuit.start_tone(294)
+                 if cpx.button_a:
+                     cpx.start_tone(262)
+                 elif cpx.button_b:
+                     cpx.start_tone(294)
                  else:
-                     circuit.stop_tone()
+                     cpx.stop_tone()
         """
         self._speaker_enable.value = True
         self._generate_sample()
@@ -262,15 +262,15 @@ class Express:
 
         .. code-block:: python
 
-             from adafruit_circuitplayground.express import circuit
+             from adafruit_circuitplayground.express import cpx
 
              while True:
-                 if circuit.button_a:
-                     circuit.start_tone(262)
-                 elif circuit.button_b:
-                     circuit.start_tone(294)
+                 if cpx.button_a:
+                     cpx.start_tone(262)
+                 elif cpx.button_b:
+                     cpx.start_tone(294)
                  else:
-                     circuit.stop_tone()
+                     cpx.stop_tone()
         """
         # Stop playing any tones.
         if self.sample is not None and self.sample.playing:
@@ -278,12 +278,12 @@ class Express:
         self._speaker_enable.value = False
 
 
-circuit = Express()
+cpx = Express()
 """Object that is automatically created on import.
 
    To use, simply import it from the module:
 
    .. code-block:: python
 
-     from adafruit_circuitplayground.express import circuit
+     from adafruit_circuitplayground.express import cpx
 """
