@@ -37,7 +37,21 @@ class Express:
         # Define LEDs:
         self._led = digitalio.DigitalInOut(board.D13)
         self._led.switch_to_output()
-        self.pixels = neopixel.NeoPixel(board.NEOPIXEL, 10)
+        self._pixels = neopixel.NeoPixel(board.NEOPIXEL, 10)
+
+        # Define sensors:
+        self._temp = adafruit_thermistor.Thermistor(board.TEMPERATURE, 10000, 10000, 25, 3950)
+        self._light = Photocell(board.LIGHT)
+
+        # Define audio:
+        self._speaker_enable = digitalio.DigitalInOut(board.SPEAKER_ENABLE)
+        self._speaker_enable.switch_to_output(value=False)
+
+        self.sample = None
+        self.sine_wave = None
+
+    @property
+    def pixels():
         """Sequence like object representing the ten NeoPixels around the outside
         of the CircuitPlayground. Each pixel is at a certain index in the sequence
         as labeled below. Colors can be RGB hex like 0x110000 for red where each
@@ -61,17 +75,7 @@ class Express:
           while True:
               pass
         """
-
-        # Define sensors:
-        self._temp = adafruit_thermistor.Thermistor(board.TEMPERATURE, 10000, 10000, 25, 3950)
-        self._light = Photocell(board.LIGHT)
-
-        # Define audio:
-        self._speaker_enable = digitalio.DigitalInOut(board.SPEAKER_ENABLE)
-        self._speaker_enable.switch_to_output(value=False)
-
-        self.sample = None
-        self.sine_wave = None
+        return pixels
 
     @property
     def button_a(self):
