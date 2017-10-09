@@ -27,7 +27,7 @@ This driver depends on many other libraries! Please install it by downloading
 
 Usage Example
 =============
-Using it is super simple. Simply import the `circuit` variable from the module
+Using it is super simple. Simply import the `cpx` variable from the module
 and then use it.
 
 .. code-block :: python
