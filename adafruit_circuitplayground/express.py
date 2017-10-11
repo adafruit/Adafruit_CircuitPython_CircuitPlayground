@@ -7,6 +7,7 @@ import digitalio
 import math
 import neopixel
 import time
+import touchio
 
 
 class Photocell:
@@ -49,6 +50,141 @@ class Express:
 
         self.sample = None
         self.sine_wave = None
+
+        # Define touch:
+        self._touch_A1 = None
+        self._touch_A2 = None
+        self._touch_A3 = None
+        self._touch_A4 = None
+        self._touch_A5 = None
+        self._touch_A6 = None
+        self._touch_A7 = None
+
+    @property
+    def touch_A1(self):
+        """Detect touch on capacitive touch pad A1.
+
+        .. image :: /_static/capacitive_touch_pad_A1.jpg
+
+        .. code-block:: python
+
+          from adafruit_circuitplayground.express import cpx
+
+          while True:
+              if cpx.touch_A1:
+                  print('Touched pad A1')
+        """
+        if self._touch_A1 is None:
+            self._touch_A1 = touchio.TouchIn(board.A1)
+        return self._touch_A1.value
+
+    @property
+    def touch_A2(self):
+        """Detect touch on capacitive touch pad A2.
+
+        .. image :: /_static/capacitive_touch_pad_A2.jpg
+
+        .. code-block:: python
+
+          from adafruit_circuitplayground.express import cpx
+
+          while True:
+              if cpx.touch_A2:
+                  print('Touched pad A2')
+        """
+        if self._touch_A2 is None:
+            self._touch_A2 = touchio.TouchIn(board.A2)
+        return self._touch_A2.value
+
+    @property
+    def touch_A3(self):
+        """Detect touch on capacitive touch pad A3.
+
+        .. image :: /_static/capacitive_touch_pad_A3.jpg
+
+        .. code-block:: python
+
+          from adafruit_circuitplayground.express import cpx
+
+          while True:
+              if cpx.touch_A3:
+                  print('Touched pad A3')
+        """
+        if self._touch_A3 is None:
+            self._touch_A3 = touchio.TouchIn(board.A3)
+        return self._touch_A3.value
+
+    @property
+    def touch_A4(self):
+        """Detect touch on capacitive touch pad A4.
+
+        .. image :: /_static/capacitive_touch_pad_A4.jpg
+
+        .. code-block:: python
+
+          from adafruit_circuitplayground.express import cpx
+
+          while True:
+              if cpx.touch_A4:
+                  print('Touched pad A4')
+        """
+        if self._touch_A4 is None:
+            self._touch_A4 = touchio.TouchIn(board.A4)
+        return self._touch_A4.value
+
+    @property
+    def touch_A5(self):
+        """Detect touch on capacitive touch pad A5.
+
+        .. image :: /_static/capacitive_touch_pad_A5.jpg
+
+        .. code-block:: python
+
+          from adafruit_circuitplayground.express import cpx
+
+          while True:
+              if cpx.touch_A5:
+                  print('Touched pad A5')
+        """
+        if self._touch_A5 is None:
+            self._touch_A5 = touchio.TouchIn(board.A5)
+        return self._touch_A5.value
+
+    @property
+    def touch_A6(self):
+        """Detect touch on capacitive touch pad A6.
+
+        .. image :: /_static/capacitive_touch_pad_A6.jpg
+
+        .. code-block:: python
+
+          from adafruit_circuitplayground.express import cpx
+
+          while True:
+              if cpx.touch_A6:
+                  print('Touched pad A6')
+        """
+        if self._touch_A6 is None:
+            self._touch_A6 = touchio.TouchIn(board.A6)
+        return self._touch_A6.value
+
+    @property
+    def touch_A7(self):
+        """Detect touch on capacitive touch pad A7.
+
+        .. image :: /_static/capacitive_touch_pad_A7.jpg
+
+        .. code-block:: python
+
+          from adafruit_circuitplayground.express import cpx
+
+          while True:
+              if cpx.touch_A7:
+                  print('Touched pad A7')
+        """
+        if self._touch_A7 is None:
+            self._touch_A7 = touchio.TouchIn(board.A7)
+        return self._touch_A7.value
 
     @property
     def pixels(self):
