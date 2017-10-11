@@ -51,7 +51,7 @@ class Express:
         self.sine_wave = None
 
     @property
-    def pixels():
+    def pixels(self):
         """Sequence like object representing the ten NeoPixels around the outside
         of the CircuitPlayground. Each pixel is at a certain index in the sequence
         as labeled below. Colors can be RGB hex like 0x110000 for red where each
@@ -75,7 +75,7 @@ class Express:
           while True:
               pass
         """
-        return pixels
+        return self._pixels
 
     @property
     def button_a(self):
