@@ -69,72 +69,24 @@ class Express:
         self._lis3dh._write_register_byte(adafruit_lis3dh.REG_CTRL5, 0b01001000)
         self._lis3dh._write_register_byte(0x2E, 0b10000000)
 
-    def acceleration_update(self):
-        """``acceleration_update`` updates the acceleration data from the x, y
-        and z axes. It is only needed once to update all three.
-
-            .. image :: /_static/accelerometer.jpg
-
-            .. code-block:: python
-
-              from adafruit_circuitplayground.express import cpx
-
-              while True:
-                  cpx.acceleration_update()
-                  print(cpx.acceleration_x, cpx.acceleration_y, cpx.acceleration_z, sep=", ")
-        """
-        self._x, self._y, self._z = self._lis3dh.acceleration
-
     @property
-    def acceleration_x(self):
-        """Utilise the acceleration data from the x axis. ``acceleration_update``
-        must be included before ``acceleration_x`` to get this data.
+    def acceleration(self):
+        """Obtain data from the x, y and z axes.
 
-            .. image :: /_static/accelerometer.jpg
+        .. image :: /_static/accelerometer.jpg
 
-            .. code-block:: python
+        This example prints the values. Try moving the board to see how the
+        printed values change.
 
-              from adafruit_circuitplayground.express import cpx
+        .. code-block:: python
 
-              while True:
-                  cpx.acceleration_update()
-                  print(cpx.acceleration_x)
+          from adafruit_circuitplayground.express import cpx
+
+          while True:
+              x, y, z = cpx.acceleration
+              print(x, y, z)
         """
-        return self._x
-
-    @property
-    def acceleration_y(self):
-        """Utilise the acceleration data from the y axis. ``acceleration_update``
-        must be included before ``acceleration_y`` to get this data.
-
-            .. image :: /_static/accelerometer.jpg
-
-            .. code-block:: python
-
-              from adafruit_circuitplayground.express import cpx
-
-              while True:
-                  cpx.acceleration_update()
-                  print(cpx.acceleration_y)
-        """
-        return self._y
-
-    @property
-    def acceleration_z(self):
-        """Utilise the acceleration data from the z axis.  ``acceleration_update``
-        must be included before ``acceleration_z`` to get this data.
-
-            .. image :: /_static/accelerometer.jpg
-
-            .. code-block:: python
-
-              from adafruit_circuitplayground.express import cpx
-
-              while True:
-                  cpx.acceleration_update()
-                  print(cpx.acceleration_z)
-        """
-        return self._z
+        return self._lis3dh.acceleration
 
     @property
     def touch_A1(self):
