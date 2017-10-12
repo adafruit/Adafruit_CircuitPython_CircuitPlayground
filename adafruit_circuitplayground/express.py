@@ -1,8 +1,10 @@
+import adafruit_lis3dh
 import adafruit_thermistor
 import analogio
 import array
 import audioio
 import board
+import busio
 import digitalio
 import math
 import neopixel
@@ -59,6 +61,32 @@ class Express:
         self._touch_A5 = None
         self._touch_A6 = None
         self._touch_A7 = None
+
+        # Define acceleration:
+        self._i2c = busio.I2C(board.ACCELEROMETER_SCL, board.ACCELEROMETER_SDA)
+        self._lis3dh = adafruit_lis3dh.LIS3DH_I2C(self._i2c, address=0x19)
+        self._lis3dh.range = adafruit_lis3dh.RANGE_8_G
+        self._lis3dh._write_register_byte(adafruit_lis3dh.REG_CTRL5, 0b01001000)
+        self._lis3dh._write_register_byte(0x2E, 0b10000000)
+
+    @property
+    def acceleration(self):
+        """Obtain data from the x, y and z axes.
+
+        .. image :: /_static/accelerometer.jpg
+
+        This example prints the values. Try moving the board to see how the
+        printed values change.
+
+        .. code-block:: python
+
+          from adafruit_circuitplayground.express import cpx
+
+          while True:
+              x, y, z = cpx.acceleration
+              print(x, y, z)
+        """
+        return self._lis3dh.acceleration
 
     @property
     def touch_A1(self):
