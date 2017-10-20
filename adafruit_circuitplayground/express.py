@@ -49,7 +49,6 @@ class Express:
         # Define audio:
         self._speaker_enable = digitalio.DigitalInOut(board.SPEAKER_ENABLE)
         self._speaker_enable.switch_to_output(value=False)
-
         self.sample = None
         self.sine_wave = None
 
@@ -443,6 +442,32 @@ class Express:
         # Stop playing any tones.
         if self.sample is not None and self.sample.playing:
             self.sample.stop()
+        self._speaker_enable.value = False
+
+    def play_file(self, file_name):
+        """ Play a .wav file using the onboard speaker.
+
+        :param file_name: The name of your .wav file in quotation marks including .wav
+
+        .. image :: /_static/speaker.jpg
+
+        .. code-block:: python
+
+             from adafruit_circuitplayground.express import cpx
+
+             while True:
+                 if cpx.button_a:
+                     cpx.play_file("laugh.wav")
+                 elif cpx.button_b:
+                     cpx.play_file("rimshot.wav")
+        """
+        # Play a specified file.
+        self._speaker_enable.value = True
+        self.a = audioio.AudioOut(board.SPEAKER, open(file_name, "rb"))
+
+        self.a.play()
+        while self.a.playing:
+            pass
         self._speaker_enable.value = False
 
 
