@@ -73,6 +73,7 @@ class Express:
         """Obtain data from the x, y and z axes.
 
         .. image :: /_static/accelerometer.jpg
+          :alt: Accelerometer
 
         This example prints the values. Try moving the board to see how the
         printed values change.
@@ -92,6 +93,7 @@ class Express:
         """Detect touch on capacitive touch pad A1.
 
         .. image :: /_static/capacitive_touch_pad_A1.jpg
+          :alt: Capacitive touch pad A1
 
         .. code-block:: python
 
@@ -110,6 +112,7 @@ class Express:
         """Detect touch on capacitive touch pad A2.
 
         .. image :: /_static/capacitive_touch_pad_A2.jpg
+          :alt: Capacitive touch pad A2
 
         .. code-block:: python
 
@@ -128,6 +131,7 @@ class Express:
         """Detect touch on capacitive touch pad A3.
 
         .. image :: /_static/capacitive_touch_pad_A3.jpg
+          :alt: Capacitive touch pad A3
 
         .. code-block:: python
 
@@ -146,6 +150,7 @@ class Express:
         """Detect touch on capacitive touch pad A4.
 
         .. image :: /_static/capacitive_touch_pad_A4.jpg
+          :alt: Capacitive touch pad A4
 
         .. code-block:: python
 
@@ -164,6 +169,7 @@ class Express:
         """Detect touch on capacitive touch pad A5.
 
         .. image :: /_static/capacitive_touch_pad_A5.jpg
+          :alt: Capacitive touch pad A5
 
         .. code-block:: python
 
@@ -182,6 +188,7 @@ class Express:
         """Detect touch on capacitive touch pad A6.
 
         .. image :: /_static/capacitive_touch_pad_A6.jpg
+          :alt: Capacitive touch pad A6
 
         .. code-block:: python
 
@@ -200,6 +207,7 @@ class Express:
         """Detect touch on capacitive touch pad A7.
 
         .. image :: /_static/capacitive_touch_pad_A7.jpg
+          :alt: Capacitive touch pad A7
 
         .. code-block:: python
 
@@ -219,11 +227,13 @@ class Express:
         of the CircuitPlayground. Each pixel is at a certain index in the sequence
         as labeled below. Colors can be RGB hex like 0x110000 for red where each
         two digits are a color (0xRRGGBB) or a tuple like (17, 0, 0) where (R, G, B).
+        Set the global brightness using any number from 0 to 1 to represent a
+        percentage, i.e. 0.3 sets global brightness to 30%.
 
         See `neopixel.NeoPixel` for more info.
 
         .. image :: /_static/neopixel_numbering.jpg
-            :alt: NeoPixel order diagram
+          :alt: NeoPixel order diagram
 
         Here is an example that sets the first pixel green and the second red.
 
@@ -231,8 +241,9 @@ class Express:
 
           from adafruit_circuitplayground.express import cpx
 
-          cpx.pixels[0] = 0x000300
-          cpx.pixels[9] = 0x030000
+          cpx.pixels.brightness = 0.3
+          cpx.pixels[0] = 0x003000
+          cpx.pixels[9] = (30, 0, 0)
 
           # Wait forever. CTRL-C to quit.
           while True:
@@ -245,7 +256,7 @@ class Express:
         """``True`` when Button A is pressed. ``False`` if not.
 
             .. image :: /_static/button_a.jpg
-              :alt: NeoPixel order diagram
+              :alt: Button A
 
             .. code-block:: python
 
@@ -262,7 +273,7 @@ class Express:
         """``True`` when Button B is pressed. ``False`` if not.
 
             .. image :: /_static/button_b.jpg
-              :alt: NeoPixel order diagram
+              :alt: Button B
 
             .. code-block:: python
 
@@ -281,7 +292,7 @@ class Express:
           ``False`` when it is to the right towards the ear.
 
           .. image :: ../_static/slide_switch.jpg
-            :alt: NeoPixel order diagram
+            :alt: Slide switch
 
           .. code-block:: python
 
@@ -299,7 +310,7 @@ class Express:
         """The temperature of the CircuitPlayground in Celsius.
 
             .. image :: /_static/thermistor.jpg
-              :alt: NeoPixel order diagram
+              :alt: Temperature sensor
 
            Converting this to Farenheit is easy!
 
@@ -322,7 +333,7 @@ class Express:
         """The brightness of the CircuitPlayground in approximate Lux.
 
            .. image :: /_static/light_sensor.jpg
-             :alt: NeoPixel order diagram
+             :alt: Light sensor
 
            Try covering the sensor next to the eye to see it change.
 
@@ -342,7 +353,7 @@ class Express:
         """The red led next to the USB plug marked D13.
 
            .. image :: /_static/red_led.jpg
-             :alt: NeoPixel order diagram
+             :alt: D13 LED
 
            .. code-block:: python
 
@@ -383,6 +394,7 @@ class Express:
         :param float duration: The duration of the tone in seconds
 
         .. image :: /_static/speaker.jpg
+          :alt: Onboard speaker
 
         .. code-block:: python
 
@@ -402,6 +414,7 @@ class Express:
         :param int frequency: The frequency of the tone in Hz
 
         .. image :: /_static/speaker.jpg
+          :alt: Onboard speaker
 
         .. code-block:: python
 
@@ -426,6 +439,7 @@ class Express:
         """ Use with start_tone to stop the tone produced.
 
         .. image :: /_static/speaker.jpg
+          :alt: Onboard speaker
 
         .. code-block:: python
 
@@ -450,6 +464,7 @@ class Express:
         :param file_name: The name of your .wav file in quotation marks including .wav
 
         .. image :: /_static/speaker.jpg
+          :alt: Onboard speaker
 
         .. code-block:: python
 
