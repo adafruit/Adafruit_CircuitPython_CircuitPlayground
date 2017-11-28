@@ -88,7 +88,6 @@ class Express:
         """
         return self._lis3dh.acceleration
 
-    @property
     def shake(self):
         """Detect when device is shaken.
 
@@ -100,8 +99,8 @@ class Express:
           from adafruit_circuitplayground.express import cpx
 
           while True:
-              if shake():
-              print("Shake detected!")
+              if cpx.shake():
+                  print("Shake detected!")
 
         The `shake_threshold` default is 30. Decreasing this number increases
         shake sensitivity, i.e. the code will return a shake detected more
@@ -115,10 +114,10 @@ class Express:
           from adafruit_circuitplayground.express import cpx
 
           while True:
-              if shake(shake_threshold=20):
-              print("Shake detected more easily than before!")
+              if cpx.shake(shake_threshold=20):
+                  print("Shake detected more easily than before!")
         """
-        return self._lis3dh.shake
+        return self._lis3dh.shake()
 
 
     @property
