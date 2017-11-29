@@ -88,6 +88,38 @@ class Express:
         """
         return self._lis3dh.acceleration
 
+    def shake(self):
+        """Detect when device is shaken.
+
+        .. image :: /_static/accelerometer.jpg
+          :alt: Accelerometer
+
+        .. code-block:: python
+
+          from adafruit_circuitplayground.express import cpx
+
+          while True:
+              if cpx.shake():
+                  print("Shake detected!")
+
+        The `shake_threshold` default is 30. Decreasing this number increases
+        shake sensitivity, i.e. the code will return a shake detected more
+        easily with a lower `shake_threshold`. Increasing it causes the opposite.
+        `shake_threshold` requires a minimum value of 10 - 10 is the value when
+        the board is not moving, therefore anything less than 10 will
+        erroneously report a constant shake detected.
+
+        .. code-block:: python
+
+          from adafruit_circuitplayground.express import cpx
+
+          while True:
+              if cpx.shake(shake_threshold=20):
+                  print("Shake detected more easily than before!")
+        """
+        return self._lis3dh.shake()
+
+
     @property
     def touch_A1(self):
         """Detect touch on capacitive touch pad A1.
@@ -323,7 +355,7 @@ class Express:
                   temperature_c = cpx.temperature
                   temperature_f = temperature_c * 1.8 + 32
                   print("Temperature celsius:", temperature_c)
-                  print("Temperature farenheit:", temperature_f)
+                  print("Temperature fahrenheit:", temperature_f)
                   time.sleep(1)
         """
         return self._temp.temperature
