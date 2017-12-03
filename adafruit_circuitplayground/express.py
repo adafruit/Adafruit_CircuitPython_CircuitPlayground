@@ -1,3 +1,6 @@
+import sys
+sys.path.insert(0, ".frozen")  # prefer frozen modules over local
+
 import adafruit_lis3dh
 import adafruit_thermistor
 import analogio
