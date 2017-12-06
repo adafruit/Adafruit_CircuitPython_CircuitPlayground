@@ -116,13 +116,6 @@ class Express:
         self._lis3dh = adafruit_lis3dh.LIS3DH_I2C(self._i2c, address=0x19)
         self._lis3dh.range = adafruit_lis3dh.RANGE_8_G
 
-        # Enables FIFO stream mode and then sets it to stream mode.
-        # TODO(tdicola): Replace this with code that doesn't call an internal (starts with _)
-        # method. https://github.com/adafruit/Adafruit_CircuitPython_LIS3DH/issues/14
-        # pylint: disable=protected-access
-        self._lis3dh._write_register_byte(adafruit_lis3dh.REG_CTRL5, 0b01001000)
-        self._lis3dh._write_register_byte(0x2E, 0b10000000)
-
     @property
     def acceleration(self):
         """Obtain data from the x, y and z axes.
