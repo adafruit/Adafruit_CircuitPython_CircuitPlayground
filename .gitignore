@@ -4,5 +4,7 @@ dist
 *.pyc
 _build/
 *.mpy
-build/
 .DS_Store
+.env
+build*
+bundles

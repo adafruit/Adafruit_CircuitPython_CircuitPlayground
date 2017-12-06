@@ -1,35 +1,78 @@
+# The MIT License (MIT)
+#
+# Copyright (c) 2016 Scott Shawcroft for Adafruit Industries
+# Copyright (c) 2017 Kattni Rembor for Adafruit Industries
+#
+# Permission is hereby granted, free of charge, to any person obtaining a copy
+# of this software and associated documentation files (the "Software"), to deal
+# in the Software without restriction, including without limitation the rights
+# to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+# copies of the Software, and to permit persons to whom the Software is
+# furnished to do so, subject to the following conditions:
+#
+# The above copyright notice and this permission notice shall be included in
+# all copies or substantial portions of the Software.
+#
+# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+# IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+# FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+# AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+# LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+# OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+# THE SOFTWARE.
+
+# We have a lot of attributes for this complex sensor.
+# pylint: disable=too-many-instance-attributes
+
+"""
+`adafruit_circuitplayground.express`
+====================================================
+
+CircuitPython driver from `CircuitPlayground Express <https://www.adafruit.com/product/3333>`_.
+
+* Author(s): Kattni Rembor, Scott Shawcroft
+"""
+
+import array
+import math
 import sys
+import time
+# pylint: disable=wrong-import-position
 sys.path.insert(0, ".frozen")  # prefer frozen modules over local
 
 import adafruit_lis3dh
 import adafruit_thermistor
 import analogio
-import array
 import audioio
 import board
 import busio
 import digitalio
-import math
 import neopixel
-import time
 import touchio
+
+__version__ = "0.0.0-auto.0"
+__repo__ = "https://github.com/adafruit/Adafruit_CircuitPython_CircuitPlayground.git"
 
 
 class Photocell:
+    """Simple driver for analog photocell on the CircuitPlayground Express."""
+    # pylint: disable=too-few-public-methods
     def __init__(self, pin):
         self._photocell = analogio.AnalogIn(pin)
 
     # TODO(tannewt): Calibrate this against another calibrated sensor.
     @property
-    def value(self):
+    def light(self):
+        """Light level in SI Lux."""
         return self._photocell.value * 330 // (2 ** 16)
 
 class Express:
     """Represents a single CircuitPlayground Express. Do not use more than one at
        a time."""
     def __init__(self):
-        # Only create the circuit module member when we're aren't being imported by Sphinx
-        if "__module__" in dir(digitalio.DigitalInOut) and digitalio.DigitalInOut.__module__ == "sphinx.ext.autodoc":
+        # Only create the cpx module member when we're aren't being imported by Sphinx
+        if ("__module__" in dir(digitalio.DigitalInOut) and
+                digitalio.DigitalInOut.__module__ == "sphinx.ext.autodoc"):
             return
         self._a = digitalio.DigitalInOut(board.BUTTON_A)
         self._a.switch_to_input(pull=digitalio.Pull.DOWN)
@@ -52,10 +95,14 @@ class Express:
         # Define audio:
         self._speaker_enable = digitalio.DigitalInOut(board.SPEAKER_ENABLE)
         self._speaker_enable.switch_to_output(value=False)
-        self.sample = None
-        self.sine_wave = None
+        self._sample = None
+        self._sine_wave = None
 
         # Define touch:
+        # We chose these verbose touch_A# names so that beginners could use it without understanding
+        # lists and the capital A to match the pin name. The capitalization is not strictly Python
+        # style, so everywhere we use these names, we whitelist the errors using:
+        # pylint: disable=invalid-name
         self._touch_A1 = None
         self._touch_A2 = None
         self._touch_A3 = None
@@ -68,6 +115,11 @@ class Express:
         self._i2c = busio.I2C(board.ACCELEROMETER_SCL, board.ACCELEROMETER_SDA)
         self._lis3dh = adafruit_lis3dh.LIS3DH_I2C(self._i2c, address=0x19)
         self._lis3dh.range = adafruit_lis3dh.RANGE_8_G
+
+        # Enables FIFO stream mode and then sets it to stream mode.
+        # TODO(tdicola): Replace this with code that doesn't call an internal (starts with _)
+        # method. https://github.com/adafruit/Adafruit_CircuitPython_LIS3DH/issues/14
+        # pylint: disable=protected-access
         self._lis3dh._write_register_byte(adafruit_lis3dh.REG_CTRL5, 0b01001000)
         self._lis3dh._write_register_byte(0x2E, 0b10000000)
 
@@ -124,7 +176,7 @@ class Express:
 
 
     @property
-    def touch_A1(self):
+    def touch_A1(self): # pylint: disable=invalid-name
         """Detect touch on capacitive touch pad A1.
 
         .. image :: /_static/capacitive_touch_pad_A1.jpg
@@ -143,7 +195,7 @@ class Express:
         return self._touch_A1.value
 
     @property
-    def touch_A2(self):
+    def touch_A2(self): # pylint: disable=invalid-name
         """Detect touch on capacitive touch pad A2.
 
         .. image :: /_static/capacitive_touch_pad_A2.jpg
@@ -162,7 +214,7 @@ class Express:
         return self._touch_A2.value
 
     @property
-    def touch_A3(self):
+    def touch_A3(self): # pylint: disable=invalid-name
         """Detect touch on capacitive touch pad A3.
 
         .. image :: /_static/capacitive_touch_pad_A3.jpg
@@ -181,7 +233,7 @@ class Express:
         return self._touch_A3.value
 
     @property
-    def touch_A4(self):
+    def touch_A4(self): # pylint: disable=invalid-name
         """Detect touch on capacitive touch pad A4.
 
         .. image :: /_static/capacitive_touch_pad_A4.jpg
@@ -200,7 +252,7 @@ class Express:
         return self._touch_A4.value
 
     @property
-    def touch_A5(self):
+    def touch_A5(self): # pylint: disable=invalid-name
         """Detect touch on capacitive touch pad A5.
 
         .. image :: /_static/capacitive_touch_pad_A5.jpg
@@ -219,7 +271,7 @@ class Express:
         return self._touch_A5.value
 
     @property
-    def touch_A6(self):
+    def touch_A6(self): # pylint: disable=invalid-name
         """Detect touch on capacitive touch pad A6.
 
         .. image :: /_static/capacitive_touch_pad_A6.jpg
@@ -238,7 +290,7 @@ class Express:
         return self._touch_A6.value
 
     @property
-    def touch_A7(self):
+    def touch_A7(self): # pylint: disable=invalid-name
         """Detect touch on capacitive touch pad A7.
 
         .. image :: /_static/capacitive_touch_pad_A7.jpg
@@ -381,7 +433,7 @@ class Express:
                  print("Lux:", cpx.light)
                  time.sleep(1)
         """
-        return self._light.value
+        return self._light.light
 
     @property
     def red_led(self):
@@ -409,17 +461,17 @@ class Express:
 
     @staticmethod
     def _sine_sample(length):
-        TONE_VOLUME = (2 ** 15) - 1
+        tone_volume = (2 ** 15) - 1
         shift = 2 ** 15
         for i in range(length):
-            yield int(TONE_VOLUME * math.sin(2*math.pi*(i / length)) + shift)
+            yield int(tone_volume * math.sin(2*math.pi*(i / length)) + shift)
 
     def _generate_sample(self):
-        if self.sample is not None:
+        if self._sample is not None:
             return
         length = 100
-        self.sine_wave = array.array("H", Express._sine_sample(length))
-        self.sample = audioio.AudioOut(board.SPEAKER, self.sine_wave)
+        self._sine_wave = array.array("H", Express._sine_sample(length))
+        self._sample = audioio.AudioOut(board.SPEAKER, self._sine_wave)
 
     def play_tone(self, frequency, duration):
         """ Produce a tone using the speaker. Try changing frequency to change
@@ -466,9 +518,9 @@ class Express:
         self._speaker_enable.value = True
         self._generate_sample()
         # Start playing a tone of the specified frequency (hz).
-        self.sample.frequency = int(len(self.sine_wave) * frequency)
-        if not self.sample.playing:
-            self.sample.play(loop=True)
+        self._sample.frequency = int(len(self._sine_wave) * frequency)
+        if not self._sample.playing:
+            self._sample.play(loop=True)
 
     def stop_tone(self):
         """ Use with start_tone to stop the tone produced.
@@ -489,8 +541,8 @@ class Express:
                      cpx.stop_tone()
         """
         # Stop playing any tones.
-        if self.sample is not None and self.sample.playing:
-            self.sample.stop()
+        if self._sample is not None and self._sample.playing:
+            self._sample.stop()
         self._speaker_enable.value = False
 
     def play_file(self, file_name):
@@ -513,15 +565,15 @@ class Express:
         """
         # Play a specified file.
         self._speaker_enable.value = True
-        self.a = audioio.AudioOut(board.SPEAKER, open(file_name, "rb"))
+        audio = audioio.AudioOut(board.SPEAKER, open(file_name, "rb"))
 
-        self.a.play()
-        while self.a.playing:
+        audio.play()
+        while audio.playing:
             pass
         self._speaker_enable.value = False
 
 
-cpx = Express()
+cpx = Express() # pylint: disable=invalid-name
 """Object that is automatically created on import.
 
    To use, simply import it from the module:
