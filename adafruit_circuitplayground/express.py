@@ -168,7 +168,8 @@ class Express:
         try:
             return self._lis3dh.shake()
         except AttributeError:
-            raise RuntimeError("Oops! You need a newer version of CircuitPython (2.2.0 or greater) to use cpx.shake.")
+            raise RuntimeError("Oops! You need a newer version of CircuitPython "
+                               "(2.2.0 or greater) to use cpx.shake.")
 
     @property
     def touch_A1(self): # pylint: disable=invalid-name
