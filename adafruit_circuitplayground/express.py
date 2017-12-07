@@ -165,8 +165,10 @@ class Express:
               if cpx.shake(shake_threshold=20):
                   print("Shake detected more easily than before!")
         """
-        return self._lis3dh.shake()
-
+        try:
+            return self._lis3dh.shake()
+        except AttributeError:
+            raise RuntimeError("Oops! You need a newer version of CircuitPython (2.2.0 or greater) to use cpx.shake.")
 
     @property
     def touch_A1(self): # pylint: disable=invalid-name
