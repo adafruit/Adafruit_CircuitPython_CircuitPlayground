@@ -66,6 +66,7 @@ class Photocell:
         """Light level in SI Lux."""
         return self._photocell.value * 330 // (2 ** 16)
 
+
 class Express:
     """Represents a single CircuitPlayground Express. Do not use more than one at
        a time."""
@@ -171,7 +172,8 @@ class Express:
             raise RuntimeError("Oops! You need a newer version of CircuitPython "
                                "(2.2.0 or greater) to use cpx.shake.")
 
-    def adjust_touch_threshold(self, adjustment, pad_names):
+    @classmethod
+    def adjust_touch_threshold(cls, adjustment, pad_names):
         """Adjust the threshold needed to activate the capacitive touch pads.
         Higher numbers make the touch pads less sensitive. Include the names
         of the touch pads for which you plan to change the threshold. They
