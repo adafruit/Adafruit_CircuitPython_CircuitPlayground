@@ -67,7 +67,7 @@ class Photocell:
         return self._photocell.value * 330 // (2 ** 16)
 
 
-class Express:     #pylint: disable-msg=R0904
+class Express:     # pylint: disable-msg=R0904
     """Represents a single CircuitPlayground Express. Do not use more than one at
        a time."""
     def __init__(self):
@@ -111,6 +111,7 @@ class Express:     #pylint: disable-msg=R0904
         self._touch_A5 = None
         self._touch_A6 = None
         self._touch_A7 = None
+        self._touch_threshold_adjustment = 0
 
         # Define acceleration:
         self._i2c = busio.I2C(board.ACCELEROMETER_SCL, board.ACCELEROMETER_SDA)
@@ -172,34 +173,6 @@ class Express:     #pylint: disable-msg=R0904
             raise RuntimeError("Oops! You need a newer version of CircuitPython "
                                "(2.2.0 or greater) to use cpx.shake.")
 
-    @classmethod
-    def adjust_touch_threshold(cls, adjustment, pad_names):
-        """Adjust the threshold needed to activate the capacitive touch pads.
-        Higher numbers make the touch pads less sensitive. Include the names
-        of the touch pads for which you plan to change the threshold. They
-        must be listed as in the example below.
-
-        :param int adjustment: The desired threshold increase
-        :param str pad_names: The names, in a list, of the touch pads you intend to use
-
-        .. image :: /_static/capacitive_touch_pads.jpg
-          :alt: Capacitive touch pads
-
-        .. code-block:: python
-
-          from adafruit_circuitplayground.express import cpx
-
-          cpx.adjust_touch_threshold(200, ["touch_A1", "touch_A2", "touch_A3", "touch_A4",
-                                           "touch_A5", "touch_A6", "touch_A7"])
-
-          while True:
-              if cpx.touch_A1:
-                  print('Touched pad A1')
-        """
-        for pad_name in pad_names:
-            getattr(cpx, pad_name)
-            getattr(cpx, "_" + pad_name).threshold += adjustment
-
     @property
     def touch_A1(self): # pylint: disable=invalid-name
         """Detect touch on capacitive touch pad A1.
@@ -217,6 +190,7 @@ class Express:     #pylint: disable-msg=R0904
         """
         if self._touch_A1 is None:
             self._touch_A1 = touchio.TouchIn(board.A1)
+            self._touch_A1.threshold += self._touch_threshold_adjustment
         return self._touch_A1.value
 
     @property
@@ -236,6 +210,7 @@ class Express:     #pylint: disable-msg=R0904
         """
         if self._touch_A2 is None:
             self._touch_A2 = touchio.TouchIn(board.A2)
+            self._touch_A2.threshold += self._touch_threshold_adjustment
         return self._touch_A2.value
 
     @property
@@ -255,6 +230,7 @@ class Express:     #pylint: disable-msg=R0904
         """
         if self._touch_A3 is None:
             self._touch_A3 = touchio.TouchIn(board.A3)
+            self._touch_A3.threshold += self._touch_threshold_adjustment
         return self._touch_A3.value
 
     @property
@@ -274,6 +250,7 @@ class Express:     #pylint: disable-msg=R0904
         """
         if self._touch_A4 is None:
             self._touch_A4 = touchio.TouchIn(board.A4)
+            self._touch_A4.threshold += self._touch_threshold_adjustment
         return self._touch_A4.value
 
     @property
@@ -293,6 +270,7 @@ class Express:     #pylint: disable-msg=R0904
         """
         if self._touch_A5 is None:
             self._touch_A5 = touchio.TouchIn(board.A5)
+            self._touch_A5.threshold += self._touch_threshold_adjustment
         return self._touch_A5.value
 
     @property
@@ -312,6 +290,7 @@ class Express:     #pylint: disable-msg=R0904
         """
         if self._touch_A6 is None:
             self._touch_A6 = touchio.TouchIn(board.A6)
+            self._touch_A6.threshold += self._touch_threshold_adjustment
         return self._touch_A6.value
 
     @property
@@ -331,7 +310,33 @@ class Express:     #pylint: disable-msg=R0904
         """
         if self._touch_A7 is None:
             self._touch_A7 = touchio.TouchIn(board.A7)
+            self._touch_A7.threshold += self._touch_threshold_adjustment
         return self._touch_A7.value
+
+    def adjust_touch_threshold(self, adjustment):
+        """Adjust the threshold needed to activate the capacitive touch pads.
+        Higher numbers make the touch pads less sensitive.
+
+        :param int adjustment: The desired threshold increase
+
+        .. image :: /_static/capacitive_touch_pads.jpg
+          :alt: Capacitive touch pads
+
+        .. code-block:: python
+
+          from adafruit_circuitplayground.express import cpx
+
+          cpx.adjust_touch_threshold(200)
+
+          while True:
+              if cpx.touch_A1:
+                  print('Touched pad A1')
+        """
+        for pad_name in ["_touch_A" + str(x) for x in range(1, 8)]:
+            touch_in = getattr(self, pad_name)
+            if touch_in:
+                touch_in.threshold += adjustment
+        self._touch_threshold_adjustment += adjustment
 
     @property
     def pixels(self):
