@@ -67,7 +67,7 @@ class Photocell:
         return self._photocell.value * 330 // (2 ** 16)
 
 
-class Express:     # pylint: disable-msg=R0904
+class Express:     # pylint: disable=too-many-public-methods
     """Represents a single CircuitPlayground Express. Do not use more than one at
        a time."""
     def __init__(self):
