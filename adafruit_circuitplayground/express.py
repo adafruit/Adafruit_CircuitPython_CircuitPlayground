@@ -171,6 +171,33 @@ class Express:
             raise RuntimeError("Oops! You need a newer version of CircuitPython "
                                "(2.2.0 or greater) to use cpx.shake.")
 
+    def adjust_touch_threshold(self, adjustment, pad_names):
+        """Adjust the threshold needed to activate the capacitive touch pads.
+        Higher numbers make the touch pads less sensitive. Include the names
+        of the touch pads for which you plan to change the threshold. They
+        must be listed as in the example below.
+
+        :param int adjustment: The desired threshold increase
+        :param str pad_names: The names, in a list, of the touch pads you intend to use
+
+        .. image :: /_static/capacitive_touch_pads.jpg
+          :alt: Capacitive touch pads
+
+        .. code-block:: python
+
+          from adafruit_circuitplayground.express import cpx
+
+          cpx.adjust_touch_threshold(200, ["touch_A1", "touch_A2", "touch_A3", "touch_A4",
+                                           "touch_A5", "touch_A6", "touch_A7"])
+
+          while True:
+              if cpx.touch_A1:
+                  print('Touched pad A1')
+        """
+        for pad_name in pad_names:
+            getattr(cpx, pad_name)
+            getattr(cpx, "_" + pad_name).threshold += adjustment
+
     @property
     def touch_A1(self): # pylint: disable=invalid-name
         """Detect touch on capacitive touch pad A1.
