@@ -138,8 +138,10 @@ class Express:     # pylint: disable=too-many-public-methods
         """
         return self._lis3dh.acceleration
 
-    def shake(self):
+    def shake(self, shake_threshold=30):
         """Detect when device is shaken.
+
+        :param int shake_threshold: The threshold shake must exceed to return true (Default: 30)
 
         .. image :: /_static/accelerometer.jpg
           :alt: Accelerometer
@@ -152,12 +154,11 @@ class Express:     # pylint: disable=too-many-public-methods
               if cpx.shake():
                   print("Shake detected!")
 
-        The `shake_threshold` default is 30. Decreasing this number increases
-        shake sensitivity, i.e. the code will return a shake detected more
-        easily with a lower `shake_threshold`. Increasing it causes the opposite.
-        `shake_threshold` requires a minimum value of 10 - 10 is the value when
-        the board is not moving, therefore anything less than 10 will
-        erroneously report a constant shake detected.
+        Decreasing ``shake_threshold`` increases shake sensitivity, i.e. the code
+        will return a shake detected more easily with a lower ``shake_threshold``.
+        Increasing it causes the opposite. ``shake_threshold`` requires a minimum
+        value of 10 - 10 is the value when the board is not moving, therefore
+        anything less than 10 will erroneously report a constant shake detected.
 
         .. code-block:: python
 
@@ -168,7 +169,7 @@ class Express:     # pylint: disable=too-many-public-methods
                   print("Shake detected more easily than before!")
         """
         try:
-            return self._lis3dh.shake()
+            return self._lis3dh.shake(shake_threshold=shake_threshold)
         except AttributeError:
             raise RuntimeError("Oops! You need a newer version of CircuitPython "
                                "(2.2.0 or greater) to use cpx.shake.")
