@@ -118,6 +118,32 @@ class Express:     # pylint: disable=too-many-public-methods
         self._lis3dh = adafruit_lis3dh.LIS3DH_I2C(self._i2c, address=0x19)
         self._lis3dh.range = adafruit_lis3dh.RANGE_8_G
 
+        # Initialise tap:
+        self._lis3dh.set_tap(2, 18, time_limit=4, time_latency=17, time_window=110)
+        self._last_tap = False
+
+    @property
+    def double_tap(self):
+        """True once after a double tap.
+
+        .. image :: /_static/accelerometer.jpg
+          :alt: Accelerometer
+
+        Quickly tap the CPX twice to double-tap.
+
+        .. code-block:: python
+
+          from adafruit_circuitplayground.express import cpx
+
+          while True:
+              if cpx.double_tap:
+                  print("Double tap!")
+        """
+        tapped = self._lis3dh.tapped
+        first_double_tap = tapped and not self._last_tap
+        self._last_tap = tapped
+        return first_double_tap
+
     @property
     def acceleration(self):
         """Obtain data from the x, y and z axes.
