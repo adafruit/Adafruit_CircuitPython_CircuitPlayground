@@ -139,10 +139,14 @@ class Express:     # pylint: disable=too-many-public-methods
               if cpx.double_tap:
                   print("Double tap!")
         """
-        tapped = self._lis3dh.tapped
-        first_double_tap = tapped and not self._last_tap
-        self._last_tap = tapped
-        return first_double_tap
+        try:
+            tapped = self._lis3dh.tapped
+            first_double_tap = tapped and not self._last_tap
+            self._last_tap = tapped
+            return first_double_tap
+        except AttributeError:
+            raise RuntimeError("Oops! You need a newer version of CircuitPython "
+                               "(2.2.0 or greater) to use this feature.")
 
     @property
     def acceleration(self):
@@ -198,7 +202,7 @@ class Express:     # pylint: disable=too-many-public-methods
             return self._lis3dh.shake(shake_threshold=shake_threshold)
         except AttributeError:
             raise RuntimeError("Oops! You need a newer version of CircuitPython "
-                               "(2.2.0 or greater) to use cpx.shake.")
+                               "(2.2.0 or greater) to use this feature.")
 
     @property
     def touch_A1(self): # pylint: disable=invalid-name
