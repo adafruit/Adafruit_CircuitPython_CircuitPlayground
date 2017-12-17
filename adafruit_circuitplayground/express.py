@@ -119,28 +119,51 @@ class Express:     # pylint: disable=too-many-public-methods
         self._lis3dh.range = adafruit_lis3dh.RANGE_8_G
 
         # Initialise tap:
+        self.detect_taps = 2
+
+    @property
+    def detect_taps(self):
+        """Configure how many taps are used to set off the 'tapped' property!
+
+        .. image :: /_static/accelerometer.jpg
+          :alt: Accelerometer
+
+        .. code-block:: python
+
+          from adafruit_circuitplayground.express import cpx
+
+          cpx.detect_taps = 1
+          while True:
+            if cpx.tapped:
+              print("Single Tap detected!")
+        """
+        return self._detect_taps
+
+    @detect_taps.setter
+    def detect_taps(self, value):
+        self._detect_taps = value
         try:
-            self._lis3dh.set_tap(2, 18, time_limit=4, time_latency=17, time_window=110)
+            self._lis3dh.set_tap(value, 18, time_limit=4, time_latency=17, time_window=110)
         except AttributeError:
             pass
         self._last_tap = False
 
     @property
-    def double_tap(self):
-        """True once after a double tap.
+    def tapped(self):
+        """True once after a tap detection. use cpx.detect_taps to assign single (1) or double (2) tap
 
         .. image :: /_static/accelerometer.jpg
           :alt: Accelerometer
 
-        Quickly tap the CPX twice to double-tap.
+        Quickly tap the CPX twice to double-tap, or tap once for single-tap
 
         .. code-block:: python
 
           from adafruit_circuitplayground.express import cpx
 
           while True:
-              if cpx.double_tap:
-                  print("Double tap!")
+              if cpx.tapped:
+                  print("Tapped!")
         """
         try:
             tapped = self._lis3dh.tapped
