@@ -119,7 +119,10 @@ class Express:     # pylint: disable=too-many-public-methods
         self._lis3dh.range = adafruit_lis3dh.RANGE_8_G
 
         # Initialise tap:
-        self._lis3dh.set_tap(2, 18, time_limit=4, time_latency=17, time_window=110)
+        try:
+            self._lis3dh.set_tap(2, 18, time_limit=4, time_latency=17, time_window=110)
+        except AttributeError:
+            pass
         self._last_tap = False
 
     @property
