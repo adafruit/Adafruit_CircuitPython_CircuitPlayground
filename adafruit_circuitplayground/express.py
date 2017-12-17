@@ -119,8 +119,10 @@ class Express:     # pylint: disable=too-many-public-methods
         self._lis3dh.range = adafruit_lis3dh.RANGE_8_G
 
         # Initialise tap:
-        self.detect_taps = 2
-
+        self._last_tap = False
+        self._detect_taps = 1
+        self.detect_taps = 1
+        
     @property
     def detect_taps(self):
         """Configure how many taps are used to set off the 'tapped' property!
