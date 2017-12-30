@@ -116,7 +116,10 @@ class Express:     # pylint: disable=too-many-public-methods
         # Define acceleration:
         self._i2c = busio.I2C(board.ACCELEROMETER_SCL, board.ACCELEROMETER_SDA)
         self._int1 = digitalio.DigitalInOut(board.ACCELEROMETER_INTERRUPT)
-        self._lis3dh = adafruit_lis3dh.LIS3DH_I2C(self._i2c, address=0x19, int1=self._int1)
+        try:
+            self._lis3dh = adafruit_lis3dh.LIS3DH_I2C(self._i2c, address=0x19, int1=self._int1)
+        except TypeError:
+            self._lis3dh = adafruit_lis3dh.LIS3DH_I2C(self._i2c, address=0x19)
         self._lis3dh.range = adafruit_lis3dh.RANGE_8_G
 
         # Initialise tap:
