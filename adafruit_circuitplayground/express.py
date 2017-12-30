@@ -115,17 +115,21 @@ class Express:     # pylint: disable=too-many-public-methods
 
         # Define acceleration:
         self._i2c = busio.I2C(board.ACCELEROMETER_SCL, board.ACCELEROMETER_SDA)
-        self._lis3dh = adafruit_lis3dh.LIS3DH_I2C(self._i2c, address=0x19)
+        self._int1 = digitalio.DigitalInOut(board.ACCELEROMETER_INTERRUPT)
+        try:
+            self._lis3dh = adafruit_lis3dh.LIS3DH_I2C(self._i2c, address=0x19, int1=self._int1)
+        except TypeError:
+            self._lis3dh = adafruit_lis3dh.LIS3DH_I2C(self._i2c, address=0x19)
         self._lis3dh.range = adafruit_lis3dh.RANGE_8_G
 
         # Initialise tap:
-        self._last_tap = False
         self._detect_taps = 1
         self.detect_taps = 1
 
     @property
     def detect_taps(self):
-        """Configure how many taps are used to set off the 'tapped' property!
+        """Configure what type of tap is detected by ``cpx.tapped``. Use ``1`` for single-tap
+        detection and ``2`` for double-tap detection. This does nothing without ``cpx.tapped``.
 
         .. image :: /_static/accelerometer.jpg
           :alt: Accelerometer
@@ -137,7 +141,7 @@ class Express:     # pylint: disable=too-many-public-methods
           cpx.detect_taps = 1
           while True:
             if cpx.tapped:
-              print("Single Tap detected!")
+              print("Single tap detected!")
         """
         return self._detect_taps
 
@@ -145,34 +149,64 @@ class Express:     # pylint: disable=too-many-public-methods
     def detect_taps(self, value):
         self._detect_taps = value
         try:
-            self._lis3dh.set_tap(value, 80, time_limit=4, time_latency=17, time_window=110)
+            if value == 1:
+                self._lis3dh.set_tap(value, 90, time_limit=4, time_latency=50, time_window=255)
+            if value == 2:
+                self._lis3dh.set_tap(value, 60, time_limit=10, time_latency=50, time_window=255)
         except AttributeError:
             pass
-        self._last_tap = False
 
     @property
     def tapped(self):
-        """True once after a tap detection. use cpx.detect_taps to assign single (1) or
-        double (2) tap
+        """True once after a detecting a tap. Requires ``cpx.detect_taps``.
 
         .. image :: /_static/accelerometer.jpg
           :alt: Accelerometer
 
-        Quickly tap the CPX twice to double-tap, or tap once for single-tap
+        Tap the CPX once for a single-tap, or quickly tap twice for a double-tap.
 
         .. code-block:: python
 
           from adafruit_circuitplayground.express import cpx
 
+          cpx.detect_taps = 1
+
           while True:
               if cpx.tapped:
-                  print("Tapped!")
+                  print("Single tap detected!")
+
+        To use single and double tap together, you must have a delay between them. It
+        will not function properly without it. This example uses both by counting a
+        specified number of each type of tap before moving on in the code.
+
+        .. code-block:: python
+
+          from adafruit_circuitplayground.express import cpx
+
+          # Set to check for single-taps.
+          cpx.detect_taps = 1
+          tap_count = 0
+
+          # We're looking for 2 single-taps before moving on.
+          while tap_count < 2:
+              if cpx.tapped:
+                  tap_count += 1
+          print("Reached 2 single-taps!")
+
+          # Now switch to checking for double-taps
+          tap_count = 0
+          cpx.detect_taps = 2
+
+          # We're looking for 2 double-taps before moving on.
+          while tap_count < 2:
+              if cpx.tapped:
+                 tap_count += 1
+          print("Reached 2 double-taps!")
+          print("Done.")
+
         """
         try:
-            tapped = self._lis3dh.tapped
-            first_double_tap = tapped and not self._last_tap
-            self._last_tap = tapped
-            return first_double_tap
+            return self._lis3dh.tapped
         except AttributeError:
             raise RuntimeError("Oops! You need a newer version of CircuitPython "
                                "(2.2.0 or greater) to use this feature.")
