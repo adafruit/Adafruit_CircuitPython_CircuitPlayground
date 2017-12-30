@@ -146,7 +146,10 @@ class Express:     # pylint: disable=too-many-public-methods
     def detect_taps(self, value):
         self._detect_taps = value
         try:
-            self._lis3dh.set_tap(value, 90, time_limit=2, time_latency=50, time_window=255)
+            if value is 1:
+                self._lis3dh.set_tap(value, 90, time_limit=4, time_latency=50, time_window=255)
+            if value is 2:
+                self._lis3dh.set_tap(value, 60, time_limit=10, time_latency=50, time_window=255)
         except AttributeError:
             pass
 
