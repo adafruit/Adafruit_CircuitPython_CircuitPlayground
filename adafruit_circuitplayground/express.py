@@ -131,7 +131,7 @@ class Express:     # pylint: disable=too-many-public-methods
         """Configure what type of tap is detected by ``cpx.tapped``. Use ``1`` for single-tap
         detection and ``2`` for double-tap detection. This does nothing without ``cpx.tapped``.
 
-        .. image :: /_static/accelerometer.jpg
+        .. image :: /docs/_static/accelerometer.jpg
           :alt: Accelerometer
 
         .. code-block:: python
@@ -160,7 +160,7 @@ class Express:     # pylint: disable=too-many-public-methods
     def tapped(self):
         """True once after a detecting a tap. Requires ``cpx.detect_taps``.
 
-        .. image :: /_static/accelerometer.jpg
+        .. image :: /docs/_static/accelerometer.jpg
           :alt: Accelerometer
 
         Tap the CPX once for a single-tap, or quickly tap twice for a double-tap.
@@ -215,7 +215,7 @@ class Express:     # pylint: disable=too-many-public-methods
     def acceleration(self):
         """Obtain data from the x, y and z axes.
 
-        .. image :: /_static/accelerometer.jpg
+        .. image :: /docs/_static/accelerometer.jpg
           :alt: Accelerometer
 
         This example prints the values. Try moving the board to see how the
@@ -236,7 +236,7 @@ class Express:     # pylint: disable=too-many-public-methods
 
         :param int shake_threshold: The threshold shake must exceed to return true (Default: 30)
 
-        .. image :: /_static/accelerometer.jpg
+        .. image :: /docs/_static/accelerometer.jpg
           :alt: Accelerometer
 
         .. code-block:: python
@@ -271,7 +271,7 @@ class Express:     # pylint: disable=too-many-public-methods
     def touch_A1(self): # pylint: disable=invalid-name
         """Detect touch on capacitive touch pad A1.
 
-        .. image :: /_static/capacitive_touch_pad_A1.jpg
+        .. image :: /docs/_static/capacitive_touch_pad_A1.jpg
           :alt: Capacitive touch pad A1
 
         .. code-block:: python
@@ -291,7 +291,7 @@ class Express:     # pylint: disable=too-many-public-methods
     def touch_A2(self): # pylint: disable=invalid-name
         """Detect touch on capacitive touch pad A2.
 
-        .. image :: /_static/capacitive_touch_pad_A2.jpg
+        .. image :: /docs/_static/capacitive_touch_pad_A2.jpg
           :alt: Capacitive touch pad A2
 
         .. code-block:: python
@@ -311,7 +311,7 @@ class Express:     # pylint: disable=too-many-public-methods
     def touch_A3(self): # pylint: disable=invalid-name
         """Detect touch on capacitive touch pad A3.
 
-        .. image :: /_static/capacitive_touch_pad_A3.jpg
+        .. image :: /docs/_static/capacitive_touch_pad_A3.jpg
           :alt: Capacitive touch pad A3
 
         .. code-block:: python
@@ -331,7 +331,7 @@ class Express:     # pylint: disable=too-many-public-methods
     def touch_A4(self): # pylint: disable=invalid-name
         """Detect touch on capacitive touch pad A4.
 
-        .. image :: /_static/capacitive_touch_pad_A4.jpg
+        .. image :: /docs/_static/capacitive_touch_pad_A4.jpg
           :alt: Capacitive touch pad A4
 
         .. code-block:: python
@@ -351,7 +351,7 @@ class Express:     # pylint: disable=too-many-public-methods
     def touch_A5(self): # pylint: disable=invalid-name
         """Detect touch on capacitive touch pad A5.
 
-        .. image :: /_static/capacitive_touch_pad_A5.jpg
+        .. image :: /docs/_static/capacitive_touch_pad_A5.jpg
           :alt: Capacitive touch pad A5
 
         .. code-block:: python
@@ -371,7 +371,7 @@ class Express:     # pylint: disable=too-many-public-methods
     def touch_A6(self): # pylint: disable=invalid-name
         """Detect touch on capacitive touch pad A6.
 
-        .. image :: /_static/capacitive_touch_pad_A6.jpg
+        .. image :: /docs/_static/capacitive_touch_pad_A6.jpg
           :alt: Capacitive touch pad A6
 
         .. code-block:: python
@@ -391,7 +391,7 @@ class Express:     # pylint: disable=too-many-public-methods
     def touch_A7(self): # pylint: disable=invalid-name
         """Detect touch on capacitive touch pad A7.
 
-        .. image :: /_static/capacitive_touch_pad_A7.jpg
+        .. image :: /docs/_static/capacitive_touch_pad_A7.jpg
           :alt: Capacitive touch pad A7
 
         .. code-block:: python
@@ -413,7 +413,7 @@ class Express:     # pylint: disable=too-many-public-methods
 
         :param int adjustment: The desired threshold increase
 
-        .. image :: /_static/capacitive_touch_pads.jpg
+        .. image :: /docs/_static/capacitive_touch_pads.jpg
           :alt: Capacitive touch pads
 
         .. code-block:: python
@@ -443,7 +443,7 @@ class Express:     # pylint: disable=too-many-public-methods
 
         See `neopixel.NeoPixel` for more info.
 
-        .. image :: /_static/neopixel_numbering.jpg
+        .. image :: /docs/_static/neopixel_numbering.jpg
           :alt: NeoPixel order diagram
 
         Here is an example that sets the first pixel green and the second red.
@@ -466,7 +466,7 @@ class Express:     # pylint: disable=too-many-public-methods
     def button_a(self):
         """``True`` when Button A is pressed. ``False`` if not.
 
-            .. image :: /_static/button_a.jpg
+            .. image :: /docs/_static/button_a.jpg
               :alt: Button A
 
             .. code-block:: python
@@ -483,7 +483,7 @@ class Express:     # pylint: disable=too-many-public-methods
     def button_b(self):
         """``True`` when Button B is pressed. ``False`` if not.
 
-            .. image :: /_static/button_b.jpg
+            .. image :: /docs/_static/button_b.jpg
               :alt: Button B
 
             .. code-block:: python
@@ -502,7 +502,7 @@ class Express:     # pylint: disable=too-many-public-methods
           ``True`` when the switch is to the left next to the music notes.
           ``False`` when it is to the right towards the ear.
 
-          .. image :: ../_static/slide_switch.jpg
+          .. image :: /docs/_static/slide_switch.jpg
             :alt: Slide switch
 
           .. code-block:: python
@@ -520,7 +520,7 @@ class Express:     # pylint: disable=too-many-public-methods
     def temperature(self):
         """The temperature of the CircuitPlayground in Celsius.
 
-            .. image :: /_static/thermistor.jpg
+            .. image :: /docs/_static/thermistor.jpg
               :alt: Temperature sensor
 
            Converting this to Farenheit is easy!
@@ -543,7 +543,7 @@ class Express:     # pylint: disable=too-many-public-methods
     def light(self):
         """The brightness of the CircuitPlayground in approximate Lux.
 
-           .. image :: /_static/light_sensor.jpg
+           .. image :: /docs/_static/light_sensor.jpg
              :alt: Light sensor
 
            Try covering the sensor next to the eye to see it change.
@@ -563,7 +563,7 @@ class Express:     # pylint: disable=too-many-public-methods
     def red_led(self):
         """The red led next to the USB plug marked D13.
 
-           .. image :: /_static/red_led.jpg
+           .. image :: /docs/_static/red_led.jpg
              :alt: D13 LED
 
            .. code-block:: python
@@ -604,7 +604,7 @@ class Express:     # pylint: disable=too-many-public-methods
         :param int frequency: The frequency of the tone in Hz
         :param float duration: The duration of the tone in seconds
 
-        .. image :: /_static/speaker.jpg
+        .. image :: /docs/_static/speaker.jpg
           :alt: Onboard speaker
 
         .. code-block:: python
@@ -624,7 +624,7 @@ class Express:     # pylint: disable=too-many-public-methods
 
         :param int frequency: The frequency of the tone in Hz
 
-        .. image :: /_static/speaker.jpg
+        .. image :: /docs/_static/speaker.jpg
           :alt: Onboard speaker
 
         .. code-block:: python
@@ -649,7 +649,7 @@ class Express:     # pylint: disable=too-many-public-methods
     def stop_tone(self):
         """ Use with start_tone to stop the tone produced.
 
-        .. image :: /_static/speaker.jpg
+        .. image :: /docs/_static/speaker.jpg
           :alt: Onboard speaker
 
         .. code-block:: python
@@ -674,7 +674,7 @@ class Express:     # pylint: disable=too-many-public-methods
 
         :param file_name: The name of your .wav file in quotation marks including .wav
 
-        .. image :: /_static/speaker.jpg
+        .. image :: /docs/_static/speaker.jpg
           :alt: Onboard speaker
 
         .. code-block:: python
