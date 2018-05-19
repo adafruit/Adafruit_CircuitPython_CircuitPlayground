@@ -20,7 +20,7 @@ intersphinx_mapping = {'python': ('https://docs.python.org/3.4', None),
                        'NeoPixel': ('https://circuitpython.readthedocs.io/projects/neopixel/en/latest/', None)}
 
 # Libraries we depend on but don't need for generating docs.
-autodoc_mock_imports = ["board", "analogio", "digitalio", "neopixel", "adafruit_thermistor", "audioio", "touchio", "adafruit_lis3dh", "busio"]
+autodoc_mock_imports = ["board", "analogio", "digitalio", "neopixel", "adafruit_thermistor", "audioio", "touchio", "adafruit_lis3dh", "busio", "audiobusio"]
 
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ['_templates']
