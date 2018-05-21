@@ -107,8 +107,7 @@ class Express:     # pylint: disable=too-many-public-methods
         except TypeError:
             self._mic = audiobusio.PDMIn(board.MICROPHONE_CLOCK, board.MICROPHONE_DATA,
                                          frequency=16000, bit_depth=16)
-        self._samples = array.array('H', [0] * 160)
-        self._mic.record(self._samples, len(self._samples))
+        self._samples = None
 
         # Define touch:
         # We chose these verbose touch_A# names so that beginners could use it without understanding
@@ -160,6 +159,7 @@ class Express:     # pylint: disable=too-many-public-methods
           while True:
               print(cpx.sound_level)
         """
+        self._samples = array.array('H', [0] * 160)
         self._mic.record(self._samples, len(self._samples))
         return self._normalized_rms(self._samples)
 
