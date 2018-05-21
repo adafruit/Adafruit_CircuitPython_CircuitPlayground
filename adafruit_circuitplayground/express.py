@@ -1,7 +1,7 @@
 # The MIT License (MIT)
 #
 # Copyright (c) 2016 Scott Shawcroft for Adafruit Industries
-# Copyright (c) 2017 Kattni Rembor for Adafruit Industries
+# Copyright (c) 2017-2018 Kattni Rembor for Adafruit Industries
 #
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
@@ -21,7 +21,7 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 # THE SOFTWARE.
 
-# We have a lot of attributes for this complex sensor.
+# We have a lot of attributes for this complex library.
 # pylint: disable=too-many-instance-attributes
 
 """
@@ -49,6 +49,7 @@ import busio
 import digitalio
 import neopixel
 import touchio
+import audiobusio
 
 __version__ = "0.0.0-auto.0"
 __repo__ = "https://github.com/adafruit/Adafruit_CircuitPython_CircuitPlayground.git"
@@ -99,6 +100,15 @@ class Express:     # pylint: disable=too-many-public-methods
         self._sample = None
         self._sine_wave = None
 
+        # Define sound sensor/mic:
+        try:
+            self._mic = audiobusio.PDMIn(board.MICROPHONE_CLOCK, board.MICROPHONE_DATA,
+                                         sample_rate=16000, bit_depth=16)
+        except TypeError:
+            self._mic = audiobusio.PDMIn(board.MICROPHONE_CLOCK, board.MICROPHONE_DATA,
+                                         frequency=16000, bit_depth=16)
+        self._samples = None
+
         # Define touch:
         # We chose these verbose touch_A# names so that beginners could use it without understanding
         # lists and the capital A to match the pin name. The capitalization is not strictly Python
@@ -125,6 +135,77 @@ class Express:     # pylint: disable=too-many-public-methods
         # Initialise tap:
         self._detect_taps = 1
         self.detect_taps = 1
+
+    @staticmethod
+    def _normalized_rms(values):
+        mean_values = int(sum(values) / len(values))
+        return math.sqrt(sum(float(sample - mean_values) * (sample - mean_values)
+                             for sample in values) / len(values))
+
+    @property
+    def sound_level(self):
+        """Obtain the sound level from the microphone (sound sensor).
+
+        .. image :: ../docs/_static/microphone.jpg
+          :alt: Microphone (sound sensor)
+
+        This example prints the sound levels. Try clapping or blowing on
+        the microphone to see the levels change.
+
+        .. code-block:: python
+
+          from adafruit_circuitplayground.express import cpx
+
+          while True:
+              print(cpx.sound_level)
+        """
+        if self._sample is None:
+            self._samples = array.array('H', [0 for _ in range(160)])
+            self._mic.record(self._samples, len(self._samples))
+            return self._normalized_rms(self._samples)
+
+    def loud_sound(self, sound_threshold=200):
+        """Utilise a loud sound as an input.
+
+        :param int sound_threshold: Threshold sound level must exceed to return true (Default: 200)
+
+        .. image :: ../docs/_static/microphone.jpg
+          :alt: Microphone (sound sensor)
+
+        This example turns the LEDs red each time you make a loud sound.
+        Try clapping or blowing onto the microphone to trigger it.
+
+        .. code-block:: python
+
+          from adafruit_circuitplayground.express import cpx
+
+          while True:
+              if cpx.loud_sound():
+                  cpx.pixels.fill((50, 0, 0))
+              else:
+                  cpx.pixels.fill(0)
+
+        You may find that the code is not responding how you would like.
+        If this is the case, you can change the loud sound threshold to
+        make it more or less responsive. Setting it to a higher number
+        means it will take a louder sound to trigger. Setting it to a
+        lower number will take a quieter sound to trigger. The following
+        example shows the threshold being set to a higher number than
+        the default.
+
+        .. code-block:: python
+
+          from adafruit_circuitplayground.express import cpx
+
+          while True:
+              if cpx.loud_sound(sound_threshold=300):
+                  cpx.pixels.fill((50, 0, 0))
+              else:
+                  cpx.pixels.fill(0)
+        """
+
+        if self._sample is None:
+            return self.sound_level > sound_threshold
 
     @property
     def detect_taps(self):
@@ -667,6 +748,7 @@ class Express:     # pylint: disable=too-many-public-methods
         # Stop playing any tones.
         if self._sample is not None and self._sample.playing:
             self._sample.stop()
+            self._sample = None
         self._speaker_enable.value = False
 
     def play_file(self, file_name):
@@ -689,11 +771,17 @@ class Express:     # pylint: disable=too-many-public-methods
         """
         # Play a specified file.
         self._speaker_enable.value = True
-        audio = audioio.AudioOut(board.SPEAKER, open(file_name, "rb"))
-
-        audio.play()
-        while audio.playing:
-            pass
+        if sys.implementation.version[0] == 3:
+            audio = audioio.AudioOut(board.SPEAKER)
+            file = audioio.WaveFile(open(file_name, "rb"))
+            audio.play(file)
+            while audio.playing:
+                pass
+        else:
+            audio = audioio.AudioOut(board.SPEAKER, open(file_name, "rb"))
+            audio.play()
+            while audio.playing:
+                pass
         self._speaker_enable.value = False
 
 
