@@ -159,9 +159,10 @@ class Express:     # pylint: disable=too-many-public-methods
           while True:
               print(cpx.sound_level)
         """
-        self._samples = array.array('H', [0] * 160)
-        self._mic.record(self._samples, len(self._samples))
-        return self._normalized_rms(self._samples)
+        if self._sample is None:
+            self._samples = array.array('H', [0 for _ in range(160)])
+            self._mic.record(self._samples, len(self._samples))
+            return self._normalized_rms(self._samples)
 
     def loud_sound(self, sound_threshold=200):
         """Utilise a loud sound as an input.
@@ -202,7 +203,9 @@ class Express:     # pylint: disable=too-many-public-methods
               else:
                   cpx.pixels.fill(0)
         """
-        return self.sound_level > sound_threshold
+
+        if self._sample is None:
+            return self.sound_level > sound_threshold
 
     @property
     def detect_taps(self):
@@ -745,6 +748,7 @@ class Express:     # pylint: disable=too-many-public-methods
         # Stop playing any tones.
         if self._sample is not None and self._sample.playing:
             self._sample.stop()
+            self._sample = None
         self._speaker_enable.value = False
 
     def play_file(self, file_name):
