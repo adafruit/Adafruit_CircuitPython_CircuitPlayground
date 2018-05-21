@@ -1,7 +1,7 @@
 # The MIT License (MIT)
 #
 # Copyright (c) 2016 Scott Shawcroft for Adafruit Industries
-# Copyright (c) 2017 Kattni Rembor for Adafruit Industries
+# Copyright (c) 2017-2018 Kattni Rembor for Adafruit Industries
 #
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
@@ -21,7 +21,7 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 # THE SOFTWARE.
 
-# We have a lot of attributes for this complex sensor.
+# We have a lot of attributes for this complex library.
 # pylint: disable=too-many-instance-attributes
 
 """
@@ -689,11 +689,17 @@ class Express:     # pylint: disable=too-many-public-methods
         """
         # Play a specified file.
         self._speaker_enable.value = True
-        audio = audioio.AudioOut(board.SPEAKER, open(file_name, "rb"))
-
-        audio.play()
-        while audio.playing:
-            pass
+        if sys.implementation.version[0] == 3:
+            audio = audioio.AudioOut(board.SPEAKER)
+            file = audioio.WaveFile(open(file_name, "rb"))
+            audio.play(file)
+            while audio.playing:
+                pass
+        else:
+            audio = audioio.AudioOut(board.SPEAKER, open(file_name, "rb"))
+            audio.play()
+            while audio.playing:
+                pass
         self._speaker_enable.value = False
 
 
