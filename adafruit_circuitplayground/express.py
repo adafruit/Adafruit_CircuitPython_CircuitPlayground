@@ -689,7 +689,7 @@ class Express:     # pylint: disable=too-many-public-methods
         """
         # Play a specified file.
         self._speaker_enable.value = True
-        if sys.implementation.version[0] == 3:
+        if sys.implementation.version[0] >= 3:
             audio = audioio.AudioOut(board.SPEAKER)
             file = audioio.WaveFile(open(file_name, "rb"))
             audio.play(file)
