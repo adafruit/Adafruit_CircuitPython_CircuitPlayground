@@ -98,6 +98,7 @@ class Express:     # pylint: disable=too-many-public-methods
         self._speaker_enable.switch_to_output(value=False)
         self._sample = None
         self._sine_wave = None
+        self._sine_wave_sample = None
 
         # Define touch:
         # We chose these verbose touch_A# names so that beginners could use it without understanding
