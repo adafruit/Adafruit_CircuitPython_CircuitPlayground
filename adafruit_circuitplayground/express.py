@@ -594,8 +594,14 @@ class Express:     # pylint: disable=too-many-public-methods
         if self._sample is not None:
             return
         length = 100
-        self._sine_wave = array.array("H", Express._sine_sample(length))
-        self._sample = audioio.AudioOut(board.SPEAKER, self._sine_wave)
+        if sys.implementation.version[0] >= 3:
+            self._sine_wave = array.array("H", Express._sine_sample(length))
+            self._sample = audioio.AudioOut(board.SPEAKER)
+            self._sine_wave_sample = audioio.RawSample(self._sine_wave)
+        else:
+            self._sine_wave = array.array("H", Express._sine_sample(length))
+            self._sample = audioio.AudioOut(board.SPEAKER, self._sine_wave)
+
 
     def play_tone(self, frequency, duration):
         """ Produce a tone using the speaker. Try changing frequency to change
@@ -642,9 +648,14 @@ class Express:     # pylint: disable=too-many-public-methods
         self._speaker_enable.value = True
         self._generate_sample()
         # Start playing a tone of the specified frequency (hz).
-        self._sample.frequency = int(len(self._sine_wave) * frequency)
-        if not self._sample.playing:
-            self._sample.play(loop=True)
+        if sys.implementation.version[0] >= 3:
+            self._sine_wave_sample.sample_rate = int(len(self._sine_wave) * frequency)
+            if not self._sample.playing:
+                self._sample.play(self._sine_wave_sample, loop=True)
+        else:
+            self._sample.frequency = int(len(self._sine_wave) * frequency)
+            if not self._sample.playing:
+                self._sample.play(loop=True)
 
     def stop_tone(self):
         """ Use with start_tone to stop the tone produced.
