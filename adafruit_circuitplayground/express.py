@@ -113,10 +113,7 @@ class Express:     # pylint: disable=too-many-public-methods
         # Define acceleration:
         self._i2c = busio.I2C(board.ACCELEROMETER_SCL, board.ACCELEROMETER_SDA)
         self._int1 = digitalio.DigitalInOut(board.ACCELEROMETER_INTERRUPT)
-        try:
-            self._lis3dh = adafruit_lis3dh.LIS3DH_I2C(self._i2c, address=0x19, int1=self._int1)
-        except TypeError:
-            self._lis3dh = adafruit_lis3dh.LIS3DH_I2C(self._i2c, address=0x19)
+        self._lis3dh = adafruit_lis3dh.LIS3DH_I2C(self._i2c, address=0x19, int1=self._int1)
         self._lis3dh.range = adafruit_lis3dh.RANGE_8_G
 
         # Initialise tap:
@@ -145,13 +142,10 @@ class Express:     # pylint: disable=too-many-public-methods
     @detect_taps.setter
     def detect_taps(self, value):
         self._detect_taps = value
-        try:
-            if value == 1:
-                self._lis3dh.set_tap(value, 90, time_limit=4, time_latency=50, time_window=255)
-            if value == 2:
-                self._lis3dh.set_tap(value, 60, time_limit=10, time_latency=50, time_window=255)
-        except AttributeError:
-            pass
+        if value == 1:
+            self._lis3dh.set_tap(value, 90, time_limit=4, time_latency=50, time_window=255)
+        if value == 2:
+            self._lis3dh.set_tap(value, 60, time_limit=10, time_latency=50, time_window=255)
 
     @property
     def tapped(self):
@@ -202,11 +196,7 @@ class Express:     # pylint: disable=too-many-public-methods
           print("Done.")
 
         """
-        try:
-            return self._lis3dh.tapped
-        except AttributeError:
-            raise RuntimeError("Oops! You need a newer version of CircuitPython "
-                               "(2.2.0 or greater) to use this feature.")
+        return self._lis3dh.tapped
 
     @property
     def acceleration(self):
@@ -258,11 +248,7 @@ class Express:     # pylint: disable=too-many-public-methods
               if cpx.shake(shake_threshold=20):
                   print("Shake detected more easily than before!")
         """
-        try:
-            return self._lis3dh.shake(shake_threshold=shake_threshold)
-        except AttributeError:
-            raise RuntimeError("Oops! You need a newer version of CircuitPython "
-                               "(2.2.0 or greater) to use this feature.")
+        return self._lis3dh.shake(shake_threshold=shake_threshold)
 
     def _touch(self, i):
         if not isinstance(self._touches[i], touchio.TouchIn):
