@@ -101,26 +101,19 @@ class Express:     # pylint: disable=too-many-public-methods
         self._sine_wave_sample = None
 
         # Define touch:
-        # We chose these verbose touch_A# names so that beginners could use it without understanding
-        # lists and the capital A to match the pin name. The capitalization is not strictly Python
-        # style, so everywhere we use these names, we whitelist the errors using:
-        # pylint: disable=invalid-name
-        self._touch_A1 = None
-        self._touch_A2 = None
-        self._touch_A3 = None
-        self._touch_A4 = None
-        self._touch_A5 = None
-        self._touch_A6 = None
-        self._touch_A7 = None
+        # Initially, self._touches stores the pin used for a particular touch. When that touch is
+        # used for the first time, the pin is replaced with the corresponding TouchIn object.
+        # This saves a little RAM over using a separate read-only pin tuple.
+        # For example, after `cpx.touch_A2`, self._touches is equivalent to:
+        # [None, board.A1, touchio.TouchIn(board.A2), board.A3, ...]
+        # Slot 0 is not used (A0 is not allowed as a touch pin).
+        self._touches = [None, board.A1, board.A2, board.A3, board.A4, board.A5, board.A6, board.A7]
         self._touch_threshold_adjustment = 0
 
         # Define acceleration:
         self._i2c = busio.I2C(board.ACCELEROMETER_SCL, board.ACCELEROMETER_SDA)
         self._int1 = digitalio.DigitalInOut(board.ACCELEROMETER_INTERRUPT)
-        try:
-            self._lis3dh = adafruit_lis3dh.LIS3DH_I2C(self._i2c, address=0x19, int1=self._int1)
-        except TypeError:
-            self._lis3dh = adafruit_lis3dh.LIS3DH_I2C(self._i2c, address=0x19)
+        self._lis3dh = adafruit_lis3dh.LIS3DH_I2C(self._i2c, address=0x19, int1=self._int1)
         self._lis3dh.range = adafruit_lis3dh.RANGE_8_G
 
         # Initialise tap:
@@ -149,13 +142,10 @@ class Express:     # pylint: disable=too-many-public-methods
     @detect_taps.setter
     def detect_taps(self, value):
         self._detect_taps = value
-        try:
-            if value == 1:
-                self._lis3dh.set_tap(value, 90, time_limit=4, time_latency=50, time_window=255)
-            if value == 2:
-                self._lis3dh.set_tap(value, 60, time_limit=10, time_latency=50, time_window=255)
-        except AttributeError:
-            pass
+        if value == 1:
+            self._lis3dh.set_tap(value, 90, time_limit=4, time_latency=50, time_window=255)
+        if value == 2:
+            self._lis3dh.set_tap(value, 60, time_limit=10, time_latency=50, time_window=255)
 
     @property
     def tapped(self):
@@ -206,11 +196,7 @@ class Express:     # pylint: disable=too-many-public-methods
           print("Done.")
 
         """
-        try:
-            return self._lis3dh.tapped
-        except AttributeError:
-            raise RuntimeError("Oops! You need a newer version of CircuitPython "
-                               "(2.2.0 or greater) to use this feature.")
+        return self._lis3dh.tapped
 
     @property
     def acceleration(self):
@@ -262,12 +248,19 @@ class Express:     # pylint: disable=too-many-public-methods
               if cpx.shake(shake_threshold=20):
                   print("Shake detected more easily than before!")
         """
-        try:
-            return self._lis3dh.shake(shake_threshold=shake_threshold)
-        except AttributeError:
-            raise RuntimeError("Oops! You need a newer version of CircuitPython "
-                               "(2.2.0 or greater) to use this feature.")
+        return self._lis3dh.shake(shake_threshold=shake_threshold)
 
+    def _touch(self, i):
+        if not isinstance(self._touches[i], touchio.TouchIn):
+            # First time referenced. Get the pin from the slot for this touch
+            # and replace it with a TouchIn object for the pin.
+            self._touches[i] = touchio.TouchIn(self._touches[i])
+            self._touches[i].threshold += self._touch_threshold_adjustment
+        return self._touches[i].value
+
+    # We chose these verbose touch_A# names so that beginners could use it without understanding
+    # lists and the capital A to match the pin name. The capitalization is not strictly Python
+    # style, so everywhere we use these names, we whitelist the errors using:
     @property
     def touch_A1(self): # pylint: disable=invalid-name
         """Detect touch on capacitive touch pad A1.
@@ -283,10 +276,7 @@ class Express:     # pylint: disable=too-many-public-methods
               if cpx.touch_A1:
                   print('Touched pad A1')
         """
-        if self._touch_A1 is None:
-            self._touch_A1 = touchio.TouchIn(board.A1)
-            self._touch_A1.threshold += self._touch_threshold_adjustment
-        return self._touch_A1.value
+        return self._touch(1)
 
     @property
     def touch_A2(self): # pylint: disable=invalid-name
@@ -303,10 +293,7 @@ class Express:     # pylint: disable=too-many-public-methods
               if cpx.touch_A2:
                   print('Touched pad A2')
         """
-        if self._touch_A2 is None:
-            self._touch_A2 = touchio.TouchIn(board.A2)
-            self._touch_A2.threshold += self._touch_threshold_adjustment
-        return self._touch_A2.value
+        return self._touch(2)
 
     @property
     def touch_A3(self): # pylint: disable=invalid-name
@@ -323,10 +310,7 @@ class Express:     # pylint: disable=too-many-public-methods
               if cpx.touch_A3:
                   print('Touched pad A3')
         """
-        if self._touch_A3 is None:
-            self._touch_A3 = touchio.TouchIn(board.A3)
-            self._touch_A3.threshold += self._touch_threshold_adjustment
-        return self._touch_A3.value
+        return self._touch(3)
 
     @property
     def touch_A4(self): # pylint: disable=invalid-name
@@ -343,10 +327,7 @@ class Express:     # pylint: disable=too-many-public-methods
               if cpx.touch_A4:
                   print('Touched pad A4')
         """
-        if self._touch_A4 is None:
-            self._touch_A4 = touchio.TouchIn(board.A4)
-            self._touch_A4.threshold += self._touch_threshold_adjustment
-        return self._touch_A4.value
+        return self._touch(4)
 
     @property
     def touch_A5(self): # pylint: disable=invalid-name
@@ -363,10 +344,7 @@ class Express:     # pylint: disable=too-many-public-methods
               if cpx.touch_A5:
                   print('Touched pad A5')
         """
-        if self._touch_A5 is None:
-            self._touch_A5 = touchio.TouchIn(board.A5)
-            self._touch_A5.threshold += self._touch_threshold_adjustment
-        return self._touch_A5.value
+        return self._touch(5)
 
     @property
     def touch_A6(self): # pylint: disable=invalid-name
@@ -383,10 +361,7 @@ class Express:     # pylint: disable=too-many-public-methods
               if cpx.touch_A6:
                   print('Touched pad A6')
         """
-        if self._touch_A6 is None:
-            self._touch_A6 = touchio.TouchIn(board.A6)
-            self._touch_A6.threshold += self._touch_threshold_adjustment
-        return self._touch_A6.value
+        return self._touch(6)
 
     @property
     def touch_A7(self): # pylint: disable=invalid-name
@@ -403,10 +378,7 @@ class Express:     # pylint: disable=too-many-public-methods
               if cpx.touch_A7:
                   print('Touched pad A7')
         """
-        if self._touch_A7 is None:
-            self._touch_A7 = touchio.TouchIn(board.A7)
-            self._touch_A7.threshold += self._touch_threshold_adjustment
-        return self._touch_A7.value
+        return self._touch(7)
 
     def adjust_touch_threshold(self, adjustment):
         """Adjust the threshold needed to activate the capacitive touch pads.
@@ -427,9 +399,8 @@ class Express:     # pylint: disable=too-many-public-methods
               if cpx.touch_A1:
                   print('Touched pad A1')
         """
-        for pad_name in ["_touch_A" + str(x) for x in range(1, 8)]:
-            touch_in = getattr(self, pad_name)
-            if touch_in:
+        for touch_in in self._touches:
+            if isinstance(touch_in, touchio.TouchIn):
                 touch_in.threshold += adjustment
         self._touch_threshold_adjustment += adjustment
 
@@ -595,12 +566,11 @@ class Express:     # pylint: disable=too-many-public-methods
         if self._sample is not None:
             return
         length = 100
+        self._sine_wave = array.array("H", Express._sine_sample(length))
         if sys.implementation.version[0] >= 3:
-            self._sine_wave = array.array("H", Express._sine_sample(length))
             self._sample = audioio.AudioOut(board.SPEAKER)
             self._sine_wave_sample = audioio.RawSample(self._sine_wave)
         else:
-            self._sine_wave = array.array("H", Express._sine_sample(length))
             self._sample = audioio.AudioOut(board.SPEAKER, self._sine_wave)
 
 
