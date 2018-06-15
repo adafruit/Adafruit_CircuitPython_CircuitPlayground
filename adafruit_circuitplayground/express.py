@@ -649,6 +649,8 @@ class Express:     # pylint: disable=too-many-public-methods
         # Stop playing any tones.
         if self._sample is not None and self._sample.playing:
             self._sample.stop()
+            self._sample.deinit()
+            self._sample = None
         self._speaker_enable.value = False
 
     def play_file(self, file_name):
@@ -670,18 +672,19 @@ class Express:     # pylint: disable=too-many-public-methods
                      cpx.play_file("rimshot.wav")
         """
         # Play a specified file.
+        self.stop_tone()
         self._speaker_enable.value = True
         if sys.implementation.version[0] >= 3:
-            audio = audioio.AudioOut(board.SPEAKER)
-            file = audioio.WaveFile(open(file_name, "rb"))
-            audio.play(file)
-            while audio.playing:
-                pass
+            with audioio.AudioOut(board.SPEAKER) as audio:
+                wavefile = audioio.WaveFile(open(file_name, "rb"))
+                audio.play(wavefile)
+                while audio.playing:
+                    pass
         else:
-            audio = audioio.AudioOut(board.SPEAKER, open(file_name, "rb"))
-            audio.play()
-            while audio.playing:
-                pass
+            with audioio.AudioOut(board.SPEAKER, open(file_name, "rb")) as audio:
+                audio.play()
+                while audio.playing:
+                    pass
         self._speaker_enable.value = False
 
 
