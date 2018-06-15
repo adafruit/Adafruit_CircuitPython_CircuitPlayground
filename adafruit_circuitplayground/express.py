@@ -672,22 +672,19 @@ class Express:     # pylint: disable=too-many-public-methods
                      cpx.play_file("rimshot.wav")
         """
         # Play a specified file.
+        self.stop_tone()
         self._speaker_enable.value = True
-        try:
-            if sys.implementation.version[0] >= 3:
-                audio = audioio.AudioOut(board.SPEAKER)
-                file = audioio.WaveFile(open(file_name, "rb"))
-                audio.play(file)
+        if sys.implementation.version[0] >= 3:
+            with audioio.AudioOut(board.SPEAKER) as audio:
+                wavefile = audioio.WaveFile(open(file_name, "rb"))
+                audio.play(wavefile)
                 while audio.playing:
                     pass
-                audio.deinit()
-            else:
-                audio = audioio.AudioOut(board.SPEAKER, open(file_name, "rb"))
+        else:
+            with audioio.AudioOut(board.SPEAKER, open(file_name, "rb")) as audio:
                 audio.play()
                 while audio.playing:
                     pass
-        except RuntimeError:
-            pass
         self._speaker_enable.value = False
 
 
