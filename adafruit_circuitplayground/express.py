@@ -687,7 +687,7 @@ class Express:     # pylint: disable=too-many-public-methods
                 while audio.playing:
                     pass
         except RuntimeError:
-            pass
+            pass 
         self._speaker_enable.value = False
 
 
