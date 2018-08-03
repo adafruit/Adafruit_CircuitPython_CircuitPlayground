@@ -3,9 +3,9 @@
 import time
 from adafruit_circuitplayground.express import cpx
 
-
 # The number of pixels in the strip
 numpix = 10
+
 
 def wheel(pos):
     # Input a value 0 to 255 to get a color value.
@@ -20,6 +20,7 @@ def wheel(pos):
     pos -= 170
     return (0, int(pos*3), int(255 - pos*3))
 
+
 def rainbow_cycle(wait):
     for j in range(255):
         for i in range(cpx.pixels.n):
@@ -27,6 +28,7 @@ def rainbow_cycle(wait):
             cpx.pixels[i] = wheel(idx & 255)
         cpx.pixels.show()
         time.sleep(wait)
+
 
 cpx.pixels.auto_write = False
 cpx.pixels.brightness = 0.3

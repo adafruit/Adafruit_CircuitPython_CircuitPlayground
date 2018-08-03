@@ -23,6 +23,7 @@ deploy:
 
 install:
   - pip install pylint circuitpython-build-tools Sphinx sphinx-rtd-theme
+  - pip install --force-reinstall pylint==1.9.2
 
 script:
   - pylint adafruit_circuitplayground/*.py
