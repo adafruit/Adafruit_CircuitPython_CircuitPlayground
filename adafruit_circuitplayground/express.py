@@ -562,10 +562,9 @@ class Express:     # pylint: disable=too-many-public-methods
         for i in range(length):
             yield int(tone_volume * math.sin(2*math.pi*(i / length)) + shift)
 
-    def _generate_sample(self):
+    def _generate_sample(self, length=100):
         if self._sample is not None:
             return
-        length = 100
         self._sine_wave = array.array("H", Express._sine_sample(length))
         if sys.implementation.version[0] >= 3:
             self._sample = audioio.AudioOut(board.SPEAKER)
@@ -617,7 +616,10 @@ class Express:     # pylint: disable=too-many-public-methods
                      cpx.stop_tone()
         """
         self._speaker_enable.value = True
-        self._generate_sample()
+        length = 100
+        if length * frequency > 350000:
+            length = 350000 // frequency
+        self._generate_sample(length)
         # Start playing a tone of the specified frequency (hz).
         if sys.implementation.version[0] >= 3:
             self._sine_wave_sample.sample_rate = int(len(self._sine_wave) * frequency)
