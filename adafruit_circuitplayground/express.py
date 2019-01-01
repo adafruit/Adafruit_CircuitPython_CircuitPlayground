@@ -51,6 +51,7 @@ import adafruit_lis3dh
 import adafruit_thermistor
 import analogio
 import audioio
+import audiobusio
 import board
 import busio
 import digitalio
@@ -99,6 +100,12 @@ class Express:     # pylint: disable=too-many-public-methods
         # Define sensors:
         self._temp = adafruit_thermistor.Thermistor(board.TEMPERATURE, 10000, 10000, 25, 3950)
         self._light = Photocell(board.LIGHT)
+        self._sound = audiobusio.PDMIn(
+            board.MICROPHONE_CLOCK,
+            board.MICROPHONE_DATA,
+            sample_rate=16000,
+            bit_depth=16
+            )
 
         # Define audio:
         self._speaker_enable = digitalio.DigitalInOut(board.SPEAKER_ENABLE)
@@ -494,6 +501,34 @@ class Express:     # pylint: disable=too-many-public-methods
                 time.sleep(1)
             """
         return self._switch.value
+
+    @property
+    def magnitude(self):
+        """The magnitude of sound pressure change within a sound wave.
+
+           .. image :: ../docs/_static/circuitplayground_express.jpg
+             :alt: Sound sensor
+
+           Try clapping to see it count claps.
+
+           .. code-block:: python
+
+             
+             from adafruit_circuitplayground.express import time, cpx
+             clapcount = 0
+
+             while True:
+                 if cpx.magnitude > 500:
+                     clapcount = clapcount + 1
+                     print("clap", clapcount)
+                     time.sleep(0.3)
+        """
+        samples = array.array('H', [0] * 80)
+        self._sound.record(samples, len(samples))
+        minbuf = int(sum(samples) / len(samples))
+        sum_of_samples = sum(float(sample - minbuf) * (sample - minbuf)
+            for sample in samples)
+        return math.sqrt(sum_of_samples / len(samples))
 
     @property
     def temperature(self):
