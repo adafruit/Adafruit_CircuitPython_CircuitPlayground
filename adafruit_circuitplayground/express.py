@@ -56,6 +56,8 @@ import busio
 import digitalio
 import neopixel
 import touchio
+import gamepad
+
 
 __version__ = "0.0.0-auto.0"
 __repo__ = "https://github.com/adafruit/Adafruit_CircuitPython_CircuitPlayground.git"
@@ -86,6 +88,7 @@ class Express:     # pylint: disable=too-many-public-methods
         self._a.switch_to_input(pull=digitalio.Pull.DOWN)
         self._b = digitalio.DigitalInOut(board.BUTTON_B)
         self._b.switch_to_input(pull=digitalio.Pull.DOWN)
+        self.gamepad = gamepad.GamePad(self._a, self._b)
 
         # Define switch:
         self._switch = digitalio.DigitalInOut(board.SLIDE_SWITCH)
@@ -474,6 +477,15 @@ class Express:     # pylint: disable=too-many-public-methods
                       print("Button B pressed!")
         """
         return self._b.value
+
+    @property
+    def were_pressed(self):
+        ret = set()
+        pressed = self.gamepad.get_pressed()
+        for button, mask in (('A', 0x01), ('B', 0x02)):
+            if mask & pressed:
+                ret.add(button)
+        return ret
 
     @property
     def switch(self):
