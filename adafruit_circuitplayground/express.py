@@ -658,8 +658,6 @@ class Express:     # pylint: disable=too-many-public-methods
         # Stop playing any tones.
         if self._sample is not None and self._sample.playing:
             self._sample.stop()
-            self._sample.deinit()
-            self._sample = None
         self._speaker_enable.value = False
 
     def play_melody(self, frequencies, durations):
@@ -693,7 +691,7 @@ class Express:     # pylint: disable=too-many-public-methods
                 cpx.play_melody(notes, beats)
         """        
         for i in range(len(frequencies)):
-            self.play_tone(frequencies[i], durations[i]/10)        
+            self.play_tone(frequencies[i], durations[i]/8)        
         
     def play_file(self, file_name):
         """ Play a .wav file using the onboard speaker.
