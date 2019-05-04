@@ -695,7 +695,7 @@ class Express:     # pylint: disable=too-many-public-methods
                 cpx.play_melody(notes, beats)
         """
         for idx, frequency in enumerate(frequencies):
-            self.play_tone(frequency, durations[idx]/7, volume)
+            self.play_tone(frequency, durations[idx]/7)
 
     def deinit_audio(self):
         """ Use with start_tone to stop the tone produced.
