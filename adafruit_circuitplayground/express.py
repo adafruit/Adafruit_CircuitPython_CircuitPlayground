@@ -696,7 +696,7 @@ class Express:     # pylint: disable=too-many-public-methods
             else:
                 self.start_tone(frequency)
                 time.sleep(durations[idx]/tempo)
-            self._sample.stop()
+                self._sample.stop()
         self.stop_tone()
 
     def play_file(self, file_name):
