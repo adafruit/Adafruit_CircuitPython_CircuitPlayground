@@ -662,12 +662,12 @@ class Express:     # pylint: disable=too-many-public-methods
             self._sample = None
         self._speaker_enable.value = False
 
-    def play_melody(self, frequencies, durations, tempo=10):
-        """ Play a melody using notes and beats, rests are  frequency.
+    def play_melody(self, frequencies, durations, speed=10):
+        """ Play a melody using notes and beats, rests are 0 frequency.
 
         :param int frequency: The frequency of the tone in Hz
         :param float duration: The duration of the tone in seconds
-        :param float tempo: higher = faster, lower = slower
+        :param float speed: Optional parameter, fine tune duration
 
         .. image :: ../docs/_static/speaker.jpg
           :alt: Onboard speaker
@@ -701,10 +701,10 @@ class Express:     # pylint: disable=too-many-public-methods
         for idx, frequency in enumerate(frequencies):
             if frequency is 0:
                 self._sample.stop()
-                time.sleep(durations[idx]/tempo)
+                time.sleep(durations[idx]/speed)
             else:
                 self.start_tone(frequency)
-                time.sleep(durations[idx]/tempo)
+                time.sleep(durations[idx]/speed)
                 self._sample.stop()
         self.stop_tone()
 
