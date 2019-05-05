@@ -666,6 +666,7 @@ class Express:     # pylint: disable=too-many-public-methods
         """ Play a melody using notes and beats, rests are  frequency.
         :param int frequency: The frequency of the tone in Hz
         :param float duration: The duration of the tone in seconds
+        :param float tempo: higher number faster, lower number slower
         .. image :: ../docs/_static/speaker.jpg
           :alt: Onboard speaker
         .. code-block:: python
