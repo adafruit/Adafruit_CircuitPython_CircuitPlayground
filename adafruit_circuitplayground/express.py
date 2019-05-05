@@ -690,6 +690,7 @@ class Express:     # pylint: disable=too-many-public-methods
             while True:
                 cpx.play_melody(notes, beats)
         """
+        # Play a melody.
         for idx, frequency in enumerate(frequencies):
             if frequency is 0:
                 self._sample.stop()
