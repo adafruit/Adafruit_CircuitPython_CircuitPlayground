@@ -690,8 +690,12 @@ class Express:     # pylint: disable=too-many-public-methods
                 cpx.play_melody(notes, beats)
         """
         for idx, frequency in enumerate(frequencies):
-            self.start_tone(frequency)
-            time.sleep(durations[idx]/tempo)
+            if frequency is 0:
+                self._sample.stop()
+                time.sleep(durations[idx]/tempo)
+            else:
+                self.start_tone(frequency)
+                time.sleep(durations[idx]/tempo)
             self._sample.stop()
         self.stop_tone()
 
