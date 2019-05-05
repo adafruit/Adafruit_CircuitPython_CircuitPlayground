@@ -664,13 +664,18 @@ class Express:     # pylint: disable=too-many-public-methods
 
     def play_melody(self, frequencies, durations, tempo=10):
         """ Play a melody using notes and beats, rests are  frequency.
+
         :param int frequency: The frequency of the tone in Hz
         :param float duration: The duration of the tone in seconds
-        :param float tempo: higher number faster, lower number slower
+        :param float tempo: higher = faster, lower = slower
+
         .. image :: ../docs/_static/speaker.jpg
           :alt: Onboard speaker
+
         .. code-block:: python
+
             from adafruit_circuitplayground.express import cpx
+
             notes = [698, 880, 988, 698, 880, 988, 698, 880, 988,
             1319, 1175, 988, 1047, 988, 784, 659, 587, 659, 784, 659,
             698, 880, 988, 698, 880, 988, 698, 880, 988, 1319,
@@ -681,12 +686,14 @@ class Express:     # pylint: disable=too-many-public-methods
             784, 698, 880, 784, 988, 880, 1047, 988, 1175, 1047,
             1319, 1175, 1397, 1319, 1319, 1397, 1175, 1319,
             0, 0, 0]
+
             beats= [2, 2, 4, 2, 2, 4, 2, 2, 2, 2, 4, 2, 2, 2, 2, 8, 2, 2, 2,
             10, 2, 2, 4, 2, 2, 4, 2, 2, 2, 2, 4, 2, 2, 2, 2, 8, 2, 2, 2, 10,
             2, 2, 4, 2, 2, 4, 2, 2, 8, 2, 2, 4, 2, 2, 4, 2, 2, 8,
             2, 2, 4, 2, 2, 4, 2, 2, 8,
             2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1, 1, 2, 6,
             4, 2, 2]
+
             while True:
                 cpx.play_melody(notes, beats)
         """
