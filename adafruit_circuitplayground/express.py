@@ -701,8 +701,8 @@ class Express:     # pylint: disable=too-many-public-methods
         for idx, frequency in enumerate(frequencies):
             if frequency != 0:
                 self.start_tone(frequency)
-            self._sample.stop()
             time.sleep(durations[idx]/speed)
+            self._sample.stop()
         self.stop_tone()
 
     def play_file(self, file_name):
