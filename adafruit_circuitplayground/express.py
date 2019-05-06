@@ -577,7 +577,7 @@ class Express:     # pylint: disable=too-many-public-methods
             self._sample = audioio.AudioOut(board.SPEAKER)
             self._sine_wave_sample = audioio.RawSample(self._sine_wave)
         else:
-            self._sample = audioio.AudioOut(board.SPEAKER, self._sine_wave)
+            raise NotImplementedError("Please use CircuitPython 3.0 or higher.")
 
 
     def play_tone(self, frequency, duration):
@@ -633,9 +633,7 @@ class Express:     # pylint: disable=too-many-public-methods
             if not self._sample.playing:
                 self._sample.play(self._sine_wave_sample, loop=True)
         else:
-            self._sample.frequency = int(len(self._sine_wave) * frequency)
-            if not self._sample.playing:
-                self._sample.play(loop=True)
+            raise NotImplementedError("Please use CircuitPython 3.0 or higher.")
 
     def stop_tone(self):
         """ Use with start_tone to stop the tone produced.
@@ -690,10 +688,7 @@ class Express:     # pylint: disable=too-many-public-methods
                 while audio.playing:
                     pass
         else:
-            with audioio.AudioOut(board.SPEAKER, open(file_name, "rb")) as audio:
-                audio.play()
-                while audio.playing:
-                    pass
+            raise NotImplementedError("Please use CircuitPython 3.0 or higher.")
         self._speaker_enable.value = False
 
 
