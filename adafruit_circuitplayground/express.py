@@ -699,13 +699,10 @@ class Express:     # pylint: disable=too-many-public-methods
         """
         # Play a melody.
         for idx, frequency in enumerate(frequencies):
-            if frequency is 0:
-                self._sample.stop()
-                time.sleep(durations[idx]/speed)
-            else:
+            if frequency != 0:
                 self.start_tone(frequency)
-                time.sleep(durations[idx]/speed)
-                self._sample.stop()
+            self._sample.stop()
+            time.sleep(durations[idx]/speed)
         self.stop_tone()
 
     def play_file(self, file_name):
