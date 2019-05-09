@@ -698,13 +698,12 @@ class Express:     # pylint: disable=too-many-public-methods
                 cpx.play_melody(notes, beats)
         """
         # Play a melody.
-	if len(frequencies) == len(durations):
-            for idx, frequency in enumerate(frequencies):
-                if frequency != 0:
-                    self.start_tone(frequency, volume)
-                time.sleep(durations[idx]/speed)
-                self._sample.stop()
-            self.stop_tone()
+        for idx, frequency in enumerate(frequencies):
+            if frequency != 0:
+                self.start_tone(frequency, volume)
+            time.sleep(durations[idx]/speed)
+            self._sample.stop()
+        self.stop_tone()
 
     def play_file(self, file_name):
         """ Play a .wav file using the onboard speaker.
