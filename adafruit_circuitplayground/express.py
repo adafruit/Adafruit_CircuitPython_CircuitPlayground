@@ -51,7 +51,6 @@ import adafruit_lis3dh
 import adafruit_thermistor
 import analogio
 import audioio
-import audiobusio
 import board
 import busio
 import digitalio
@@ -100,12 +99,6 @@ class Express:     # pylint: disable=too-many-public-methods
         # Define sensors:
         self._temp = adafruit_thermistor.Thermistor(board.TEMPERATURE, 10000, 10000, 25, 3950)
         self._light = Photocell(board.LIGHT)
-        self._sound = audiobusio.PDMIn(
-            board.MICROPHONE_CLOCK,
-            board.MICROPHONE_DATA,
-            sample_rate=16000,
-            bit_depth=16
-            )
 
         # Define audio:
         self._speaker_enable = digitalio.DigitalInOut(board.SPEAKER_ENABLE)
@@ -503,34 +496,6 @@ class Express:     # pylint: disable=too-many-public-methods
         return self._switch.value
 
     @property
-    def magnitude(self):
-        """The magnitude of sound pressure change within a sound wave.
-
-           .. image :: ../docs/_static/circuitplayground_express.jpg
-             :alt: Sound sensor
-
-           Try clapping to see it count claps.
-
-           .. code-block:: python
-
-             
-             from adafruit_circuitplayground.express import time, cpx
-             clapcount = 0
-
-             while True:
-                 if cpx.magnitude > 500:
-                     clapcount = clapcount + 1
-                     print("clap", clapcount)
-                     time.sleep(0.3)
-        """
-        samples = array.array('H', [0] * 80)
-        self._sound.record(samples, len(samples))
-        minbuf = int(sum(samples) / len(samples))
-        sum_of_samples = sum(float(sample - minbuf) * (sample - minbuf)
-            for sample in samples)
-        return math.sqrt(sum_of_samples / len(samples))
-
-    @property
     def temperature(self):
         """The temperature of the CircuitPlayground in Celsius.
 
@@ -598,24 +563,26 @@ class Express:     # pylint: disable=too-many-public-methods
         self._led.value = value
 
     @staticmethod
-    def _sine_sample(length):
-        tone_volume = (2 ** 15) - 1
+    def _sine_sample(length, volume=None):
+        if volume is None:
+            volume = 0
+        tone_volume = (2 ** 15) + volume
         shift = 2 ** 15
         for i in range(length):
             yield int(tone_volume * math.sin(2*math.pi*(i / length)) + shift)
 
-    def _generate_sample(self, length=100):
+    def _generate_sample(self, length=100, volume=None):
         if self._sample is not None:
             return
-        self._sine_wave = array.array("H", Express._sine_sample(length))
+        self._sine_wave = array.array("H", Express._sine_sample(length, volume))
         if sys.implementation.version[0] >= 3:
             self._sample = audioio.AudioOut(board.SPEAKER)
             self._sine_wave_sample = audioio.RawSample(self._sine_wave)
         else:
-            self._sample = audioio.AudioOut(board.SPEAKER, self._sine_wave)
+            raise NotImplementedError("Please use CircuitPython 3.0 or higher.")
 
 
-    def play_tone(self, frequency, duration):
+    def play_tone(self, frequency, duration, volume=None):
         """ Produce a tone using the speaker. Try changing frequency to change
         the pitch of the tone.
 
@@ -632,11 +599,11 @@ class Express:     # pylint: disable=too-many-public-methods
             cpx.play_tone(440, 1)
         """
         # Play a tone of the specified frequency (hz).
-        self.start_tone(frequency)
+        self.start_tone(frequency, volume)
         time.sleep(duration)
         self.stop_tone()
 
-    def start_tone(self, frequency):
+    def start_tone(self, frequency, volume=None):
         """ Produce a tone using the speaker. Try changing frequency to change
         the pitch of the tone.
 
@@ -661,16 +628,14 @@ class Express:     # pylint: disable=too-many-public-methods
         length = 100
         if length * frequency > 350000:
             length = 350000 // frequency
-        self._generate_sample(length)
+        self._generate_sample(length, volume)
         # Start playing a tone of the specified frequency (hz).
         if sys.implementation.version[0] >= 3:
             self._sine_wave_sample.sample_rate = int(len(self._sine_wave) * frequency)
             if not self._sample.playing:
                 self._sample.play(self._sine_wave_sample, loop=True)
         else:
-            self._sample.frequency = int(len(self._sine_wave) * frequency)
-            if not self._sample.playing:
-                self._sample.play(loop=True)
+            raise NotImplementedError("Please use CircuitPython 3.0 or higher.")
 
     def stop_tone(self):
         """ Use with start_tone to stop the tone produced.
@@ -696,6 +661,50 @@ class Express:     # pylint: disable=too-many-public-methods
             self._sample.deinit()
             self._sample = None
         self._speaker_enable.value = False
+
+    def play_melody(self, frequencies, durations, speed=10, volume=None):
+        """ Play a melody using notes and beats, rests are 0 frequency.
+
+        :param int frequency: The frequency of the tone in Hz
+        :param float duration: The duration of the tone in seconds
+        :param float speed: Optional parameter, fine tune duration
+
+        .. image :: ../docs/_static/speaker.jpg
+          :alt: Onboard speaker
+
+        .. code-block:: python
+
+            from adafruit_circuitplayground.express import cpx
+
+            notes = [698, 880, 988, 698, 880, 988, 698, 880, 988,
+            1319, 1175, 988, 1047, 988, 784, 659, 587, 659, 784, 659,
+            698, 880, 988, 698, 880, 988, 698, 880, 988, 1319,
+            1175, 988, 1047, 1319, 988, 784, 988, 784, 587, 659,
+            587, 659, 698, 784, 880, 988, 1047, 988, 659, 698,
+            784, 880, 988, 1047, 1175, 1319, 1397, 1568,
+            587, 659, 698, 784, 880, 988, 1047, 988, 659,
+            784, 698, 880, 784, 988, 880, 1047, 988, 1175, 1047,
+            1319, 1175, 1397, 1319, 1319, 1397, 1175, 1319,
+            0, 0, 0]
+
+            beats= [2, 2, 4, 2, 2, 4, 2, 2, 2, 2, 4, 2, 2, 2, 2, 8, 2, 2, 2,
+            10, 2, 2, 4, 2, 2, 4, 2, 2, 2, 2, 4, 2, 2, 2, 2, 8, 2, 2, 2, 10,
+            2, 2, 4, 2, 2, 4, 2, 2, 8, 2, 2, 4, 2, 2, 4, 2, 2, 8,
+            2, 2, 4, 2, 2, 4, 2, 2, 8,
+            2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1, 1, 2, 6,
+            4, 2, 2]
+
+            while True:
+                cpx.play_melody(notes, beats)
+        """
+        # Play a melody.
+	    if len(frequencies) == len(durations):
+            for idx, frequency in enumerate(frequencies):
+                if frequency != 0:
+                    self.start_tone(frequency, volume)
+                time.sleep(durations[idx]/speed)
+                self._sample.stop()
+            self.stop_tone()
 
     def play_file(self, file_name):
         """ Play a .wav file using the onboard speaker.
@@ -725,10 +734,7 @@ class Express:     # pylint: disable=too-many-public-methods
                 while audio.playing:
                     pass
         else:
-            with audioio.AudioOut(board.SPEAKER, open(file_name, "rb")) as audio:
-                audio.play()
-                while audio.playing:
-                    pass
+            raise NotImplementedError("Please use CircuitPython 3.0 or higher.")
         self._speaker_enable.value = False
 
 
