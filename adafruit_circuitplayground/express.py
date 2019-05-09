@@ -562,7 +562,7 @@ class Express:     # pylint: disable=too-many-public-methods
         for i in range(length):
             yield int(tone_volume * math.sin(2*math.pi*(i / length)) + shift)
 
-    def _generate_sample(self):
+    def _generate_sample(self, length=100):
         if self._sample is not None:
             return
         length = 100
