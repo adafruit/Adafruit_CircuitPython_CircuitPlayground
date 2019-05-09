@@ -38,14 +38,7 @@ import math
 import sys
 import time
 # pylint: disable=wrong-import-position
-try:
-    lib_index = sys.path.index("/lib")        # pylint: disable=invalid-name
-    if lib_index < sys.path.index(".frozen"):
-        # Prefer frozen modules over those in /lib.
-        sys.path.insert(lib_index, ".frozen")
-except ValueError:
-    # Don't change sys.path if it doesn't contain "lib" or ".frozen".
-    pass
+sys.path.insert(0, ".frozen")  # prefer frozen modules over local
 
 import adafruit_lis3dh
 import adafruit_thermistor
@@ -569,9 +562,10 @@ class Express:     # pylint: disable=too-many-public-methods
         for i in range(length):
             yield int(tone_volume * math.sin(2*math.pi*(i / length)) + shift)
 
-    def _generate_sample(self, length=100):
+    def _generate_sample(self):
         if self._sample is not None:
             return
+        length = 100
         self._sine_wave = array.array("H", Express._sine_sample(length))
         if sys.implementation.version[0] >= 3:
             self._sample = audioio.AudioOut(board.SPEAKER)
@@ -623,10 +617,7 @@ class Express:     # pylint: disable=too-many-public-methods
                      cpx.stop_tone()
         """
         self._speaker_enable.value = True
-        length = 100
-        if length * frequency > 350000:
-            length = 350000 // frequency
-        self._generate_sample(length)
+        self._generate_sample()
         # Start playing a tone of the specified frequency (hz).
         if sys.implementation.version[0] >= 3:
             self._sine_wave_sample.sample_rate = int(len(self._sine_wave) * frequency)
