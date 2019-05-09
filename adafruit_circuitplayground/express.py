@@ -698,7 +698,7 @@ class Express:     # pylint: disable=too-many-public-methods
                 cpx.play_melody(notes, beats)
         """
         # Play a melody.
-	    if len(frequencies) == len(durations):
+	if len(frequencies) == len(durations):
             for idx, frequency in enumerate(frequencies):
                 if frequency != 0:
                     self.start_tone(frequency, volume)
