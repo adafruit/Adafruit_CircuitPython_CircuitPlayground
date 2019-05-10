@@ -3,8 +3,8 @@ Simple test
 
 Ensure your device works with this simple test.
 
-.. literalinclude:: ../examples/acceleration_simpletest.py
-    :caption: examples/acceleration_simpletest.py
+.. literalinclude:: ../examples/circuitplayground_acceleration_simpletest.py
+    :caption: examples/circuitplayground_acceleration_simpletest.py
     :linenos:
 
 .. literalinclude:: ../examples/circuitplayground_pixels_simpletest.py
