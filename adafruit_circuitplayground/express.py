@@ -581,7 +581,6 @@ class Express:     # pylint: disable=too-many-public-methods
         else:
             raise NotImplementedError("Please use CircuitPython 3.0 or higher.")
 
-
     def play_tone(self, frequency, duration, volume=None):
         """ Produce a tone using the speaker. Try changing frequency to change
         the pitch of the tone.
@@ -692,7 +691,6 @@ class Express:     # pylint: disable=too-many-public-methods
         else:
             raise NotImplementedError("Please use CircuitPython 3.0 or higher.")
         self._speaker_enable.value = False
-
 
 cpx = Express() # pylint: disable=invalid-name
 """Object that is automatically created on import.
