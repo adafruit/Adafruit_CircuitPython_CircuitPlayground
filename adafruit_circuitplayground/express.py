@@ -413,7 +413,7 @@ class Express:     # pylint: disable=too-many-public-methods
 
     @property
     def pixels(self):
-        """Sequence like object representing the ten NeoPixels around the outside
+        """Sequence-like object representing the ten NeoPixels around the outside
         of the CircuitPlayground. Each pixel is at a certain index in the sequence
         as labeled below. Colors can be RGB hex like 0x110000 for red where each
         two digits are a color (0xRRGGBB) or a tuple like (17, 0, 0) where (R, G, B).
