@@ -51,6 +51,7 @@ import adafruit_lis3dh
 import adafruit_thermistor
 import analogio
 import audioio
+import audiocore
 import board
 import busio
 import digitalio
@@ -575,7 +576,7 @@ class Express:     # pylint: disable=too-many-public-methods
         self._sine_wave = array.array("H", Express._sine_sample(length))
         if sys.implementation.version[0] >= 3:
             self._sample = audioio.AudioOut(board.SPEAKER)
-            self._sine_wave_sample = audioio.RawSample(self._sine_wave)
+            self._sine_wave_sample = audiocore.RawSample(self._sine_wave)
         else:
             raise NotImplementedError("Please use CircuitPython 3.0 or higher.")
 
@@ -683,7 +684,7 @@ class Express:     # pylint: disable=too-many-public-methods
         self._speaker_enable.value = True
         if sys.implementation.version[0] >= 3:
             with audioio.AudioOut(board.SPEAKER) as audio:
-                wavefile = audioio.WaveFile(open(file_name, "rb"))
+                wavefile = audiocore.WaveFile(open(file_name, "rb"))
                 audio.play(wavefile)
                 while audio.playing:
                     pass
