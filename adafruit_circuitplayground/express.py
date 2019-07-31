@@ -51,7 +51,10 @@ import adafruit_lis3dh
 import adafruit_thermistor
 import analogio
 import audioio
-import audiocore
+try:
+    import audiocore
+except ImportError:
+    import audioio as audiocore
 import board
 import busio
 import digitalio
