@@ -18,10 +18,4 @@ while True:
         B = 0
         x, y, z = cpx.acceleration
         print((x, y, z))
-        if x:
-            R = R + abs(int(x))
-        if y:
-            G = G + abs(int(y))
-        if z:
-            B = B + abs(int(z))
-        cpx.pixels.fill((R, G, B))
+        cpx.pixels.fill(((R + abs(int(x))), (G + abs(int(y))), (B + abs(int(z)))))
