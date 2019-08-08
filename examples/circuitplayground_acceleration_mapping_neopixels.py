@@ -13,7 +13,7 @@ to green.
 This video walks you through the code: https://youtu.be/eNpPLbYx-iA
 """
 
-from time import sleep
+import time
 from adafruit_circuitplayground.express import cpx
 
 cpx.pixels.brightness = 0.2  # Adjust overall brightness as desired, between 0 and 1
@@ -28,25 +28,21 @@ def color_amount(accel_component):
     return round(normalized_accel * 255)                        # Convert to 0–255
 
 
-def fmt_accel(acceleration):
+def format_acceleration():
     return ', '.join(('{:>6.2f}'.format(axis_value) for axis_value in acceleration))
 
 
-def fmt_rgb(rgb_amounts):
+def format_rgb():
     return ', '.join(('{:>3d}'.format(rgb_amount) for rgb_amount in rgb_amounts))
 
 
-def log_values(acceleration, rgb_amounts):
-    print('({}) ==> ({})'.format(fmt_accel(acceleration), fmt_rgb(rgb_amounts)))
-
-
-def process():
-    acceleration = cpx.acceleration
-    rgb_amounts = [color_amount(axis_value) for axis_value in acceleration]
-    cpx.pixels.fill(rgb_amounts)
-    log_values(acceleration, rgb_amounts)
+def log_values():
+    print('({}) ==> ({})'.format(format_acceleration(), format_rgb()))
 
 
 while True:
-    process()
-    sleep(0.1)
+    acceleration = cpx.acceleration
+    rgb_amounts = [color_amount(axis_value) for axis_value in acceleration]
+    cpx.pixels.fill(rgb_amounts)
+    log_values()
+    time.sleep(0.1)
