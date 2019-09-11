@@ -127,12 +127,12 @@ Ensure your device works with this simple test.
     :caption: examples/circuitplayground_temperature_neopixels.py
     :linenos:
 
-.. literalinclude:: ../examples/circuitplayground_temperture_plotter.py
-    :caption: examples/circuitplayground_temperture_plotter.py
+.. literalinclude:: ../examples/circuitplayground_temperature_plotter.py
+    :caption: examples/circuitplayground_temperature_plotter.py
     :linenos:
 
-.. literalinclude:: ../examples/circuitplayground_temperture.py
-    :caption: examples/circuitplayground_temperture.py
+.. literalinclude:: ../examples/circuitplayground_temperature.py
+    :caption: examples/circuitplayground_temperature.py
     :linenos:
 
 .. literalinclude:: ../examples/circuitplayground_touch_pixel_fill_rainbow.py
