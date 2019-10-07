@@ -484,6 +484,18 @@ class Express:     # pylint: disable=too-many-public-methods
 
     @property
     def were_pressed(self):
+        """Returns a set of the buttons that have been pressed
+
+            .. image :: ../docs/_static/button_b.jpg
+              :alt: Button B
+
+            .. code-block:: python
+
+              from adafruit_circuitplayground.express import cpx
+
+              while True:
+                  print(cpx.were_pressed)
+        """
         ret = set()
         pressed = self.gamepad.get_pressed()
         for button, mask in (('A', 0x01), ('B', 0x02)):
