@@ -34,17 +34,9 @@ CircuitPython subclass for Circuit Playground Express.
 * Author(s): Kattni Rembor, Scott Shawcroft
 """
 
-import array
-import math
-import time
-import sys
 import audioio
-try:
-    import audiocore
-except ImportError:
-    audiocore = audioio
-import board
 import digitalio
+import sys
 # pylint: disable=wrong-import-position
 try:
     lib_index = sys.path.index("/lib")        # pylint: disable=invalid-name
@@ -69,6 +61,7 @@ class Express(CircuitPlaygroundBase):
     # the Circuit Playground Bluefruit. It is therefore referred to as TX in the
     # CircuitPlaygroundBase class, but can be used as either for Express.
     touch_A7 = CircuitPlaygroundBase.touch_TX
+    _audio_out = audioio.AudioOut
 
     def __init__(self):
         # Only create the cpx module member when we aren't being imported by Sphinx
@@ -76,133 +69,7 @@ class Express(CircuitPlaygroundBase):
                 digitalio.DigitalInOut.__module__ == "sphinx.ext.autodoc"):
             return
 
-        # Define audio:
-        self._speaker_enable = digitalio.DigitalInOut(board.SPEAKER_ENABLE)
-        self._speaker_enable.switch_to_output(value=False)
-        self._sample = None
-        self._sine_wave = None
-        self._sine_wave_sample = None
-
         super().__init__()
-
-    @staticmethod
-    def _sine_sample(length):
-        tone_volume = (2 ** 15) - 1
-        shift = 2 ** 15
-        for i in range(length):
-            yield int(tone_volume * math.sin(2*math.pi*(i / length)) + shift)
-
-    def _generate_sample(self, length=100):
-        if self._sample is not None:
-            return
-        self._sine_wave = array.array("H", Express._sine_sample(length))
-        self._sample = audioio.AudioOut(board.SPEAKER)
-        self._sine_wave_sample = audiocore.RawSample(self._sine_wave)
-
-    def play_tone(self, frequency, duration):
-        """ Produce a tone using the speaker. Try changing frequency to change
-        the pitch of the tone.
-
-        :param int frequency: The frequency of the tone in Hz
-        :param float duration: The duration of the tone in seconds
-
-        .. image :: ../docs/_static/speaker.jpg
-          :alt: Onboard speaker
-
-        .. code-block:: python
-
-            from adafruit_circuitplayground.express import cpx
-
-            cpx.play_tone(440, 1)
-        """
-        # Play a tone of the specified frequency (hz).
-        self.start_tone(frequency)
-        time.sleep(duration)
-        self.stop_tone()
-
-    def start_tone(self, frequency):
-        """ Produce a tone using the speaker. Try changing frequency to change
-        the pitch of the tone.
-
-        :param int frequency: The frequency of the tone in Hz
-
-        .. image :: ../docs/_static/speaker.jpg
-          :alt: Onboard speaker
-
-        .. code-block:: python
-
-             from adafruit_circuitplayground.express import cpx
-
-             while True:
-                 if cpx.button_a:
-                     cpx.start_tone(262)
-                 elif cpx.button_b:
-                     cpx.start_tone(294)
-                 else:
-                     cpx.stop_tone()
-        """
-        self._speaker_enable.value = True
-        length = 100
-        if length * frequency > 350000:
-            length = 350000 // frequency
-        self._generate_sample(length)
-        # Start playing a tone of the specified frequency (hz).
-        self._sine_wave_sample.sample_rate = int(len(self._sine_wave) * frequency)
-        if not self._sample.playing:
-            self._sample.play(self._sine_wave_sample, loop=True)
-
-    def stop_tone(self):
-        """ Use with start_tone to stop the tone produced.
-
-        .. image :: ../docs/_static/speaker.jpg
-          :alt: Onboard speaker
-
-        .. code-block:: python
-
-             from adafruit_circuitplayground.express import cpx
-
-             while True:
-                 if cpx.button_a:
-                     cpx.start_tone(262)
-                 elif cpx.button_b:
-                     cpx.start_tone(294)
-                 else:
-                     cpx.stop_tone()
-        """
-        # Stop playing any tones.
-        if self._sample is not None and self._sample.playing:
-            self._sample.stop()
-            self._sample.deinit()
-            self._sample = None
-        self._speaker_enable.value = False
-
-    def play_file(self, file_name):
-        """ Play a .wav file using the onboard speaker.
-
-        :param file_name: The name of your .wav file in quotation marks including .wav
-
-        .. image :: ../docs/_static/speaker.jpg
-          :alt: Onboard speaker
-
-        .. code-block:: python
-
-             from adafruit_circuitplayground.express import cpx
-
-             while True:
-                 if cpx.button_a:
-                     cpx.play_file("laugh.wav")
-                 elif cpx.button_b:
-                     cpx.play_file("rimshot.wav")
-        """
-        # Play a specified file.
-        self.stop_tone()
-        self._speaker_enable.value = True
-        with audioio.AudioOut(board.SPEAKER) as audio:
-            wavefile = audiocore.WaveFile(open(file_name, "rb"))
-            audio.play(wavefile)
-            while audio.playing:
-                pass
-        self._speaker_enable.value = False
 
 
 cpx = Express()  # pylint: disable=invalid-name
