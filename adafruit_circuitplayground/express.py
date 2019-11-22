@@ -34,9 +34,9 @@ CircuitPython helper for Circuit Playground Express.
 * Author(s): Kattni Rembor, Scott Shawcroft
 """
 
+import sys
 import audioio
 import digitalio
-import sys
 # pylint: disable=wrong-import-position
 try:
     lib_index = sys.path.index("/lib")        # pylint: disable=invalid-name

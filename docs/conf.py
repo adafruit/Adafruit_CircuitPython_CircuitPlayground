@@ -22,7 +22,7 @@ intersphinx_mapping = {'python': ('https://docs.python.org/3.4', None),
 # Libraries we depend on but don't need for generating docs.
 autodoc_mock_imports = ["board", "analogio", "digitalio", "neopixel", "adafruit_thermistor",
                         "audioio", "touchio", "adafruit_lis3dh", "busio", "gamepad", "audiocore",
-                        "audiopwmio"]
+                        "audiopwmio", "audiobusio"]
 
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ['_templates']

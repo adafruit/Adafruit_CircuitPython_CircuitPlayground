@@ -21,8 +21,8 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 # THE SOFTWARE.
 
-# We have a lot of attributes for this complex library.
-# pylint: disable=too-many-instance-attributes
+# We have a lot of attributes for this complex library, as well as a lot of documentation.
+# pylint: disable=too-many-instance-attributes, too-many-lines
 
 """
 `adafruit_circuitplayground.circuit_playground_base`
@@ -39,10 +39,7 @@ CircuitPython base class for Circuit Playground.
 import math
 import array
 import time
-try:
-    import audiocore
-except ImportError:
-    audiocore = audioio
+import audiocore
 import adafruit_lis3dh
 import adafruit_thermistor
 import analogio
@@ -840,7 +837,7 @@ class CircuitPlaygroundBase:     # pylint: disable=too-many-public-methods
         if self._sample is not None:
             return
         self._sine_wave = array.array("H", self._sine_sample(length))
-        self._sample = self._audio_out(board.SPEAKER)
+        self._sample = self._audio_out(board.SPEAKER)  # pylint: disable=not-callable
         self._sine_wave_sample = audiocore.RawSample(self._sine_wave)
 
     def play_tone(self, frequency, duration):
@@ -997,7 +994,7 @@ class CircuitPlaygroundBase:     # pylint: disable=too-many-public-methods
         # Play a specified file.
         self.stop_tone()
         self._speaker_enable.value = True
-        with self._audio_out(board.SPEAKER) as audio:
+        with self._audio_out(board.SPEAKER) as audio:  # pylint: disable=not-callable
             wavefile = audiocore.WaveFile(open(file_name, "rb"))
             audio.play(wavefile)
             while audio.playing:
