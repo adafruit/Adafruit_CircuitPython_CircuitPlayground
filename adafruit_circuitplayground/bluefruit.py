@@ -24,7 +24,7 @@
 `adafruit_circuitplayground.bluefruit`
 ====================================================
 
-CircuitPython subclass for Circuit Playground Bluefruit.
+CircuitPython helper for Circuit Playground Bluefruit.
 
 * Author(s): Kattni Rembor
 

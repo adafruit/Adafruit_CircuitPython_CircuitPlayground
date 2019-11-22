@@ -25,7 +25,7 @@
 `adafruit_circuitplayground.express`
 ====================================================
 
-CircuitPython subclass for Circuit Playground Express.
+CircuitPython helper for Circuit Playground Express.
 
 **Hardware:**
 
