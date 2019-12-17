@@ -1,14 +1,14 @@
 """
-This example use the temperature sensor on the CPX, located next to the picture of the thermometer
-on the board. Try warming up the board to watch the number of NeoPixels lit up increase, or cooling
-it down to see the number decrease. You can set the min and max temperatures to make it more or
-less sensitive to temperature changes.
+This example use the temperature sensor on the Circuit Playground, located next to the picture of
+the thermometer on the board. Try warming up the board to watch the number of NeoPixels lit up
+increase, or cooling it down to see the number decrease. You can set the min and max temperatures
+to make it more or less sensitive to temperature changes.
 """
 import time
-from adafruit_circuitplayground.express import cpx
+from adafruit_circuitplayground import cp
 
-cpx.pixels.auto_write = False
-cpx.pixels.brightness = 0.3
+cp.pixels.auto_write = False
+cp.pixels.brightness = 0.3
 
 # Set these based on your ambient temperature in Celsius for best results!
 minimum_temp = 24
@@ -22,14 +22,14 @@ def scale_range(value):
 
 
 while True:
-    peak = scale_range(cpx.temperature)
-    print(cpx.temperature)
+    peak = scale_range(cp.temperature)
+    print(cp.temperature)
     print(int(peak))
 
     for i in range(10):
         if i <= peak:
-            cpx.pixels[i] = (0, 255, 255)
+            cp.pixels[i] = (0, 255, 255)
         else:
-            cpx.pixels[i] = (0, 0, 0)
-    cpx.pixels.show()
+            cp.pixels[i] = (0, 0, 0)
+    cp.pixels.show()
     time.sleep(0.05)

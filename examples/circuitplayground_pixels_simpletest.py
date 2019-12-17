@@ -1,7 +1,7 @@
 # CircuitPython demo - NeoPixel
 
 import time
-from adafruit_circuitplayground.express import cpx
+from adafruit_circuitplayground import cp
 
 # The number of pixels in the strip
 numpix = 10
@@ -23,14 +23,14 @@ def wheel(pos):
 
 def rainbow_cycle(wait):
     for j in range(255):
-        for i in range(cpx.pixels.n):
-            idx = int((i * 256 / len(cpx.pixels)) + j)
-            cpx.pixels[i] = wheel(idx & 255)
-        cpx.pixels.show()
+        for i in range(cp.pixels.n):
+            idx = int((i * 256 / len(cp.pixels)) + j)
+            cp.pixels[i] = wheel(idx & 255)
+        cp.pixels.show()
         time.sleep(wait)
 
 
-cpx.pixels.auto_write = False
-cpx.pixels.brightness = 0.3
+cp.pixels.auto_write = False
+cp.pixels.brightness = 0.3
 while True:
     rainbow_cycle(0.001)    # rainbowcycle with 1ms delay per step

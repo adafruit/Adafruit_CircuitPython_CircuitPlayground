@@ -1,5 +1,5 @@
-from adafruit_circuitplayground.express import cpx
+from adafruit_circuitplayground import cp
 
 while True:
-    if cpx.shake(shake_threshold=20):
+    if cp.shake(shake_threshold=20):
         print("Shake detected!")

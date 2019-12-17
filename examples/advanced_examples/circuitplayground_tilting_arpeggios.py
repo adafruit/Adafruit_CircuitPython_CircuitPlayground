@@ -4,14 +4,15 @@ This program plays notes from arpeggios in a circle of fourths. Y-axis tilt choo
 Buttons A and B advance forward and backward through the circle. The switch selects
 the type of arpeggio, either dominant seventh or blues.
 
-You can ignore the FrequencyProvider class if you’re just interested in the CPX interface.
+You can ignore the FrequencyProvider class if you’re just interested in the Circuit Playground
+interface.
 
 See a code walkthrough here: https://www.youtube.com/watch?v=cDhqyT3ZN0g
 """
 
 # pylint: disable=R0903
 import time
-from adafruit_circuitplayground.express import cpx
+from adafruit_circuitplayground import cp
 
 HS_OCT = 12                 # Half-steps per octave
 HS_4TH = 5                  # Half-steps in a fourth
@@ -65,11 +66,11 @@ class FrequencyMaker:
 class ButtonDetector:
     def __init__(self):
         self.next_press_allowed_at = time.monotonic()
-        self.buttons_on = (cpx.button_a, cpx.button_b)
+        self.buttons_on = (cp.button_a, cp.button_b)
 
     def pressed(self, index):
         """Return whether the specified button (0=A, 1=B) was pressed, limiting the repeat rate"""
-        pressed = cpx.button_b if index else cpx.button_a
+        pressed = cp.button_b if index else cp.button_a
         if pressed:
             now = time.monotonic()
             if now >= self.next_press_allowed_at:
@@ -80,7 +81,7 @@ class ButtonDetector:
 
 class TiltingArpeggios:
     def __init__(self):
-        cpx.pixels.brightness = 0.2
+        cp.pixels.brightness = 0.2
         self.freq_maker = FrequencyMaker()
         TiltingArpeggios.update_pixel(self.freq_maker.circle_pos)
         self.button = ButtonDetector()
@@ -97,18 +98,18 @@ class TiltingArpeggios:
     @staticmethod
     def update_pixel(circle_pos):
         """Manage the display on the NeoPixels of the current circle position"""
-        cpx.pixels.fill((0, 0, 0))
+        cp.pixels.fill((0, 0, 0))
         # Light the pixels clockwise from “1 o’clock” with the USB connector on the bottom
         pixel_index = (4 - circle_pos) % 10
         # Use a different color after all ten LEDs used
         color = (0, 255, 0) if circle_pos <= 9 else (255, 255, 0)
-        cpx.pixels[pixel_index] = color
+        cp.pixels[pixel_index] = color
 
     @staticmethod
     def tilt():
         """Normalize the Y-Axis Tilt"""
         standard_gravity = 9.81  # Acceleration (m/s²) due to gravity at the earth’s surface
-        constrained_accel = min(max(0.0, -cpx.acceleration[1]), standard_gravity)
+        constrained_accel = min(max(0.0, -cp.acceleration[1]), standard_gravity)
         return constrained_accel / standard_gravity
 
     def process_button_presses(self):
@@ -120,12 +121,12 @@ class TiltingArpeggios:
 
     def change_tone_if_needed(self):
         """Find the frequency for the current arpeggio and tilt, and restart the tone if changed"""
-        arpeggio_index = 0 if cpx.switch else 1
+        arpeggio_index = 0 if cp.switch else 1
         freq = self.freq_maker.freq(TiltingArpeggios.tilt(), arpeggio_index)
         if freq != self.last_freq:
             self.last_freq = freq
-            cpx.stop_tone()
-            cpx.start_tone(freq)
+            cp.stop_tone()
+            cp.start_tone(freq)
 
 
 TiltingArpeggios().run()

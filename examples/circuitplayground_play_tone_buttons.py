@@ -1,8 +1,8 @@
 """This example plays a different tone for a duration of 1 second for each button pressed."""
-from adafruit_circuitplayground.express import cpx
+from adafruit_circuitplayground import cp
 
 while True:
-    if cpx.button_a:
-        cpx.play_tone(262, 1)
-    if cpx.button_b:
-        cpx.play_tone(294, 1)
+    if cp.button_a:
+        cp.play_tone(262, 1)
+    if cp.button_b:
+        cp.play_tone(294, 1)

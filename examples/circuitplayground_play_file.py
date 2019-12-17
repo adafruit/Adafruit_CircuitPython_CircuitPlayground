@@ -5,6 +5,6 @@ https://github.com/adafruit/Adafruit_CircuitPython_CircuitPlayground/tree/master
 Copy the "dip.wav" file to your CIRCUITPY drive.
 
 Once the file is copied, this example plays a wav file!"""
-from adafruit_circuitplayground.express import cpx
+from adafruit_circuitplayground import cp
 
-cpx.play_file("dip.wav")
+cp.play_file("dip.wav")

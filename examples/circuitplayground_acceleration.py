@@ -1,8 +1,8 @@
 import time
-from adafruit_circuitplayground.express import cpx
+from adafruit_circuitplayground import cp
 
 while True:
-    x, y, z = cpx.acceleration
+    x, y, z = cp.acceleration
     print(x, y, z)
 
     time.sleep(0.1)

@@ -1,7 +1,7 @@
-from adafruit_circuitplayground.express import cpx
+from adafruit_circuitplayground import cp
 
-cpx.detect_taps = 1
+cp.detect_taps = 1
 
 while True:
-    if cpx.tapped:
+    if cp.tapped:
         print("Single tap detected!")
