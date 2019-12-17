@@ -20,6 +20,8 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 # THE SOFTWARE.
 
+"""Verifies which board is being used and imports the appropriate module."""
+
 import sys
 if sys.platform == 'nRF52840':
     from .bluefruit import cpb as cp
