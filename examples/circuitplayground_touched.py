@@ -1,3 +1,4 @@
+"""This example prints to the serial console when you touch the capacitive touch pads."""
 from adafruit_circuitplayground import cp
 
 while True:

@@ -1,10 +1,6 @@
-# CircuitPython demo - NeoPixel
-
+"""This example lights up the NeoPixels with a rainbow swirl."""
 import time
 from adafruit_circuitplayground import cp
-
-# The number of pixels in the strip
-numpix = 10
 
 
 def wheel(pos):
