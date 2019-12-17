@@ -3,7 +3,7 @@
 x, y, and z acceleration components map to red, green and blue,
 respectively.
 
-When the CPX is level, the lights are blue because there is no acceleration
+When the Circuit Playground is level, the lights are blue because there is no acceleration
 on x or y, but on z, gravity pulls at 9.81 meters per second per second (m/s²).
 When banking, the vertical (z) axis is no longer directly aligned with gravity,
 so the blue decreases, and red increases because gravity is now pulling more
@@ -14,9 +14,9 @@ This video walks you through the code: https://youtu.be/eNpPLbYx-iA
 """
 
 import time
-from adafruit_circuitplayground.express import cpx
+from adafruit_circuitplayground import cp
 
-cpx.pixels.brightness = 0.2  # Adjust overall brightness as desired, between 0 and 1
+cp.pixels.brightness = 0.2  # Adjust overall brightness as desired, between 0 and 1
 
 
 def color_amount(accel_component):
@@ -41,8 +41,8 @@ def log_values():
 
 
 while True:
-    acceleration = cpx.acceleration
+    acceleration = cp.acceleration
     rgb_amounts = [color_amount(axis_value) for axis_value in acceleration]
-    cpx.pixels.fill(rgb_amounts)
+    cp.pixels.fill(rgb_amounts)
     log_values()
     time.sleep(0.1)

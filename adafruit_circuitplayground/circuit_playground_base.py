@@ -39,7 +39,10 @@ CircuitPython base class for Circuit Playground.
 import math
 import array
 import time
-import audiocore
+try:
+    import audiocore
+except ImportError:
+    import audioio as audiocore
 import adafruit_lis3dh
 import adafruit_thermistor
 import analogio

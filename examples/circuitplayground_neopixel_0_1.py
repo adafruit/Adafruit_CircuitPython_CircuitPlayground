@@ -1,8 +1,8 @@
 """This example lights up the first and second NeoPixel, red and blue respectively."""
-from adafruit_circuitplayground.express import cpx
+from adafruit_circuitplayground import cp
 
-cpx.pixels.brightness = 0.3
+cp.pixels.brightness = 0.3
 
 while True:
-    cpx.pixels[0] = (255, 0, 0)
-    cpx.pixels[1] = (0, 0, 255)
+    cp.pixels[0] = (255, 0, 0)
+    cp.pixels[1] = (0, 0, 255)

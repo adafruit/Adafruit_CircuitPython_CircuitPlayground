@@ -1,7 +1,7 @@
 """This example turns on the little red LED when button A is pressed."""
-from adafruit_circuitplayground.express import cpx
+from adafruit_circuitplayground import cp
 
 while True:
-    if cpx.button_a:
+    if cp.button_a:
         print("Button A pressed!")
-        cpx.red_led = True
+        cp.red_led = True

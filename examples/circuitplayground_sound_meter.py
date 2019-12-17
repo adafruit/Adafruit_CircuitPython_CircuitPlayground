@@ -1,11 +1,11 @@
 """This example uses the sound sensor, located next to the picture of the ear on your board, to
-light up the NeoPixels as a sound meter. Try talking to your CPX or clapping, etc, to see the
-NeoPixels light up!"""
+light up the NeoPixels as a sound meter. Try talking to your Circuit Playground or clapping, etc,
+to see the NeoPixels light up!"""
 import array
 import math
 import audiobusio
 import board
-from adafruit_circuitplayground.express import cpx
+from adafruit_circuitplayground import cp
 
 
 def constrain(value, floor, ceiling):
@@ -43,14 +43,14 @@ while True:
     c = log_scale(constrain(magnitude, input_floor, input_ceiling),
                   input_floor, input_ceiling, 0, 10)
 
-    cpx.pixels.fill((0, 0, 0))
+    cp.pixels.fill((0, 0, 0))
     for i in range(10):
         if i < c:
-            cpx.pixels[i] = (i * (255 // 10), 50, 0)
+            cp.pixels[i] = (i * (255 // 10), 50, 0)
         if c >= peak:
             peak = min(c, 10 - 1)
         elif peak > 0:
             peak = peak - 1
         if peak > 0:
-            cpx.pixels[int(peak)] = (80, 0, 255)
-    cpx.pixels.show()
+            cp.pixels[int(peak)] = (80, 0, 255)
+    cp.pixels.show()

@@ -5,10 +5,10 @@ https://github.com/adafruit/Adafruit_CircuitPython_CircuitPlayground/tree/master
 Copy the "dip.wav" and "rise.wav" files to your CIRCUITPY drive.
 
 Once the files are copied, this example plays a different wav file for each button pressed!"""
-from adafruit_circuitplayground.express import cpx
+from adafruit_circuitplayground import cp
 
 while True:
-    if cpx.button_a:
-        cpx.play_file("dip.wav")
-    if cpx.button_b:
-        cpx.play_file("rise.wav")
+    if cp.button_a:
+        cp.play_file("dip.wav")
+    if cp.button_b:
+        cp.play_file("rise.wav")

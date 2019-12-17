@@ -1,17 +1,18 @@
-from adafruit_circuitplayground.express import cpx
+"""This example prints to the serial console when you touch the capacitive touch pads."""
+from adafruit_circuitplayground import cp
 
 while True:
-    if cpx.touch_A1:
+    if cp.touch_A1:
         print('Touched pad A1')
-    if cpx.touch_A2:
+    if cp.touch_A2:
         print('Touched pad A2')
-    if cpx.touch_A3:
+    if cp.touch_A3:
         print('Touched pad A3')
-    if cpx.touch_A4:
+    if cp.touch_A4:
         print('Touched pad A4')
-    if cpx.touch_A5:
+    if cp.touch_A5:
         print('Touched pad A5')
-    if cpx.touch_A6:
+    if cp.touch_A6:
         print('Touched pad A6')
-    if cpx.touch_A7:
-        print('Touched pad A7')
+    if cp.touch_TX:
+        print('Touched pad TX')
