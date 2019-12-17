@@ -1,9 +1,11 @@
 """THIS EXAMPLE REQUIRES A SEPARATE LIBRARY BE LOADED ONTO YOUR CIRCUITPY DRIVE.
 This example requires the adafruit_irremote.mpy library.
 
+THIS EXAMPLE WORKS WITH CIRCUIT PLAYGROUND EXPRESS ONLY.
+
 This example uses the IR transmitter found near the center of the board. Works with another Circuit
-Playground running the circuitplayground_ir_receive.py example. Press the buttons to light up the
-NeoPixels on the RECEIVING Circuit Playground!"""
+Playground Express running the circuitplayground_ir_receive.py example. Press the buttons to light
+up the NeoPixels on the RECEIVING Circuit Playground Express!"""
 import time
 import pulseio
 import board
@@ -11,7 +13,10 @@ import adafruit_irremote
 from adafruit_circuitplayground import cp
 
 # Create a 'pulseio' output, to send infrared signals from the IR transmitter
-pwm = pulseio.PWMOut(board.IR_TX, frequency=38000, duty_cycle=2 ** 15)
+try:
+    pwm = pulseio.PWMOut(board.IR_TX, frequency=38000, duty_cycle=2 ** 15)
+except AttributeError:
+    raise NotImplementedError("This example does not work with Circuit Playground Bluefruit!")
 pulseout = pulseio.PulseOut(pwm)
 # Create an encoder that will take numbers and turn them into NEC IR pulses
 encoder = adafruit_irremote.GenericTransmit(header=[9500, 4500], one=[550, 550],

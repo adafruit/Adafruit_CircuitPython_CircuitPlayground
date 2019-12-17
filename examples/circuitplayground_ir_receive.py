@@ -1,16 +1,21 @@
 """THIS EXAMPLE REQUIRES A SEPARATE LIBRARY BE LOADED ONTO YOUR CIRCUITPY DRIVE.
 This example requires the adafruit_irremote.mpy library.
 
+THIS EXAMPLE WORKS WITH CIRCUIT PLAYGROUND EXPRESS ONLY.
+
 This example uses the IR receiver found near the center of the board. Works with another Circuit
-Playground running the circuitplayground_ir_transmit.py example. The NeoPixels will light up when
-the buttons on the TRANSMITTING Circuit Playground are pressed!"""
+Playground Express running the circuitplayground_ir_transmit.py example. The NeoPixels will light
+up when the buttons on the TRANSMITTING Circuit Playground Express are pressed!"""
 import pulseio
 import board
 import adafruit_irremote
 from adafruit_circuitplayground import cp
 
 # Create a 'pulseio' input, to listen to infrared signals on the IR receiver
-pulsein = pulseio.PulseIn(board.IR_RX, maxlen=120, idle_state=True)
+try:
+    pulsein = pulseio.PulseIn(board.IR_RX, maxlen=120, idle_state=True)
+except AttributeError:
+    raise NotImplemented("This example does not work with Circuit Playground Bluefruti!")
 # Create a decoder that will take pulses and turn them into numbers
 decoder = adafruit_irremote.GenericDecode()
 
