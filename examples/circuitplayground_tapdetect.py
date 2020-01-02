@@ -1,8 +1,9 @@
-"""This example prints to the serial console when the board is tapped."""
+"""This example prints to the serial console when the board is double-tapped."""
 from adafruit_circuitplayground import cp
 
-cp.detect_taps = 1
+# Change to 1 for single-tap detection.
+cp.detect_taps = 2
 
 while True:
     if cp.tapped:
-        print("Single tap detected!")
+        print("Tapped!")
