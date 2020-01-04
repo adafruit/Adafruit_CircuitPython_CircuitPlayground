@@ -22,3 +22,5 @@ while tap_count < 2:
         tap_count += 1
 print("Reached 2 double-taps!")
 print("Done.")
+while True:
+    cp.red_led = True

@@ -27,7 +27,7 @@ Ensure your device works with this simple test.
     :caption: examples/circuitplayground_tone.py
     :linenos:
 
-.. literalinclude:: ../examples/circuitplayground_touched.py
+.. literalinclude:: ../examples/circuitplayground_touch_all.py
     :caption: examples/circuitplayground_touched.py
     :linenos:
 
