@@ -10,8 +10,8 @@ Introduction
     :target: https://adafru.it/discord
     :alt: Discord
 
-.. image:: https://travis-ci.com/adafruit/Adafruit_CircuitPython_CircuitPlayground.svg?branch=master
-    :target: https://travis-ci.com/adafruit/Adafruit_CircuitPython_CircuitPlayground
+.. image:: https://github.com/adafruit/Adafruit_CircuitPython_CircuitPlayground/workflows/Build%20CI/badge.svg
+    :target: https://github.com/adafruit/Adafruit_CircuitPython_CircuitPlayground/actions/
     :alt: Build Status
 
 This high level library provides objects that represent CircuitPlayground hardware.
