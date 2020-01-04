@@ -100,7 +100,7 @@ class CircuitPlaygroundBase:     # pylint: disable=too-many-public-methods
         # Initially, self._touches stores the pin used for a particular touch. When that touch is
         # used for the first time, the pin is replaced with the corresponding TouchIn object.
         # This saves a little RAM over using a separate read-only pin tuple.
-        # For example, after `cpx.touch_A2`, self._touches is equivalent to:
+        # For example, after `cp.touch_A2`, self._touches is equivalent to:
         # [None, board.A1, touchio.TouchIn(board.A2), board.A3, ...]
         # Slot 0 is not used (A0 is not allowed as a touch pin).
         self._touches = [None, board.A1, board.A2, board.A3, board.A4, board.A5, board.A6, board.TX]
@@ -125,32 +125,21 @@ class CircuitPlaygroundBase:     # pylint: disable=too-many-public-methods
 
     @property
     def detect_taps(self):
-        """Configure what type of tap is detected by ``cpx.tapped``. Use ``1`` for single-tap
-        detection and ``2`` for double-tap detection. This does nothing without ``cpx.tapped``.
+        """Configure what type of tap is detected by ``cp.tapped``. Use ``1`` for single-tap
+        detection and ``2`` for double-tap detection. This does nothing without ``cp.tapped``.
 
         .. image :: ../docs/_static/accelerometer.jpg
           :alt: Accelerometer
 
-        To use with the Circuit Playground Express:
+        To use with the Circuit Playground Express or Bluefruit:
 
         .. code-block:: python
 
-          from adafruit_circuitplayground.express import cpx
+          from adafruit_circuitplayground import cp
 
-          cpx.detect_taps = 1
+          cp.detect_taps = 1
           while True:
-            if cpx.tapped:
-              print("Single tap detected!")
-
-        To use with the Circuit Playground Bluefruit:
-
-        .. code-block:: python
-
-          from adafruit_circuitplayground.bluefruit import cpb
-
-          cpb.detect_taps = 1
-          while True:
-            if cpb.tapped:
+            if cp.tapped:
               print("Single tap detected!")
         """
         return self._detect_taps
@@ -165,35 +154,23 @@ class CircuitPlaygroundBase:     # pylint: disable=too-many-public-methods
 
     @property
     def tapped(self):
-        """True once after a detecting a tap. Requires ``cpx.detect_taps``.
+        """True once after a detecting a tap. Requires ``cp.detect_taps``.
 
         .. image :: ../docs/_static/accelerometer.jpg
           :alt: Accelerometer
 
         Tap the Circuit Playground once for a single-tap, or quickly tap twice for a double-tap.
 
-        To use with Circuit Playground Express:
+        To use with Circuit Playground Express or Bluefruit:
 
         .. code-block:: python
 
-          from adafruit_circuitplayground.express import cpx
+          from adafruit_circuitplayground import cp
 
-          cpx.detect_taps = 1
-
-          while True:
-              if cpx.tapped:
-                  print("Single tap detected!")
-
-        To use with Circuit Playground Bluefruit:
-
-        .. code-block:: python
-
-          from adafruit_circuitplayground.bluefruit import cpb
-
-          cpb.detect_taps = 1
+          cp.detect_taps = 1
 
           while True:
-              if cpb.tapped:
+              if cp.tapped:
                   print("Single tap detected!")
 
         To use single and double tap together, you must have a delay between them. It
@@ -202,29 +179,28 @@ class CircuitPlaygroundBase:     # pylint: disable=too-many-public-methods
 
         .. code-block:: python
 
-          from adafruit_circuitplayground.express import cpx
+          from adafruit_circuitplayground import cp
 
           # Set to check for single-taps.
-          cpx.detect_taps = 1
+          cp.detect_taps = 1
           tap_count = 0
 
           # We're looking for 2 single-taps before moving on.
           while tap_count < 2:
-              if cpx.tapped:
+              if cp.tapped:
                   tap_count += 1
           print("Reached 2 single-taps!")
 
           # Now switch to checking for double-taps
           tap_count = 0
-          cpx.detect_taps = 2
+          cp.detect_taps = 2
 
           # We're looking for 2 double-taps before moving on.
           while tap_count < 2:
-              if cpx.tapped:
+              if cp.tapped:
                  tap_count += 1
           print("Reached 2 double-taps!")
           print("Done.")
-
         """
         return self._lis3dh.tapped
 
@@ -238,24 +214,14 @@ class CircuitPlaygroundBase:     # pylint: disable=too-many-public-methods
         This example prints the values. Try moving the board to see how the
         printed values change.
 
-        To use with the Circuit Playground Express:
+        To use with the Circuit Playground Express or Bluefruit:
 
         .. code-block:: python
 
-          from adafruit_circuitplayground.express import cpx
+          from adafruit_circuitplayground import cp
 
           while True:
-              x, y, z = cpx.acceleration
-              print(x, y, z)
-
-        To use with the Circuit Playground Bluefruit:
-
-        .. code-block:: python
-
-          from adafruit_circuitplayground.bluefruit import cpb
-
-          while True:
-              x, y, z = cpb.acceleration
+              x, y, z = cp.acceleration
               print(x, y, z)
         """
         return self._lis3dh.acceleration
@@ -268,24 +234,14 @@ class CircuitPlaygroundBase:     # pylint: disable=too-many-public-methods
         .. image :: ../docs/_static/accelerometer.jpg
           :alt: Accelerometer
 
-        To use with the Circuit Playground Express:
+        To use with the Circuit Playground Express or Bluefruit:
 
         .. code-block:: python
 
-          from adafruit_circuitplayground.express import cpx
+          from adafruit_circuitplayground import cp
 
           while True:
-              if cpx.shake():
-                  print("Shake detected!")
-
-        To use with the Circuit Playground Bluefruit:
-
-        .. code-block:: python
-
-          from adafruit_circuitplayground.bluefruit import cpb
-
-          while True:
-              if cpb.shake():
+              if cp.shake():
                   print("Shake detected!")
 
         Decreasing ``shake_threshold`` increases shake sensitivity, i.e. the code
@@ -296,10 +252,10 @@ class CircuitPlaygroundBase:     # pylint: disable=too-many-public-methods
 
         .. code-block:: python
 
-          from adafruit_circuitplayground.express import cpx
+          from adafruit_circuitplayground import cp
 
           while True:
-              if cpx.shake(shake_threshold=20):
+              if cp.shake(shake_threshold=20):
                   print("Shake detected more easily than before!")
         """
         return self._lis3dh.shake(shake_threshold=shake_threshold)
@@ -322,24 +278,14 @@ class CircuitPlaygroundBase:     # pylint: disable=too-many-public-methods
         .. image :: ../docs/_static/capacitive_touch_pad_A1.jpg
           :alt: Capacitive touch pad A1
 
-        To use with the Circuit Playground Express:
+        To use with the Circuit Playground Express or Bluefruit:
 
         .. code-block:: python
 
-          from adafruit_circuitplayground.express import cpx
+          from adafruit_circuitplayground import cp
 
           while True:
-              if cpx.touch_A1:
-                  print('Touched pad A1')
-
-        To use with the Circuit Playground Bluefruit:
-
-        .. code-block:: python
-
-          from adafruit_circuitplayground.bluefruit import cpb
-
-          while True:
-              if cpb.touch_A1:
+              if cp.touch_A1:
                   print('Touched pad A1')
         """
         return self._touch(1)
@@ -351,24 +297,14 @@ class CircuitPlaygroundBase:     # pylint: disable=too-many-public-methods
         .. image :: ../docs/_static/capacitive_touch_pad_A2.jpg
           :alt: Capacitive touch pad A2
 
-        To use with the Circuit Playground Express:
+        To use with the Circuit Playground Express or Bluefruit:
 
         .. code-block:: python
 
-          from adafruit_circuitplayground.express import cpx
+          from adafruit_circuitplayground import cp
 
           while True:
-              if cpx.touch_A2:
-                  print('Touched pad A2')
-
-        To use with the Circuit Playground Bluefruit:
-
-        .. code-block:: python
-
-          from adafruit_circuitplayground.bluefruit import cpb
-
-          while True:
-              if cpb.touch_A2:
+              if cp.touch_A2:
                   print('Touched pad A2')
         """
         return self._touch(2)
@@ -380,24 +316,14 @@ class CircuitPlaygroundBase:     # pylint: disable=too-many-public-methods
         .. image :: ../docs/_static/capacitive_touch_pad_A3.jpg
           :alt: Capacitive touch pad A3
 
-        To use with the Circuit Playground Express:
+        To use with the Circuit Playground Express or Bluefruit:
 
         .. code-block:: python
 
-          from adafruit_circuitplayground.express import cpx
+          from adafruit_circuitplayground import cp
 
           while True:
-              if cpx.touch_A3:
-                  print('Touched pad A3')
-
-        To use with the Circuit Playground Bluefruit:
-
-        .. code-block:: python
-
-          from adafruit_circuitplayground.bluefruit import cpb
-
-          while True:
-              if cpb.touch_A3:
+              if cp.touch_A3:
                   print('Touched pad A3')
         """
         return self._touch(3)
@@ -409,24 +335,14 @@ class CircuitPlaygroundBase:     # pylint: disable=too-many-public-methods
         .. image :: ../docs/_static/capacitive_touch_pad_A4.jpg
           :alt: Capacitive touch pad A4
 
-        To use with the Circuit Playground Express:
+        To use with the Circuit Playground Express or Bluefruit:
 
         .. code-block:: python
 
-          from adafruit_circuitplayground.express import cpx
+          from adafruit_circuitplayground import cp
 
           while True:
-              if cpx.touch_A4:
-                  print('Touched pad A4')
-
-        To use with the Circuit Playground Bluefruit:
-
-        .. code-block:: python
-
-          from adafruit_circuitplayground.bluefruit import cpb
-
-          while True:
-              if cpb.touch_A4:
+              if cp.touch_A4:
                   print('Touched pad A4')
         """
         return self._touch(4)
@@ -438,24 +354,14 @@ class CircuitPlaygroundBase:     # pylint: disable=too-many-public-methods
         .. image :: ../docs/_static/capacitive_touch_pad_A5.jpg
           :alt: Capacitive touch pad A5
 
-        To use with the Circuit Playground Express:
+        To use with the Circuit Playground Express or Bluefruit:
 
         .. code-block:: python
 
-          from adafruit_circuitplayground.express import cpx
+          from adafruit_circuitplayground import cp
 
           while True:
-              if cpx.touch_A5:
-                  print('Touched pad A5')
-
-        To use with the Circuit Playground Bluefruit:
-
-        .. code-block:: python
-
-          from adafruit_circuitplayground.bluefruit import cpb
-
-          while True:
-              if cpb.touch_A5:
+              if cp.touch_A5:
                   print('Touched pad A5')
         """
         return self._touch(5)
@@ -467,25 +373,15 @@ class CircuitPlaygroundBase:     # pylint: disable=too-many-public-methods
         .. image :: ../docs/_static/capacitive_touch_pad_A6.jpg
           :alt: Capacitive touch pad A6
 
-        To use with the Circuit Playground Express:
+        To use with the Circuit Playground Express or Bluefruit:
 
         .. code-block:: python
 
-          from adafruit_circuitplayground.express import cpx
+          from adafruit_circuitplayground import cp
 
           while True:
-              if cpx.touch_A6:
-                  print('Touched pad A6')
-
-        To use with the Circuit Playground Bluefruit:
-
-        .. code-block:: python
-
-          from adafruit_circuitplayground.bluefruit import cpb
-
-          while True:
-              if cpb.touch_A6:
-                  print('Touched pad A6')
+              if cp.touch_A6:
+                  print('Touched pad A6'
         """
         return self._touch(6)
 
@@ -497,25 +393,15 @@ class CircuitPlaygroundBase:     # pylint: disable=too-many-public-methods
         .. image :: ../docs/_static/capacitive_touch_pad_A7.jpg
           :alt: Capacitive touch pad TX
 
-        To use with the Circuit Playground Express:
+        To use with the Circuit Playground Express or Bluefruit:
 
         .. code-block:: python
 
-          from adafruit_circuitplayground.express import cpx
+          from adafruit_circuitplayground import cp
 
           while True:
-              if cpx.touch_A7:
+              if cp.touch_A7:
                   print('Touched pad A7')
-
-        To use with the Circuit Playground Bluefruit:
-
-        .. code-block:: python
-
-          from adafruit_circuitplayground.bluefruit import cpb
-
-          while True:
-              if cpb.touch_TX:
-                  print('Touched pad TX')
         """
         return self._touch(7)
 
@@ -528,28 +414,16 @@ class CircuitPlaygroundBase:     # pylint: disable=too-many-public-methods
         .. image :: ../docs/_static/capacitive_touch_pads.jpg
           :alt: Capacitive touch pads
 
-        To use with the Circuit Playground Express:
+        To use with the Circuit Playground Express or Bluefruit:
 
         .. code-block:: python
 
-          from adafruit_circuitplayground.express import cpx
+          from adafruit_circuitplayground import cp
 
-          cpx.adjust_touch_threshold(200)
-
-          while True:
-              if cpx.touch_A1:
-                  print('Touched pad A1')
-
-        To use with the Circuit Playground Bluefruit:
-
-        .. code-block:: python
-
-          from adafruit_circuitplayground.bluefruit import cpb
-
-          cpb.adjust_touch_threshold(200)
+          cp.adjust_touch_threshold(200)
 
           while True:
-              if cpb.touch_A1:
+              if cp.touch_A1:
                   print('Touched pad A1')
         """
         for touch_in in self._touches:
@@ -573,26 +447,15 @@ class CircuitPlaygroundBase:     # pylint: disable=too-many-public-methods
 
         Here is an example that sets the first pixel green and the ninth red.
 
-        To use with the Circuit Playground Express:
+        To use with the Circuit Playground Express or Bluefruit:
 
         .. code-block:: python
 
-          from adafruit_circuitplayground.express import cpx
+          from adafruit_circuitplayground import cp
 
-          cpx.pixels.brightness = 0.3
-          cpx.pixels[0] = 0x003000
-          cpx.pixels[9] = (30, 0, 0)
-
-        To use with the Circuit Playground Bluefruit:
-
-        .. code-block:: python
-
-          from adafruit_circuitplayground.bluefruit import cpb
-
-          cpb.pixels.brightness = 0.3
-          cpb.pixels[0] = 0x003000
-          cpb.pixels[9] = (30, 0, 0)
-
+          cp.pixels.brightness = 0.3
+          cp.pixels[0] = 0x00FF00
+          cp.pixels[9] = (255, 0, 0)
         """
         return self._pixels
 
@@ -603,24 +466,14 @@ class CircuitPlaygroundBase:     # pylint: disable=too-many-public-methods
         .. image :: ../docs/_static/button_a.jpg
           :alt: Button A
 
-        To use with the Circuit Playground Express:
+        To use with the Circuit Playground Express or Bluefruit:
 
         .. code-block:: python
 
-          from adafruit_circuitplayground.express import cpx
+          from adafruit_circuitplayground import cp
 
           while True:
-              if cpx.button_a:
-                  print("Button A pressed!")
-
-        To use with the Circuit Playground Bluefruit:
-
-        .. code-block:: python
-
-          from adafruit_circuitplayground.bluefruit import cpb
-
-          while True:
-              if cpb.button_a:
+              if cp.button_a:
                   print("Button A pressed!")
         """
         return self._a.value
@@ -632,24 +485,14 @@ class CircuitPlaygroundBase:     # pylint: disable=too-many-public-methods
         .. image :: ../docs/_static/button_b.jpg
           :alt: Button B
 
-        To use with the Circuit Playground Express:
+        To use with the Circuit Playground Express or Bluefruit:
 
         .. code-block:: python
 
-          from adafruit_circuitplayground.express import cpx
+          from adafruit_circuitplayground import cp
 
           while True:
-              if cpx.button_b:
-                  print("Button B pressed!")
-
-        To use with the Circuit Playground Bluefruit:
-
-        .. code-block:: python
-
-          from adafruit_circuitplayground.bluefruit import cpb
-
-          while True:
-              if cpb.button_b:
+              if cp.button_b:
                   print("Button B pressed!")
         """
         return self._b.value
@@ -661,23 +504,14 @@ class CircuitPlaygroundBase:     # pylint: disable=too-many-public-methods
         .. image :: ../docs/_static/button_b.jpg
           :alt: Button B
 
-        To use with the Circuit Playground Express:
+        To use with the Circuit Playground Express or Bluefruit:
 
         .. code-block:: python
 
-          from adafruit_circuitplayground.express import cpx
+          from adafruit_circuitplayground import cp
 
           while True:
-              print(cpx.were_pressed)
-
-        To use with the Circuit Playground Bluefruit:
-
-        .. code-block:: python
-
-          from adafruit_circuitplayground.bluefruit import cpb
-
-          while True:
-              print(cpb.were_pressed)
+              print(cp.were_pressed)
         """
         ret = set()
         pressed = self.gamepad.get_pressed()
@@ -694,27 +528,16 @@ class CircuitPlaygroundBase:     # pylint: disable=too-many-public-methods
         .. image :: ../docs/_static/slide_switch.jpg
           :alt: Slide switch
 
-        To use with the Circuit Playground Express:
+        To use with the Circuit Playground Express or Bluefruit:
 
         .. code-block:: python
 
-          from adafruit_circuitplayground.express import cpx
+          from adafruit_circuitplayground import cp
          import time
 
           while True:
-              print("Slide switch:", cpx.switch)
-              time.sleep(1)
-
-        To use with the Circuit Playground Bluefruit:
-
-        .. code-block:: python
-
-          from adafruit_circuitplayground.bluefruit import cpb
-          import time
-
-          while True:
-              print("Slide switch:", cpb.switch)
-              time.sleep(1)
+              print("Slide switch:", cp.switch)
+              time.sleep(0.1)
         """
         return self._switch.value
 
@@ -727,29 +550,15 @@ class CircuitPlaygroundBase:     # pylint: disable=too-many-public-methods
 
         Converting this to Fahrenheit is easy!
 
-        To use with the Circuit Playground Express:
+        To use with the Circuit Playground Express or Bluefruit:
 
         .. code-block:: python
 
-          from adafruit_circuitplayground.express import cpx
+          from adafruit_circuitplayground import cp
           import time
 
           while True:
-              temperature_c = cpx.temperature
-              temperature_f = temperature_c * 1.8 + 32
-              print("Temperature celsius:", temperature_c)
-              print("Temperature fahrenheit:", temperature_f)
-              time.sleep(1)
-
-        To use with the Circuit Playground Bluefruit:
-
-        .. code-block:: python
-
-          from adafruit_circuitplayground.bluefruit import cpb
-          import time
-
-          while True:
-              temperature_c = cpb.temperature
+              temperature_c = cp.temperature
               temperature_f = temperature_c * 1.8 + 32
               print("Temperature celsius:", temperature_c)
               print("Temperature fahrenheit:", temperature_f)
@@ -766,26 +575,15 @@ class CircuitPlaygroundBase:     # pylint: disable=too-many-public-methods
 
         Try covering the sensor next to the eye to see it change.
 
-        To use with the Circuit Playground Express:
+        To use with the Circuit Playground Express or Bluefruit:
 
         .. code-block:: python
 
-          from adafruit_circuitplayground.express import cpx
+          from adafruit_circuitplayground import cp
           import time
 
           while True:
-              print("Light:", cpx.light)
-              time.sleep(1)
-
-        To use with the Circuit Playground Bluefruit:
-
-        .. code-block:: python
-
-          from adafruit_circuitplayground.bluefruit import cpb
-          import time
-
-          while True:
-              print("Light:", cpb.light)
+              print("Light:", cp.light)
               time.sleep(1)
         """
         return self._light.light
@@ -797,31 +595,18 @@ class CircuitPlaygroundBase:     # pylint: disable=too-many-public-methods
         .. image :: ../docs/_static/red_led.jpg
           :alt: D13 LED
 
-        To use with the Circuit Playground Express:
+        To use with the Circuit Playground Express or Bluefruit:
 
         .. code-block:: python
 
-          from adafruit_circuitplayground.express import cpx
+          from adafruit_circuitplayground import cp
           import time
 
           while True:
-              cpx.red_led = True
-              time.sleep(1)
-              cpx.red_led = False
-              time.sleep(1)
-
-        To use with the Circuit Playground Bluefruit:
-
-        .. code-block:: python
-
-          from adafruit_circuitplayground.bluefruit import cpb
-          import time
-
-          while True:
-              cpb.red_led = True
-              time.sleep(1)
-              cpb.red_led = False
-              time.sleep(1)
+              cp.red_led = True
+              time.sleep(0.5)
+              cp.red_led = False
+              time.sleep(0.5)
         """
         return self._led.value
 
@@ -853,21 +638,13 @@ class CircuitPlaygroundBase:     # pylint: disable=too-many-public-methods
         .. image :: ../docs/_static/speaker.jpg
           :alt: Onboard speaker
 
-        To use with the Circuit Playground Express:
+        To use with the Circuit Playground Express or Bluefruit:
 
         .. code-block:: python
 
-            from adafruit_circuitplayground.express import cpx
+            from adafruit_circuitplayground import cp
 
-            cpx.play_tone(440, 1)
-
-        To use with the Circuit Playground Bluefruit:
-
-        .. code-block:: python
-
-            from adafruit_circuitplayground.bluefruit import cpb
-
-            cpb.play_tone(440, 1)
+            cp.play_tone(440, 1)
         """
         # Play a tone of the specified frequency (hz).
         self.start_tone(frequency)
@@ -883,33 +660,19 @@ class CircuitPlaygroundBase:     # pylint: disable=too-many-public-methods
         .. image :: ../docs/_static/speaker.jpg
           :alt: Onboard speaker
 
-        To use with the Circuit Playground Express:
+        To use with the Circuit Playground Express or Bluefruit:
 
         .. code-block:: python
 
-             from adafruit_circuitplayground.express import cpx
+             from adafruit_circuitplayground import cp
 
              while True:
-                 if cpx.button_a:
-                     cpx.start_tone(262)
-                 elif cpx.button_b:
-                     cpx.start_tone(294)
+                 if cp.button_a:
+                     cp.start_tone(262)
+                 elif cp.button_b:
+                     cp.start_tone(294)
                  else:
-                     cpx.stop_tone()
-
-        To use with the Circuit Playground Bluefruit:
-
-        .. code-block:: python
-
-             from adafruit_circuitplayground.bluefruit import cpb
-
-             while True:
-                 if cpb.button_a:
-                     cpb.start_tone(262)
-                 elif cpb.button_b:
-                     cpb.start_tone(294)
-                 else:
-                     cpb.stop_tone()
+                     cp.stop_tone()
         """
         self._speaker_enable.value = True
         length = 100
@@ -927,33 +690,19 @@ class CircuitPlaygroundBase:     # pylint: disable=too-many-public-methods
         .. image :: ../docs/_static/speaker.jpg
           :alt: Onboard speaker
 
-        To use with the Circuit Playground Express:
+        To use with the Circuit Playground Express or Bluefruit:
 
         .. code-block:: python
 
-             from adafruit_circuitplayground.express import cpx
+             from adafruit_circuitplayground import cp
 
              while True:
-                 if cpx.button_a:
-                     cpx.start_tone(262)
-                 elif cpx.button_b:
-                     cpx.start_tone(294)
+                 if cp.button_a:
+                     cp.start_tone(262)
+                 elif cp.button_b:
+                     cp.start_tone(294)
                  else:
-                     cpx.stop_tone()
-
-        To use with the Circuit Playground Bluefruit:
-
-        .. code-block:: python
-
-             from adafruit_circuitplayground.bluefruit import cpb
-
-             while True:
-                 if cpb.button_a:
-                     cpb.start_tone(262)
-                 elif cpb.button_b:
-                     cpb.start_tone(294)
-                 else:
-                     cpb.stop_tone()
+                     cp.stop_tone()
         """
         # Stop playing any tones.
         if self._sample is not None and self._sample.playing:
@@ -970,29 +719,17 @@ class CircuitPlaygroundBase:     # pylint: disable=too-many-public-methods
         .. image :: ../docs/_static/speaker.jpg
           :alt: Onboard speaker
 
-        To use with the Circuit Playground Express:
+        To use with the Circuit Playground Express or Bluefruit:
 
         .. code-block:: python
 
-             from adafruit_circuitplayground.express import cpx
+             from adafruit_circuitplayground import cp
 
              while True:
-                 if cpx.button_a:
-                     cpx.play_file("laugh.wav")
-                 elif cpx.button_b:
-                     cpx.play_file("rimshot.wav")
-
-        To use with the Circuit Playground Bluefruit:
-
-        .. code-block:: python
-
-             from adafruit_circuitplayground.bluefruit import cpb
-
-             while True:
-                 if cpb.button_a:
-                     cpb.play_file("laugh.wav")
-                 elif cpb.button_b:
-                     cpb.play_file("rimshot.wav")
+                 if cp.button_a:
+                     cp.play_file("laugh.wav")
+                 elif cp.button_b:
+                     cp.play_file("rimshot.wav")
         """
         # Play a specified file.
         self.stop_tone()
