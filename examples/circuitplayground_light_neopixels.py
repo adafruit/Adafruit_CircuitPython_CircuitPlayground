@@ -13,7 +13,7 @@ cp.pixels.brightness = 0.3
 
 
 def scale_range(value):
-    """Scale a value from 0-320 (light range) to 0-10 (the number of NeoPixels).
+    """Scale a value from 0-320 (light range) to 0-9 (NeoPixel range).
     Allows remapping light value to pixel position."""
     return int(value / 320 * 10)
 
