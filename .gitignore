@@ -6,5 +6,4 @@ _build/
 *.mpy
 .DS_Store
 .env
-build*
 bundles
