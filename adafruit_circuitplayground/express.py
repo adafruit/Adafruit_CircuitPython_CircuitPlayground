@@ -71,6 +71,17 @@ class Express(CircuitPlaygroundBase):
 
         super().__init__()
 
+    @property
+    def _unsupported(self):
+        """This feature is not supported on Circuit Playground Express."""
+        raise NotImplementedError("This feature is not supported on Circuit Playground Express.")
+
+    # The following is a list of the features available in other Circuit Playground modules but
+    # not available for Circuit Playground Express. If called while using a Circuit Playground
+    # Express, they will result in the NotImplementedError raised in the property above.
+    sound_level = _unsupported
+    loud_sound = _unsupported
+
 
 cpx = Express()  # pylint: disable=invalid-name
 """Object that is automatically created on import.
