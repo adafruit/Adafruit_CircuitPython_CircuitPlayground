@@ -14,30 +14,49 @@ Introduction
     :target: https://github.com/adafruit/Adafruit_CircuitPython_CircuitPlayground/actions/
     :alt: Build Status
 
-This high level library provides objects that represent CircuitPlayground hardware.
+This high level library provides objects that represent Circuit Playground Express and Bluefruit hardware.
 
 .. image :: ../docs/_static/circuitplayground_express.jpg
     :target: https://adafruit.com/product/3333
-    :alt: CircuitPlayground Express
+    :alt: Circuit Playground Express
+
+.. image :: ../docs/_static/circuit_playground_bluefruit.jpg
+    :target: https://adafruit.com/product/4333
+    :alt: Circuit Playground Bluefruit
 
 Installation
 =============
-This driver depends on many other libraries! Please install it by downloading
-`the Adafruit library and driver bundle <https://github.com/adafruit/Adafruit_CircuitPython_Bundle>`_.
+For Circuit Playground Express, simply install CircuitPython to use this library - the library itself and
+all of its dependencies are built into CircuitPython for Circuit Playground Express.
+
+For Circuit Playground Bluefruit, you must install this library and all of its dependencies. Please download
+`the latest Adafruit CircuitPython library bundle <https://circuitpython.org/libraries>`_. Open the resulting
+zip file, open the lib folder within, and copy the following folders and files to the lib folder on your
+CIRCUITPY drive:
+
+* adafruit_bus_device/
+* adafruit_circuitplayground/
+* adafruit_lis3dh.mpy
+* adafruit_thermistor.mpy
+* neopixel.mpy
+
 
 Usage Example
 =============
-Using it is super simple. Simply import the `cpx` variable from the module
-and then use it.
+Using this library is super simple. Simply import the `cp` variable from the module and then use it.
 
 .. code-block :: python
 
-    from adafruit_circuitplayground.express import cpx
+    from adafruit_circuitplayground import cp
 
     while True:
-        if cpx.button_a:
-            print("Temperature:", cpx.temperature)
-        cpx.red_led = cpx.button_b
+        if cp.button_a:
+            print("Temperature:", cp.temperature)
+        cp.red_led = cp.button_b
+
+To learn more about all the features of this library, check out the
+`CircuitPython Made Easy on Circuit Playground Express and Bluefruit guide <https://learn.adafruit.com/circuitpython-made-easy-on-circuit-playground-express>`_
+on the Adafruit Learn System.
 
 Contributing
 ============
