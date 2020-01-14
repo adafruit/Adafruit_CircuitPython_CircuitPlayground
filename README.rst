@@ -43,7 +43,7 @@ CIRCUITPY drive:
 
 Usage Example
 =============
-Using this library is super simple. Simply import the `cp` variable from the module and then use it.
+Using this library is super simple. Simply import the ``cp`` variable from the module and then use it.
 
 .. code-block :: python
 
