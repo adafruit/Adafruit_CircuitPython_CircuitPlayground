@@ -16,11 +16,11 @@ Introduction
 
 This high level library provides objects that represent Circuit Playground Express and Bluefruit hardware.
 
-.. image :: /docs/_static/circuit_playground_express_small.jpg
+.. image :: ../docs/_static/circuit_playground_express_small.jpg
     :target: https://adafruit.com/product/3333
     :alt: Circuit Playground Express
 
-.. image :: /docs/_static/circuit_playground_bluefruit_small.jpg
+.. image :: ../docs/_static/circuit_playground_bluefruit_small.jpg
     :target: https://adafruit.com/product/4333
     :alt: Circuit Playground Bluefruit
 
@@ -61,8 +61,8 @@ Circuit Playground Library Details
 ==================================
 
 For a detailed explanation of how the Circuit Playground library functions, see
-`The Technical Side <https://learn.adafruit.com/circuitpython-made-easy-on-circuit-playground-express/the-technical-side>`_
-page of the CircuitPython Made Easy on Circuit Playground Express and Bluefruit guide.
+`The Technical Side page <https://learn.adafruit.com/circuitpython-made-easy-on-circuit-playground-express/the-technical-side>`_
+of the CircuitPython Made Easy on Circuit Playground Express and Bluefruit guide.
 
 Contributing
 ============
