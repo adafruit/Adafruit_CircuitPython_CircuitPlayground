@@ -16,11 +16,11 @@ Introduction
 
 This high level library provides objects that represent Circuit Playground Express and Bluefruit hardware.
 
-.. image :: ../docs/_static/circuitplayground_express.jpg
+.. image :: https://raw.githubusercontent.com/adafruit/Adafruit_CircuitPython_CircuitPlayground/master/docs/_static/circuit_playground_express_small.jpg
     :target: https://adafruit.com/product/3333
     :alt: Circuit Playground Express
 
-.. image :: ../docs/_static/circuit_playground_bluefruit.jpg
+.. image :: https://raw.githubusercontent.com/adafruit/Adafruit_CircuitPython_CircuitPlayground/master/docs/_static/circuit_playground_bluefruit_small.jpg
     :target: https://adafruit.com/product/4333
     :alt: Circuit Playground Bluefruit
 
@@ -40,7 +40,6 @@ CIRCUITPY drive:
 * adafruit_thermistor.mpy
 * neopixel.mpy
 
-
 Usage Example
 =============
 Using this library is super simple. Simply import the ``cp`` variable from the module and then use it.
@@ -57,6 +56,13 @@ Using this library is super simple. Simply import the ``cp`` variable from the m
 To learn more about all the features of this library, check out the
 `CircuitPython Made Easy on Circuit Playground Express and Bluefruit guide <https://learn.adafruit.com/circuitpython-made-easy-on-circuit-playground-express>`_
 on the Adafruit Learn System.
+
+Circuit Playground Library Details
+==================================
+
+For a detailed explanation of how the Circuit Playground library functions, see
+`The Technical Side page <https://learn.adafruit.com/circuitpython-made-easy-on-circuit-playground-express/the-technical-side>`_
+of the CircuitPython Made Easy on Circuit Playground Express and Bluefruit guide.
 
 Contributing
 ============
