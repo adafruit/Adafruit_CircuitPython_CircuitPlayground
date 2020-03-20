@@ -39,16 +39,17 @@ CircuitPython base class for Circuit Playground.
 import math
 import array
 import time
+
 try:
     import audiocore
 except ImportError:
     import audioio as audiocore
-import adafruit_lis3dh
-import adafruit_thermistor
 import analogio
 import board
 import busio
 import digitalio
+import adafruit_lis3dh
+import adafruit_thermistor
 import neopixel
 import touchio
 import gamepad
@@ -60,6 +61,7 @@ __repo__ = "https://github.com/adafruit/Adafruit_CircuitPython_CircuitPlayground
 
 class Photocell:
     """Simple driver for analog photocell on the Circuit Playground Express and Bluefruit."""
+
     # pylint: disable=too-few-public-methods
     def __init__(self, pin):
         self._photocell = analogio.AnalogIn(pin)
@@ -71,7 +73,7 @@ class Photocell:
         return self._photocell.value * 330 // (2 ** 16)
 
 
-class CircuitPlaygroundBase:     # pylint: disable=too-many-public-methods
+class CircuitPlaygroundBase:  # pylint: disable=too-many-public-methods
     """Circuit Playground base class."""
 
     _audio_out = None
@@ -93,7 +95,9 @@ class CircuitPlaygroundBase:     # pylint: disable=too-many-public-methods
         self._pixels = neopixel.NeoPixel(board.NEOPIXEL, 10)
 
         # Define sensors:
-        self._temp = adafruit_thermistor.Thermistor(board.TEMPERATURE, 10000, 10000, 25, 3950)
+        self._temp = adafruit_thermistor.Thermistor(
+            board.TEMPERATURE, 10000, 10000, 25, 3950
+        )
         self._light = Photocell(board.LIGHT)
 
         # Define touch:
@@ -103,13 +107,24 @@ class CircuitPlaygroundBase:     # pylint: disable=too-many-public-methods
         # For example, after `cp.touch_A2`, self._touches is equivalent to:
         # [None, board.A1, touchio.TouchIn(board.A2), board.A3, ...]
         # Slot 0 is not used (A0 is not allowed as a touch pin).
-        self._touches = [None, board.A1, board.A2, board.A3, board.A4, board.A5, board.A6, board.TX]
+        self._touches = [
+            None,
+            board.A1,
+            board.A2,
+            board.A3,
+            board.A4,
+            board.A5,
+            board.A6,
+            board.TX,
+        ]
         self._touch_threshold_adjustment = 0
 
         # Define acceleration:
         self._i2c = busio.I2C(board.ACCELEROMETER_SCL, board.ACCELEROMETER_SDA)
         self._int1 = digitalio.DigitalInOut(board.ACCELEROMETER_INTERRUPT)
-        self._lis3dh = adafruit_lis3dh.LIS3DH_I2C(self._i2c, address=0x19, int1=self._int1)
+        self._lis3dh = adafruit_lis3dh.LIS3DH_I2C(
+            self._i2c, address=0x19, int1=self._int1
+        )
         self._lis3dh.range = adafruit_lis3dh.RANGE_8_G
 
         # Define audio:
@@ -148,9 +163,13 @@ class CircuitPlaygroundBase:     # pylint: disable=too-many-public-methods
     def detect_taps(self, value):
         self._detect_taps = value
         if value == 1:
-            self._lis3dh.set_tap(value, 90, time_limit=4, time_latency=50, time_window=255)
+            self._lis3dh.set_tap(
+                value, 90, time_limit=4, time_latency=50, time_window=255
+            )
         if value == 2:
-            self._lis3dh.set_tap(value, 60, time_limit=10, time_latency=50, time_window=255)
+            self._lis3dh.set_tap(
+                value, 60, time_limit=10, time_latency=50, time_window=255
+            )
 
     @property
     def tapped(self):
@@ -515,7 +534,7 @@ class CircuitPlaygroundBase:     # pylint: disable=too-many-public-methods
         """
         ret = set()
         pressed = self.gamepad.get_pressed()
-        for button, mask in (('A', 0x01), ('B', 0x02)):
+        for button, mask in (("A", 0x01), ("B", 0x02)):
             if mask & pressed:
                 ret.add(button)
         return ret
@@ -619,7 +638,7 @@ class CircuitPlaygroundBase:     # pylint: disable=too-many-public-methods
         tone_volume = (2 ** 15) - 1
         shift = 2 ** 15
         for i in range(length):
-            yield int(tone_volume * math.sin(2*math.pi*(i / length)) + shift)
+            yield int(tone_volume * math.sin(2 * math.pi * (i / length)) + shift)
 
     def _generate_sample(self, length=100):
         if self._sample is not None:

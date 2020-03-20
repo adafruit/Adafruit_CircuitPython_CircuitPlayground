@@ -14,11 +14,9 @@ See a code walkthrough here: https://www.youtube.com/watch?v=cDhqyT3ZN0g
 import time
 from adafruit_circuitplayground import cp
 
-HS_OCT = 12                 # Half-steps per octave
-HS_4TH = 5                  # Half-steps in a fourth
-ARPEGGIOS = (
-    (0, 4, 7, 10),          # Dominant seventh
-    (0, 3, 5, 6, 7, 10))    # Blues
+HS_OCT = 12  # Half-steps per octave
+HS_4TH = 5  # Half-steps in a fourth
+ARPEGGIOS = ((0, 4, 7, 10), (0, 3, 5, 6, 7, 10))  # Dominant seventh  # Blues
 NUM_OCTAVES = 2
 STARTING_NOTE = 233.08
 MIN_NOTE_PLAY_SECONDS = 0.25
@@ -27,6 +25,7 @@ BUTTON_REPEAT_AFTER_SECONDS = 0.25
 
 class FrequencyMaker:
     """Provide frequencies for playing notes"""
+
     def __init__(self):
         num_octaves_to_pre_compute = NUM_OCTAVES + 2
         num_freqs = HS_OCT * num_octaves_to_pre_compute
@@ -35,18 +34,25 @@ class FrequencyMaker:
             return STARTING_NOTE * 2 ** (i / HS_OCT)
 
         self.note_frequencies = [calc_freq(i) for i in range(num_freqs)]
-        self.arpeg_note_indexes = FrequencyMaker.create_arpeggios(num_octaves_to_pre_compute)
+        self.arpeg_note_indexes = FrequencyMaker.create_arpeggios(
+            num_octaves_to_pre_compute
+        )
         self.circle_pos = 0
         self.key_offset = 0
 
     @staticmethod
     def create_arpeggios(num_octaves):
         """Create a list of arpeggios, where each one is a list of chromatic scale note indexes"""
-        return [FrequencyMaker.create_arpeggio(arpeggio, num_octaves) for arpeggio in ARPEGGIOS]
+        return [
+            FrequencyMaker.create_arpeggio(arpeggio, num_octaves)
+            for arpeggio in ARPEGGIOS
+        ]
 
     @staticmethod
     def create_arpeggio(arpeggio, num_octaves):
-        return [octave * HS_OCT + note for octave in range(num_octaves) for note in arpeggio]
+        return [
+            octave * HS_OCT + note for octave in range(num_octaves) for note in arpeggio
+        ]
 
     def advance(self, amount):
         """Advance forward or backward through the circle of fourths"""
@@ -92,7 +98,9 @@ class TiltingArpeggios:
         while True:
             self.process_button_presses()
             if time.monotonic() >= self.next_freq_change_allowed_at:
-                self.next_freq_change_allowed_at = time.monotonic() + MIN_NOTE_PLAY_SECONDS
+                self.next_freq_change_allowed_at = (
+                    time.monotonic() + MIN_NOTE_PLAY_SECONDS
+                )
                 self.change_tone_if_needed()
 
     @staticmethod
@@ -108,7 +116,9 @@ class TiltingArpeggios:
     @staticmethod
     def tilt():
         """Normalize the Y-Axis Tilt"""
-        standard_gravity = 9.81  # Acceleration (m/s²) due to gravity at the earth’s surface
+        standard_gravity = (
+            9.81  # Acceleration (m/s²) due to gravity at the earth’s surface
+        )
         constrained_accel = min(max(0.0, -cp.acceleration[1]), standard_gravity)
         return constrained_accel / standard_gravity
 

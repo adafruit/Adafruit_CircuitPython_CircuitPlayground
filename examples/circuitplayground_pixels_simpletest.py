@@ -9,12 +9,12 @@ def wheel(pos):
     if (pos < 0) or (pos > 255):
         return (0, 0, 0)
     if pos < 85:
-        return (int(pos * 3), int(255 - (pos*3)), 0)
+        return (int(pos * 3), int(255 - (pos * 3)), 0)
     if pos < 170:
         pos -= 85
-        return (int(255 - pos*3), 0, int(pos*3))
+        return (int(255 - pos * 3), 0, int(pos * 3))
     pos -= 170
-    return (0, int(pos*3), int(255 - pos*3))
+    return (0, int(pos * 3), int(255 - pos * 3))
 
 
 def rainbow_cycle(wait):
@@ -29,4 +29,4 @@ def rainbow_cycle(wait):
 cp.pixels.auto_write = False
 cp.pixels.brightness = 0.3
 while True:
-    rainbow_cycle(0.001)    # rainbowcycle with 1ms delay per step
+    rainbow_cycle(0.001)  # rainbowcycle with 1ms delay per step
