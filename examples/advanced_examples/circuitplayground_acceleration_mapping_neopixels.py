@@ -22,22 +22,22 @@ cp.pixels.brightness = 0.2  # Adjust overall brightness as desired, between 0 an
 def color_amount(accel_component):
     """Convert acceleration component (x, y, or z) to color amount (r, g, or b)"""
     standard_gravity = 9.81  # Acceleration (m/s²) due to gravity at the earth’s surface
-    accel_magnitude = abs(accel_component)                      # Ignore the direction
+    accel_magnitude = abs(accel_component)  # Ignore the direction
     constrained_accel = min(accel_magnitude, standard_gravity)  # Constrain values
-    normalized_accel = constrained_accel / standard_gravity     # Convert to 0–1
-    return round(normalized_accel * 255)                        # Convert to 0–255
+    normalized_accel = constrained_accel / standard_gravity  # Convert to 0–1
+    return round(normalized_accel * 255)  # Convert to 0–255
 
 
 def format_acceleration():
-    return ', '.join(('{:>6.2f}'.format(axis_value) for axis_value in acceleration))
+    return ", ".join(("{:>6.2f}".format(axis_value) for axis_value in acceleration))
 
 
 def format_rgb():
-    return ', '.join(('{:>3d}'.format(rgb_amount) for rgb_amount in rgb_amounts))
+    return ", ".join(("{:>3d}".format(rgb_amount) for rgb_amount in rgb_amounts))
 
 
 def log_values():
-    print('({}) ==> ({})'.format(format_acceleration(), format_rgb()))
+    print("({}) ==> ({})".format(format_acceleration(), format_rgb()))
 
 
 while True:

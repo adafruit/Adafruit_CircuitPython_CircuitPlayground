@@ -35,18 +35,20 @@ CircuitPython helper for Circuit Playground Express.
 """
 
 import sys
-import audioio
 import digitalio
-# pylint: disable=wrong-import-position
+import audioio
+
 try:
-    lib_index = sys.path.index("/lib")        # pylint: disable=invalid-name
+    lib_index = sys.path.index("/lib")  # pylint: disable=invalid-name
     if lib_index < sys.path.index(".frozen"):
         # Prefer frozen modules over those in /lib.
         sys.path.insert(lib_index, ".frozen")
 except ValueError:
     # Don't change sys.path if it doesn't contain "lib" or ".frozen".
     pass
-from adafruit_circuitplayground.circuit_playground_base import CircuitPlaygroundBase
+from adafruit_circuitplayground.circuit_playground_base import (  # pylint: disable=wrong-import-position
+    CircuitPlaygroundBase,
+)
 
 
 __version__ = "0.0.0-auto.0"
@@ -65,8 +67,10 @@ class Express(CircuitPlaygroundBase):
 
     def __init__(self):
         # Only create the cpx module member when we aren't being imported by Sphinx
-        if ("__module__" in dir(digitalio.DigitalInOut) and
-                digitalio.DigitalInOut.__module__ == "sphinx.ext.autodoc"):
+        if (
+            "__module__" in dir(digitalio.DigitalInOut)
+            and digitalio.DigitalInOut.__module__ == "sphinx.ext.autodoc"
+        ):
             return
 
         super().__init__()
@@ -74,7 +78,9 @@ class Express(CircuitPlaygroundBase):
     @property
     def _unsupported(self):
         """This feature is not supported on Circuit Playground Express."""
-        raise NotImplementedError("This feature is not supported on Circuit Playground Express.")
+        raise NotImplementedError(
+            "This feature is not supported on Circuit Playground Express."
+        )
 
     # The following is a list of the features available in other Circuit Playground modules but
     # not available for Circuit Playground Express. If called while using a Circuit Playground

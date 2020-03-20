@@ -15,7 +15,9 @@ from adafruit_circuitplayground import cp
 try:
     pulsein = pulseio.PulseIn(board.IR_RX, maxlen=120, idle_state=True)
 except AttributeError:
-    raise NotImplementedError("This example does not work with Circuit Playground Bluefruti!")
+    raise NotImplementedError(
+        "This example does not work with Circuit Playground Bluefruti!"
+    )
 # Create a decoder that will take pulses and turn them into numbers
 decoder = adafruit_irremote.GenericDecode()
 

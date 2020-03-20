@@ -12,10 +12,9 @@ while True:
         print("Slide switch off!")
         cp.pixels.fill((0, 0, 0))
         continue
-    else:
-        R = 0
-        G = 0
-        B = 0
-        x, y, z = cp.acceleration
-        print((x, y, z))
-        cp.pixels.fill(((R + abs(int(x))), (G + abs(int(y))), (B + abs(int(z)))))
+    R = 0
+    G = 0
+    B = 0
+    x, y, z = cp.acceleration
+    print((x, y, z))
+    cp.pixels.fill(((R + abs(int(x))), (G + abs(int(y))), (B + abs(int(z)))))

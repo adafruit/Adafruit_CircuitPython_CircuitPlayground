@@ -57,8 +57,10 @@ class Bluefruit(CircuitPlaygroundBase):
 
     def __init__(self):
         # Only create the cpb module member when we aren't being imported by Sphinx
-        if ("__module__" in dir(digitalio.DigitalInOut) and
-                digitalio.DigitalInOut.__module__ == "sphinx.ext.autodoc"):
+        if (
+            "__module__" in dir(digitalio.DigitalInOut)
+            and digitalio.DigitalInOut.__module__ == "sphinx.ext.autodoc"
+        ):
             return
 
         super().__init__()
@@ -66,15 +68,24 @@ class Bluefruit(CircuitPlaygroundBase):
         self._sample = None
 
         # Define mic/sound sensor:
-        self._mic = audiobusio.PDMIn(board.MICROPHONE_CLOCK, board.MICROPHONE_DATA,
-                                     sample_rate=16000, bit_depth=16)
+        self._mic = audiobusio.PDMIn(
+            board.MICROPHONE_CLOCK,
+            board.MICROPHONE_DATA,
+            sample_rate=16000,
+            bit_depth=16,
+        )
         self._samples = None
 
     @staticmethod
     def _normalized_rms(values):
         mean_values = int(sum(values) / len(values))
-        return math.sqrt(sum(float(sample - mean_values) * (sample - mean_values)
-                             for sample in values) / len(values))
+        return math.sqrt(
+            sum(
+                float(sample - mean_values) * (sample - mean_values)
+                for sample in values
+            )
+            / len(values)
+        )
 
     @property
     def sound_level(self):
@@ -94,7 +105,7 @@ class Bluefruit(CircuitPlaygroundBase):
               print(cpb.sound_level)
         """
         if self._sample is None:
-            self._samples = array.array('H', [0] * 160)
+            self._samples = array.array("H", [0] * 160)
         self._mic.record(self._samples, len(self._samples))
         return self._normalized_rms(self._samples)
 
