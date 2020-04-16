@@ -3,8 +3,8 @@ light up the NeoPixels as a sound meter. Try talking to your Circuit Playground 
 to see the NeoPixels light up!"""
 import array
 import math
-import board
 import audiobusio
+import board
 from adafruit_circuitplayground import cp
 
 
@@ -27,13 +27,19 @@ def normalized_rms(values):
     )
 
 
-mic = audiobusio.PDMIn(
-    board.MICROPHONE_CLOCK, board.MICROPHONE_DATA, sample_rate=16000, bit_depth=16
-)
+# Only Circuit Playground Express has touch_A7 available. So, we'll use it to determine whether or
+# not the board being used is a CPX. If it is a CPX, run the first code block.
+if hasattr(cp, "touch_A7"):
+    mic = audiobusio.PDMIn(
+        board.MICROPHONE_CLOCK, board.MICROPHONE_DATA, sample_rate=16000, bit_depth=16
+    )
 
-samples = array.array("H", [0] * 160)
-mic.record(samples, len(samples))
-input_floor = normalized_rms(samples) + 10
+    samples = array.array("H", [0] * 160)
+    mic.record(samples, len(samples))
+    input_floor = normalized_rms(samples) + 10
+# Otherwise, the board is not a CPX, so run the second code block.
+else:
+    input_floor = cp.sound_level + 10
 
 # Lower number means more sensitive - more LEDs will light up with less sound.
 sensitivity = 500
@@ -41,9 +47,13 @@ input_ceiling = input_floor + sensitivity
 
 peak = 0
 while True:
-    mic.record(samples, len(samples))
-    magnitude = normalized_rms(samples)
-    print((magnitude,))
+    if hasattr(cp, "touch_A7"):  # Circuit Playground Express
+        mic.record(samples, len(samples))
+        magnitude = normalized_rms(samples)
+    else:  # Not CPX
+        magnitude = cp.sound_level
+
+    print((magnitude,))  # Printed as a tuple for the Mu plotter.
 
     c = log_scale(
         constrain(magnitude, input_floor, input_ceiling),
