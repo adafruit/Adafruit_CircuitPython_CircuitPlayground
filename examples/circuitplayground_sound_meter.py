@@ -27,9 +27,8 @@ def normalized_rms(values):
     )
 
 
-# Only Circuit Playground Express has touch_A7 available. So, we'll use it to determine whether or
-# not the board being used is a CPX. If it is a CPX, run the first code block.
-if hasattr(cp, "touch_A7"):
+# Check to see if the board type is a Circuit Playground Express, and, if so, run the following:
+if cp.circuit_playground_is_type("Express"):
     mic = audiobusio.PDMIn(
         board.MICROPHONE_CLOCK, board.MICROPHONE_DATA, sample_rate=16000, bit_depth=16
     )
@@ -37,7 +36,7 @@ if hasattr(cp, "touch_A7"):
     samples = array.array("H", [0] * 160)
     mic.record(samples, len(samples))
     input_floor = normalized_rms(samples) + 10
-# Otherwise, the board is not a CPX, so run the second code block.
+# If it is not, run the following:
 else:
     input_floor = cp.sound_level + 10
 
@@ -47,7 +46,7 @@ input_ceiling = input_floor + sensitivity
 
 peak = 0
 while True:
-    if hasattr(cp, "touch_A7"):  # Circuit Playground Express
+    if cp.circuit_playground_is_type("Express"):  # Circuit Playground Express
         mic.record(samples, len(samples))
         magnitude = normalized_rms(samples)
     else:  # Not CPX

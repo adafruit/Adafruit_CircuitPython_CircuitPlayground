@@ -39,6 +39,7 @@ CircuitPython base class for Circuit Playground.
 import math
 import array
 import time
+import os
 
 try:
     import audiocore
@@ -77,6 +78,9 @@ class CircuitPlaygroundBase:  # pylint: disable=too-many-public-methods
     """Circuit Playground base class."""
 
     _audio_out = None
+
+    # Circuit Playground specific board names as found in os.uname().machine
+    _CP_TYPES = ("Bluefruit", "Express")
 
     def __init__(self):
         self._a = digitalio.DigitalInOut(board.BUTTON_A)
@@ -137,6 +141,50 @@ class CircuitPlaygroundBase:  # pylint: disable=too-many-public-methods
         # Initialise tap:
         self._detect_taps = 1
         self.detect_taps = 1
+
+    @property
+    def circuit_playground_type(self):
+        """The Circuit Playground board type currently running the library. Returns the board name
+        shortened to the specific type, e.g. ``Express`` or ``Bluefruit``.
+
+        The following example prints the board type to the serial console.
+
+        To use with the Circuit Playground Express or Bluefruit:
+
+        .. code-block:: python
+
+            from adafruit_circuitplayground import cp
+
+            print(cp.circuit_playground_type)
+        """
+        board_name = os.uname().machine
+        for board_type in self._CP_TYPES:
+            if board_type in board_name:
+                return board_type
+        raise ValueError("Board unsupported by this library.")
+
+    def circuit_playground_is_type(self, is_type):
+        """Checks whether the board is the specified type of Circuit Playground, using the board
+        name shortened to the specific type, e.g. ``Express`` or ``Bluefruit``.
+
+        To use with the Circuit Playground Express or Bluefruit:
+
+        The following example prints the board type to the serial console, if the board type is a
+        Circuit Playground Express. It does nothing if the board is not a CPX. Change ``Express``
+        to ``Bluefruit`` to print the board type to the serial console, if the board type is a
+        Circuit Playground Bluefruit.
+
+        .. code-block:: python
+
+            from adafruit_circuitplayground import cp
+
+            if cp.circuit_playground_is_type("Express"):
+                print(cp.circuit_playground_type)
+
+        """
+        if is_type not in self._CP_TYPES:
+            raise ValueError("Valid Circuit Playground boards are {}".format(self._CP_TYPES))
+        return self.circuit_playground_type == is_type
 
     @property
     def detect_taps(self):
