@@ -183,7 +183,9 @@ class CircuitPlaygroundBase:  # pylint: disable=too-many-public-methods
 
         """
         if is_type not in self._CP_TYPES:
-            raise ValueError("Valid Circuit Playground boards are {}".format(self._CP_TYPES))
+            raise ValueError(
+                "Valid Circuit Playground boards are {}".format(self._CP_TYPES)
+            )
         return self.circuit_playground_type == is_type
 
     @property
