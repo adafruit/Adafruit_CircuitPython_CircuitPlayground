@@ -48,6 +48,7 @@ import analogio
 import board
 import busio
 import digitalio
+import audiomp3
 import adafruit_lis3dh
 import adafruit_thermistor
 import neopixel
@@ -754,8 +755,16 @@ class CircuitPlaygroundBase:  # pylint: disable=too-many-public-methods
         self.stop_tone()
         self._speaker_enable.value = True
         with self._audio_out(board.SPEAKER) as audio:  # pylint: disable=not-callable
-            wavefile = audiocore.WaveFile(open(file_name, "rb"))
-            audio.play(wavefile)
-            while audio.playing:
-                pass
+            if ".wav" in file_name:
+                wavefile = audiocore.WaveFile(open(file_name, "rb"))
+                audio.play(wavefile)
+                while audio.playing:
+                    pass
+            elif ".mp3" in file_name:
+                mp3file = audiomp3.MP3Decoder(open(file_name, "rb"))
+                audio.play(mp3file)
+                while audio.playing:
+                    pass
+            else:
+                raise ValueError("Only supports .mp3 and .wav files")
         self._speaker_enable.value = False
