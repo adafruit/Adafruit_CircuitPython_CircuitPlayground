@@ -732,9 +732,10 @@ class CircuitPlaygroundBase:  # pylint: disable=too-many-public-methods
         self._speaker_enable.value = False
 
     def play_file(self, file_name):
-        """ Play a .wav file using the onboard speaker.
+        """ Play a .wav or .mp3 file using the onboard speaker.
 
-        :param file_name: The name of your .wav file in quotation marks including .wav
+        :param file_name: The name of your .wav or .mp3 file in
+          quotation marks including .wav or .mp3
 
         .. image :: ../docs/_static/speaker.jpg
           :alt: Onboard speaker
@@ -755,12 +756,12 @@ class CircuitPlaygroundBase:  # pylint: disable=too-many-public-methods
         self.stop_tone()
         self._speaker_enable.value = True
         with self._audio_out(board.SPEAKER) as audio:  # pylint: disable=not-callable
-            if ".wav" in file_name:
+            if file_name.lower().endswith(".wav"):
                 wavefile = audiocore.WaveFile(open(file_name, "rb"))
                 audio.play(wavefile)
                 while audio.playing:
                     pass
-            elif ".mp3" in file_name:
+            elif file_name.lower().endswith(".mp3"):
                 mp3file = audiomp3.MP3Decoder(open(file_name, "rb"))
                 audio.play(mp3file)
                 while audio.playing:
