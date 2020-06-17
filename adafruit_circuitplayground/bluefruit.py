@@ -42,6 +42,7 @@ import math
 import digitalio
 import board
 import audiopwmio
+import audiomp3
 import audiobusio
 from adafruit_circuitplayground.circuit_playground_base import CircuitPlaygroundBase
 
@@ -150,6 +151,41 @@ class Bluefruit(CircuitPlaygroundBase):
         """
 
         return self.sound_level > sound_threshold
+
+    def play_mp3(self, file_name):
+        """ Play a .mp3 file using the onboard speaker.
+
+        :param file_name: The name of your .mp3 file in quotation marks including .mp3
+
+        .. image :: ../docs/_static/speaker.jpg
+          :alt: Onboard speaker
+
+        To use with the Circuit Playground Bluefruit:
+
+        .. code-block:: python
+
+             from adafruit_circuitplayground import cp
+
+             while True:
+                 if cp.button_a:
+                     cp.play_mp3("laugh.mp3")
+                 elif cp.button_b:
+                     cp.play_mp3("rimshot.mp3")
+        """
+        if file_name.lower().endswith(".mp3"):
+            # Play a specified file.
+            self.stop_tone()
+            self._speaker_enable.value = True
+            with self._audio_out(
+                board.SPEAKER
+            ) as audio:  # pylint: disable=not-callable
+                mp3file = audiomp3.MP3Decoder(open(file_name, "rb"))
+                audio.play(mp3file)
+                while audio.playing:
+                    pass
+            self._speaker_enable.value = False
+        else:
+            raise ValueError("Filetype must be mp3")
 
 
 cpb = Bluefruit()  # pylint: disable=invalid-name

@@ -87,6 +87,7 @@ class Express(CircuitPlaygroundBase):
     # Express, they will result in the NotImplementedError raised in the property above.
     sound_level = _unsupported
     loud_sound = _unsupported
+    play_mp3 = _unsupported
 
 
 cpx = Express()  # pylint: disable=invalid-name
