@@ -44,6 +44,7 @@ try:
     import audiocore
 except ImportError:
     import audioio as audiocore
+import os
 import analogio
 import board
 import busio
@@ -162,14 +163,26 @@ class CircuitPlaygroundBase:  # pylint: disable=too-many-public-methods
     @detect_taps.setter
     def detect_taps(self, value):
         self._detect_taps = value
-        if value == 1:
-            self._lis3dh.set_tap(
-                value, 90, time_limit=4, time_latency=50, time_window=255
-            )
-        if value == 2:
-            self._lis3dh.set_tap(
-                value, 60, time_limit=10, time_latency=50, time_window=255
-            )
+        if (
+            "nRF52840" in os.uname().machine
+        ):  # If we're on a CPB, use a higher tap threshold
+            if value == 1:
+                self._lis3dh.set_tap(
+                    value, 100, time_limit=4, time_latency=50, time_window=255
+                )
+            if value == 2:
+                self._lis3dh.set_tap(
+                    value, 70, time_limit=10, time_latency=50, time_window=255
+                )
+        else:  # If we're on a CPX
+            if value == 1:
+                self._lis3dh.set_tap(
+                    value, 90, time_limit=4, time_latency=50, time_window=255
+                )
+            if value == 2:
+                self._lis3dh.set_tap(
+                    value, 60, time_limit=10, time_latency=50, time_window=255
+                )
 
     @property
     def tapped(self):
