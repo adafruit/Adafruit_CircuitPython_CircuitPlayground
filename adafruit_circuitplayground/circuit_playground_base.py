@@ -162,7 +162,7 @@ class CircuitPlaygroundBase:  # pylint: disable=too-many-public-methods
     @detect_taps.setter
     def detect_taps(self, value):
         self._detect_taps = value
-        if hasattr(board, "A0"):  # If we're on a CPX or CPC
+        if hasattr(board, "A0"):  # If we're on a CPX or CPC, use a higher tap threshold
             if value == 1:
                 self._lis3dh.set_tap(
                     value, 90, time_limit=4, time_latency=50, time_window=255
