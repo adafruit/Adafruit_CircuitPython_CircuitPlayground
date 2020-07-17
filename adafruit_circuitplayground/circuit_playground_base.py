@@ -174,11 +174,11 @@ class CircuitPlaygroundBase:  # pylint: disable=too-many-public-methods
         else:  # If we're on a CPB
             if value == 1:
                 self._lis3dh.set_tap(
-                    value, 93, time_limit=4, time_latency=50, time_window=255
+                    value, 100, time_limit=4, time_latency=50, time_window=255
                 )
             if value == 2:
                 self._lis3dh.set_tap(
-                    value, 63, time_limit=10, time_latency=50, time_window=255
+                    value, 70, time_limit=10, time_latency=50, time_window=255
                 )
 
     @property
