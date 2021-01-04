@@ -184,6 +184,34 @@ class CircuitPlaygroundBase:  # pylint: disable=too-many-public-methods
                     value, 60, time_limit=10, time_latency=50, time_window=255
                 )
 
+    def configure_taps(self, value, range = adafruit_lis3dh.RANGE_8_G, theshold = None, time_limit = None, time_latency = 50, time_window = 255):
+        """ A way to customize the tap detection better. The default values don't work for all cases.
+            Higher default thresholds for the CPB
+        """
+        if value < 0 or value > 2:
+            return
+
+        if range not in [ adafruit_lis3dh.RANGE_2_G, adafruit_lis3dh.RANGE_4_G, adafruit_lis3dh.RANGE_8_G, adafruit_lis3dh.RANGE_16_G ]:
+            range = adafruit_lis3dh.RANGE_8_G
+        self._lis3dh.range = range
+
+        if value == 1:
+            if theshold == None or theshold < 0 or theshold > 127:
+                theshold = 100 if "nRF52840" in os.uname().machine else 90
+            if time_limit == None:
+                time_limit = 4
+        elif value == 2:
+            if theshold == None or theshold < 0 or theshold > 127:
+                theshold = 70 if "nRF52840" in os.uname().machine else 60
+            if time_limit == None:
+                time_limit = 10
+        else:
+            # sane values for turning the tap detection off
+            theshold = 100
+            time_limit = 1
+
+        self._lis3dh.set_tap(value, theshold, time_limit = time_limit, time_latency = time_latency, time_window = time_window)
+
     @property
     def tapped(self):
         """True once after a detecting a tap. Requires ``cp.detect_taps``.
