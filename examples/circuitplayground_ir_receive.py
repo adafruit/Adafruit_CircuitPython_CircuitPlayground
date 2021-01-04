@@ -14,10 +14,10 @@ from adafruit_circuitplayground import cp
 # Create a 'pulseio' input, to listen to infrared signals on the IR receiver
 try:
     pulsein = pulseio.PulseIn(board.IR_RX, maxlen=120, idle_state=True)
-except AttributeError:
+except AttributeError as e:
     raise NotImplementedError(
         "This example does not work with Circuit Playground Bluefruti!"
-    )
+    ) from e
 # Create a decoder that will take pulses and turn them into numbers
 decoder = adafruit_irremote.GenericDecode()
 

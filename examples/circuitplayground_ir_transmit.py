@@ -15,10 +15,10 @@ from adafruit_circuitplayground import cp
 # Create a 'pulseio' output, to send infrared signals from the IR transmitter
 try:
     pwm = pulseio.PWMOut(board.IR_TX, frequency=38000, duty_cycle=2 ** 15)
-except AttributeError:
+except AttributeError as e:
     raise NotImplementedError(
         "This example does not work with Circuit Playground Bluefruit!"
-    )
+    ) from e
 pulseout = pulseio.PulseOut(pwm)  # pylint: disable=no-member
 # Create an encoder that will take numbers and turn them into NEC IR pulses
 encoder = adafruit_irremote.GenericTransmit(
