@@ -233,6 +233,7 @@ class CircuitPlaygroundBase:  # pylint: disable=too-many-public-methods
             time_latency=time_latency,
             time_window=time_window,
         )
+
     # pylint: enable-msg=too-many-arguments
 
     @property
