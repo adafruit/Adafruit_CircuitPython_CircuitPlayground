@@ -1,3 +1,6 @@
+# SPDX-FileCopyrightText: 2021 ladyada for Adafruit Industries
+# SPDX-License-Identifier: MIT
+
 """
 This example plays mp3 audio files from the built-in speaker when the A or B buttons are pressed.
 

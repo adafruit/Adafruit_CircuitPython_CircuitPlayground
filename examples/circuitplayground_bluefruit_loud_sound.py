@@ -1,3 +1,6 @@
+# SPDX-FileCopyrightText: 2021 ladyada for Adafruit Industries
+# SPDX-License-Identifier: MIT
+
 """
 This example lights up the NeoPixels on a Circuit Playground Bluefruit in response to a loud sound.
 Try snapping or clapping near the board to trigger the LEDs.

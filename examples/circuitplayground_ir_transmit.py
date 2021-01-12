@@ -1,3 +1,6 @@
+# SPDX-FileCopyrightText: 2021 ladyada for Adafruit Industries
+# SPDX-License-Identifier: MIT
+
 """THIS EXAMPLE REQUIRES A SEPARATE LIBRARY BE LOADED ONTO YOUR CIRCUITPY DRIVE.
 This example requires the adafruit_irremote.mpy library.
 
@@ -15,10 +18,11 @@ from adafruit_circuitplayground import cp
 # Create a 'pulseio' output, to send infrared signals from the IR transmitter
 try:
     pwm = pulseio.PWMOut(board.IR_TX, frequency=38000, duty_cycle=2 ** 15)
-except AttributeError as e:
+except AttributeError as err:
     raise NotImplementedError(
         "This example does not work with Circuit Playground Bluefruit!"
-    ) from e
+    ) from err
+
 pulseout = pulseio.PulseOut(pwm)  # pylint: disable=no-member
 # Create an encoder that will take numbers and turn them into NEC IR pulses
 encoder = adafruit_irremote.GenericTransmit(

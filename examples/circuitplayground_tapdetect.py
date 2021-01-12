@@ -1,3 +1,6 @@
+# SPDX-FileCopyrightText: 2021 ladyada for Adafruit Industries
+# SPDX-License-Identifier: MIT
+
 """This example prints to the serial console when the board is double-tapped."""
 import time
 from adafruit_circuitplayground import cp
