@@ -1,3 +1,6 @@
+# SPDX-FileCopyrightText: 2021 ladyada for Adafruit Industries
+# SPDX-License-Identifier: MIT
+
 """This example shows how you can use single-tap and double-tap together with a delay between.
 Single-tap the board twice and then double-tap the board twice to complete the program."""
 from adafruit_circuitplayground import cp

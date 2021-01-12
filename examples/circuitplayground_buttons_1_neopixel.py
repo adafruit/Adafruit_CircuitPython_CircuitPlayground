@@ -1,3 +1,6 @@
+# SPDX-FileCopyrightText: 2021 ladyada for Adafruit Industries
+# SPDX-License-Identifier: MIT
+
 """This example lights up the third NeoPixel while button A is being pressed, and lights up the
 eighth NeoPixel while button B is being pressed."""
 from adafruit_circuitplayground import cp

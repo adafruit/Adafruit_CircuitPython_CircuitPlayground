@@ -1,3 +1,6 @@
+# SPDX-FileCopyrightText: 2021 ladyada for Adafruit Industries
+# SPDX-License-Identifier: MIT
+
 """This example lights up the NeoPixels with a rainbow swirl."""
 import time
 from adafruit_circuitplayground import cp

@@ -1,3 +1,6 @@
+# SPDX-FileCopyrightText: 2021 ladyada for Adafruit Industries
+# SPDX-License-Identifier: MIT
+
 """
 This example use the temperature sensor on the Circuit Playground, located next to the picture of
 the thermometer on the board. Try warming up the board to watch the number of NeoPixels lit up

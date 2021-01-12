@@ -1,3 +1,6 @@
+# SPDX-FileCopyrightText: 2021 ladyada for Adafruit Industries
+# SPDX-License-Identifier: MIT
+
 """
 This example prints out sound levels using the sound sensor on a Circuit Playground Bluefruit. If
 you are using Mu, open the plotter to see the sound level plotted. Try making sounds towards the

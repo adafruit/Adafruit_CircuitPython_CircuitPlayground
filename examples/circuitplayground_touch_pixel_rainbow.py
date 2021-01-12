@@ -1,3 +1,6 @@
+# SPDX-FileCopyrightText: 2021 ladyada for Adafruit Industries
+# SPDX-License-Identifier: MIT
+
 """This example uses the capacitive touch pads on the Circuit Playground. They are located around
 the outer edge of the board and are labeled A1-A6 and TX. (A0 is not a touch pad.) This example
 lights up the nearest NeoPixel to that pad a different color of the rainbow!"""
