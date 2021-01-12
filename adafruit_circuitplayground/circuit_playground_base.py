@@ -181,7 +181,7 @@ class CircuitPlaygroundBase:  # pylint: disable=too-many-public-methods
         time_latency=50,
         time_window=255,
     ):
-        """ Granular configuration of tap parameters. Expose the power of the
+        """Granular configuration of tap parameters. Expose the power of the
         adafruit_lis3dh module.
 
         :param int tap: 0 to disable tap detection, 1 to detect only single
