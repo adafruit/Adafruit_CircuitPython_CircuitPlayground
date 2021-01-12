@@ -1,3 +1,6 @@
+# SPDX-FileCopyrightText: 2021 ladyada for Adafruit Industries
+# SPDX-License-Identifier: MIT
+
 """Tilting Arpeggios
 
 This program plays notes from arpeggios in a circle of fourths. Y-axis tilt chooses the note.

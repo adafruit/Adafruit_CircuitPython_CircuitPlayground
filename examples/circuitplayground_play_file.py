@@ -1,3 +1,6 @@
+# SPDX-FileCopyrightText: 2021 ladyada for Adafruit Industries
+# SPDX-License-Identifier: MIT
+
 """THIS EXAMPLE REQUIRES A WAV FILE FROM THE examples FOLDER IN THE
 Adafruit_CircuitPython_CircuitPlayground REPO found at:
 https://github.com/adafruit/Adafruit_CircuitPython_CircuitPlayground/tree/master/examples

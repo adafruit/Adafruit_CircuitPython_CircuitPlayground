@@ -1,3 +1,6 @@
+# SPDX-FileCopyrightText: 2021 ladyada for Adafruit Industries
+# SPDX-License-Identifier: MIT
+
 """Gravity Pulls Pixel
 
 This program uses the Circuit Playground's accelerometer to position

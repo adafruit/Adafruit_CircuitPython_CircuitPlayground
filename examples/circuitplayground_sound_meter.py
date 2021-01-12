@@ -1,3 +1,6 @@
+# SPDX-FileCopyrightText: 2021 ladyada for Adafruit Industries
+# SPDX-License-Identifier: MIT
+
 """This example uses the sound sensor, located next to the picture of the ear on your board, to
 light up the NeoPixels as a sound meter. Try talking to your Circuit Playground or clapping, etc,
 to see the NeoPixels light up!"""

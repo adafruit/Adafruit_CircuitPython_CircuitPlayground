@@ -1,3 +1,6 @@
+# SPDX-FileCopyrightText: 2021 ladyada for Adafruit Industries
+# SPDX-License-Identifier: MIT
+
 """If the switch is to the right, it will appear that nothing is happening. Move the switch to the
 left to see the NeoPixels light up in colors related to the accelerometer! The Circuit Playground
 has an accelerometer in the center that returns (x, y, z) acceleration values. This program uses

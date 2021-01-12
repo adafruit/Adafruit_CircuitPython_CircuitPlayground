@@ -1,3 +1,6 @@
+# SPDX-FileCopyrightText: 2021 ladyada for Adafruit Industries
+# SPDX-License-Identifier: MIT
+
 """
 This example uses the light sensor on the Circuit Playground, located next to the picture of the
 eye on the board. Once you have the library loaded, try shining a flashlight on your Circuit

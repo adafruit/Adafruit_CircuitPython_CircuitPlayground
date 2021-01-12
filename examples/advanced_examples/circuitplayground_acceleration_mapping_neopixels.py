@@ -1,3 +1,6 @@
+# SPDX-FileCopyrightText: 2021 ladyada for Adafruit Industries
+# SPDX-License-Identifier: MIT
+
 """Maps acceleration (tilt) to Neopixel colors.
 
 x, y, and z acceleration components map to red, green and blue,

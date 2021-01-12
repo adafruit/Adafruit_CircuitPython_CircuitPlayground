@@ -1,3 +1,6 @@
+# SPDX-FileCopyrightText: 2021 ladyada for Adafruit Industries
+# SPDX-License-Identifier: MIT
+
 """THIS EXAMPLE REQUIRES A SEPARATE LIBRARY BE LOADED ONTO YOUR CIRCUITPY DRIVE.
 This example requires the adafruit_irremote.mpy library.
 
@@ -14,10 +17,10 @@ from adafruit_circuitplayground import cp
 # Create a 'pulseio' input, to listen to infrared signals on the IR receiver
 try:
     pulsein = pulseio.PulseIn(board.IR_RX, maxlen=120, idle_state=True)
-except AttributeError:
+except AttributeError as err:
     raise NotImplementedError(
         "This example does not work with Circuit Playground Bluefruti!"
-    )
+    ) from err
 # Create a decoder that will take pulses and turn them into numbers
 decoder = adafruit_irremote.GenericDecode()
 
