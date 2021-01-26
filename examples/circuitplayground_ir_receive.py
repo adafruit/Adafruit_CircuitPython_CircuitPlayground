@@ -21,6 +21,7 @@ except AttributeError as err:
     raise NotImplementedError(
         "This example does not work with Circuit Playground Bluefruti!"
     ) from err
+
 # Create a decoder that will take pulses and turn them into numbers
 decoder = adafruit_irremote.GenericDecode()
 

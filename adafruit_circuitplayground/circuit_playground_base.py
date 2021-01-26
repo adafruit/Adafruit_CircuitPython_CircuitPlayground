@@ -142,29 +142,112 @@ class CircuitPlaygroundBase:  # pylint: disable=too-many-public-methods
         """
         return self._detect_taps
 
-    @detect_taps.setter
-    def detect_taps(self, value):
-        self._detect_taps = value
+    @staticmethod
+    def _default_tap_threshold(tap):
         if (
             "nRF52840" in os.uname().machine
         ):  # If we're on a CPB, use a higher tap threshold
-            if value == 1:
-                self._lis3dh.set_tap(
-                    value, 100, time_limit=4, time_latency=50, time_window=255
-                )
-            if value == 2:
-                self._lis3dh.set_tap(
-                    value, 70, time_limit=10, time_latency=50, time_window=255
-                )
-        else:  # If we're on a CPX
-            if value == 1:
-                self._lis3dh.set_tap(
-                    value, 90, time_limit=4, time_latency=50, time_window=255
-                )
-            if value == 2:
-                self._lis3dh.set_tap(
-                    value, 60, time_limit=10, time_latency=50, time_window=255
-                )
+            return 100 if tap == 1 else 70
+
+        # If we're on a CPX
+        return 90 if tap == 1 else 60
+
+    @detect_taps.setter
+    def detect_taps(self, value):
+        self._detect_taps = value
+        if value == 1:
+            self._lis3dh.set_tap(
+                value,
+                self._default_tap_threshold(value),
+                time_limit=4,
+                time_latency=50,
+                time_window=255,
+            )
+        if value == 2:
+            self._lis3dh.set_tap(
+                value,
+                self._default_tap_threshold(value),
+                time_limit=10,
+                time_latency=50,
+                time_window=255,
+            )
+
+    def configure_tap(  # pylint: disable-msg=too-many-arguments
+        self,
+        tap,
+        accel_range=adafruit_lis3dh.RANGE_8_G,
+        threshold=None,
+        time_limit=None,
+        time_latency=50,
+        time_window=255,
+    ):
+        """Granular configuration of tap parameters. Expose the power of the
+        adafruit_lis3dh module.
+
+        :param int tap: 0 to disable tap detection, 1 to detect only single
+                        taps, and 2 to detect only double taps.
+        :param int accel_range: Takes the defined values from the adafruit_lis3dh
+                        module [ RANGE_2_G, RANGE_4_G, RANGE_8_G, RANGE_16_G ]
+                        (default sets the same value as the *detect_taps* setter)
+        :param int threshold: A threshold for the tap detection.  The higher the value
+                        the less sensitive the detection.  This changes based on the
+                        accelerometer range.  Good values are 5-10 for 16G, 10-20
+                        for 8G, 20-40 for 4G, and 40-80 for 2G.
+                        (default sets the same value as the *detect_taps* setter)
+        :param int time_limit: TIME_LIMIT register value
+                        (default sets the same value as the *detect_taps* setter)
+        :param int time_latency: TIME_LATENCY register value (default 50).
+        :param int time_window: TIME_WINDOW register value (default 255).
+
+        To use with the Circuit Playground Express or Bluefruit:
+
+        .. code-block:: python
+
+          from adafruit_circuitplayground import cp
+          import adafruit_lis3dh
+
+          cp.configure_tap(1, accel_range=adafruit_lis3dh.RANGE_2_G, threshold=50)
+          while True:
+            if cp.tapped:
+              print("Single tap detected!")
+
+        """
+        if tap < 0 or tap > 2:
+            return
+
+        self._detect_taps = tap
+
+        if accel_range not in [
+            adafruit_lis3dh.RANGE_2_G,
+            adafruit_lis3dh.RANGE_4_G,
+            adafruit_lis3dh.RANGE_8_G,
+            adafruit_lis3dh.RANGE_16_G,
+        ]:
+            accel_range = adafruit_lis3dh.RANGE_8_G
+        self._lis3dh.range = accel_range
+
+        if tap == 1:
+            if threshold is None or threshold < 0 or threshold > 127:
+                threshold = self._default_tap_threshold(tap)
+            if time_limit is None:
+                time_limit = 4
+        elif tap == 2:
+            if threshold is None or threshold < 0 or threshold > 127:
+                threshold = self._default_tap_threshold(tap)
+            if time_limit is None:
+                time_limit = 10
+        else:
+            # reasonable values for turning the tap detection off
+            threshold = 100
+            time_limit = 1
+
+        self._lis3dh.set_tap(
+            tap,
+            threshold,
+            time_limit=time_limit,
+            time_latency=time_latency,
+            time_window=time_window,
+        )
 
     @property
     def tapped(self):

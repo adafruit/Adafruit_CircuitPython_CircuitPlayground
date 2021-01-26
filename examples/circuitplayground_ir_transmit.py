@@ -22,6 +22,7 @@ except AttributeError as err:
     raise NotImplementedError(
         "This example does not work with Circuit Playground Bluefruit!"
     ) from err
+
 pulseout = pulseio.PulseOut(pwm)  # pylint: disable=no-member
 # Create an encoder that will take numbers and turn them into NEC IR pulses
 encoder = adafruit_irremote.GenericTransmit(
