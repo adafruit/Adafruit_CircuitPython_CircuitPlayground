@@ -21,11 +21,7 @@ CircuitPython base class for Circuit Playground.
 import math
 import array
 import time
-
-try:
-    import audiocore
-except ImportError:
-    import audioio as audiocore
+import audiocore
 import os
 import analogio
 import board
