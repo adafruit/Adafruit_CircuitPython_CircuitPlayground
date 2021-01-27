@@ -11,13 +11,14 @@ Playground Express running the circuitplayground_ir_receive.py example. Press th
 up the NeoPixels on the RECEIVING Circuit Playground Express!"""
 import time
 import pulseio
+import pwmio
 import board
 import adafruit_irremote
 from adafruit_circuitplayground import cp
 
-# Create a 'pulseio' output, to send infrared signals from the IR transmitter
+# Create a 'pwmio' output, to send infrared signals from the IR transmitter
 try:
-    pwm = pulseio.PWMOut(board.IR_TX, frequency=38000, duty_cycle=2 ** 15)
+    pwm = pwmio.PWMOut(board.IR_TX, frequency=38000, duty_cycle=2 ** 15)
 except AttributeError as err:
     raise NotImplementedError(
         "This example does not work with Circuit Playground Bluefruit!"
