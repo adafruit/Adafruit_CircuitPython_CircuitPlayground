@@ -16,11 +16,11 @@ Introduction
 
 This high level library provides objects that represent Circuit Playground Express and Bluefruit hardware.
 
-.. image :: https://raw.githubusercontent.com/adafruit/Adafruit_CircuitPython_CircuitPlayground/master/docs/_static/circuit_playground_express_small.jpg
+.. image :: https://raw.githubusercontent.com/adafruit/Adafruit_CircuitPython_CircuitPlayground/main/docs/_static/circuit_playground_express_small.jpg
     :target: https://adafruit.com/product/3333
     :alt: Circuit Playground Express
 
-.. image :: https://raw.githubusercontent.com/adafruit/Adafruit_CircuitPython_CircuitPlayground/master/docs/_static/circuit_playground_bluefruit_small.jpg
+.. image :: https://raw.githubusercontent.com/adafruit/Adafruit_CircuitPython_CircuitPlayground/main/docs/_static/circuit_playground_bluefruit_small.jpg
     :target: https://adafruit.com/product/4333
     :alt: Circuit Playground Bluefruit
 
@@ -68,7 +68,7 @@ Contributing
 ============
 
 Contributions are welcome! Please read our `Code of Conduct
-<https://github.com/adafruit/Adafruit_CircuitPython_CircuitPlayground/blob/master/CODE_OF_CONDUCT.md>`_
+<https://github.com/adafruit/Adafruit_CircuitPython_CircuitPlayground/blob/main/CODE_OF_CONDUCT.md>`_
 before contributing to help this project stay welcoming.
 
 Documentation

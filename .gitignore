@@ -11,3 +11,4 @@ _build/
 .DS_Store
 .env
 bundles
+.idea/
