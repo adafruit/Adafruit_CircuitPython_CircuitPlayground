@@ -45,6 +45,7 @@ autodoc_mock_imports = [
     "audiopwmio",
     "audiobusio",
     "audiomp3",
+    "keypad",
 ]
 
 # Add any paths that contain templates here, relative to this directory.
