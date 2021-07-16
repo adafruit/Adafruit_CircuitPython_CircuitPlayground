@@ -31,11 +31,54 @@ import adafruit_lis3dh
 import adafruit_thermistor
 import neopixel
 import touchio
-import gamepad
+import keypad
 
 
 __version__ = "0.0.0-auto.0"
 __repo__ = "https://github.com/adafruit/Adafruit_CircuitPython_CircuitPlayground.git"
+
+
+class KeyStates:
+    """Convert `keypad.Event` information from the given `keypad` scanner into key-pressed state.
+
+    :param scanner: a `keypad` scanner, such as `keypad.Keys`
+    """
+
+    def __init__(self, scanner):
+        self._scanner = scanner
+        self._pressed = [False] * self._scanner.key_count
+        self.update()
+
+    def update(self):
+        """Update key information based on pending scanner events."""
+
+        # If the event queue overflowed, discard any pending events,
+        # and assume all keys are now released.
+        if self._scanner.events.overflowed:
+            self._scanner.events.clear()
+            self._scanner.reset()
+            self._pressed = [False] * self._scanner.key_count
+
+        self._was_pressed = self._pressed.copy()
+
+        while True:
+            event = self._scanner.events.get()
+            if not event:
+                # Event queue is now empty.
+                break
+            self._pressed[event.key_number] = event.pressed
+            if event.pressed:
+                self._was_pressed[event.key_number] = True
+
+    def was_pressed(self, key_number):
+        """True if key was down at any time since the last `update()`,
+        even if it was later released.
+        """
+        return self._was_pressed[key_number]
+
+    def pressed(self, key_number):
+        """True if key is currently pressed, as of the last `update()`."""
+        return self._pressed[key_number]
 
 
 class Photocell:
@@ -58,11 +101,9 @@ class CircuitPlaygroundBase:  # pylint: disable=too-many-public-methods
     _audio_out = None
 
     def __init__(self):
-        self._a = digitalio.DigitalInOut(board.BUTTON_A)
-        self._a.switch_to_input(pull=digitalio.Pull.DOWN)
-        self._b = digitalio.DigitalInOut(board.BUTTON_B)
-        self._b.switch_to_input(pull=digitalio.Pull.DOWN)
-        self.gamepad = gamepad.GamePad(self._a, self._b)
+        self._button_pins = [board.BUTTON_A, board.BUTTON_B]
+        self._keys = keypad.Keys(self._button_pins, value_when_pressed=True, pull=True)
+        self._states = KeyStates(self._keys)
 
         # Define switch:
         self._switch = digitalio.DigitalInOut(board.SLIDE_SWITCH)
@@ -569,7 +610,8 @@ class CircuitPlaygroundBase:  # pylint: disable=too-many-public-methods
               if cp.button_a:
                   print("Button A pressed!")
         """
-        return self._a.value
+        self._states.update()
+        return self._states.pressed(0)
 
     @property
     def button_b(self):
@@ -588,7 +630,8 @@ class CircuitPlaygroundBase:  # pylint: disable=too-many-public-methods
               if cp.button_b:
                   print("Button B pressed!")
         """
-        return self._b.value
+        self._states.update()
+        return self._states.pressed(1)
 
     @property
     def were_pressed(self):
@@ -606,12 +649,8 @@ class CircuitPlaygroundBase:  # pylint: disable=too-many-public-methods
           while True:
               print(cp.were_pressed)
         """
-        ret = set()
-        pressed = self.gamepad.get_pressed()
-        for button, mask in (("A", 0x01), ("B", 0x02)):
-            if mask & pressed:
-                ret.add(button)
-        return ret
+        self._states.update()
+        return {("A", "B")[i] for i in range(2) if self._states.was_pressed(i)}
 
     @property
     def switch(self):
