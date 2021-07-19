@@ -41,7 +41,6 @@ autodoc_mock_imports = [
     "touchio",
     "adafruit_lis3dh",
     "busio",
-    "gamepad",
     "audiocore",
     "audiopwmio",
     "audiobusio",
