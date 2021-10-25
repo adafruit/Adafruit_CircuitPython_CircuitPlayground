@@ -64,6 +64,11 @@ For a detailed explanation of how the Circuit Playground library functions, see
 `The Technical Side page <https://learn.adafruit.com/circuitpython-made-easy-on-circuit-playground-express/the-technical-side>`_
 of the CircuitPython Made Easy on Circuit Playground Express and Bluefruit guide.
 
+Documentation
+=============
+
+API documentation for this library can be found on `Read the Docs <https://circuitpython.readthedocs.io/projects/circuitplayground/en/latest/>`_.
+
 Contributing
 ============
 
