@@ -158,12 +158,9 @@ class Bluefruit(CircuitPlaygroundBase):
             # Play a specified file.
             self.stop_tone()
             self._speaker_enable.value = True
-            with self._audio_out(
-                board.SPEAKER
-            ) as audio:  # pylint: disable=not-callable
-                mp3file = audiomp3.MP3Decoder(
-                    open(file_name, "rb")  # pylint: disable=consider-using-with
-                )
+            with self._audio_out(board.SPEAKER) as audio, audiomp3.MP3Decoder(
+                open(file_name, "rb")
+            ) as mp3file:  # pylint: disable=not-callable
                 audio.play(mp3file)
                 while audio.playing:
                     pass

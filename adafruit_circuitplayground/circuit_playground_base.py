@@ -801,10 +801,9 @@ class CircuitPlaygroundBase:  # pylint: disable=too-many-public-methods
         # Play a specified file.
         self.stop_tone()
         self._speaker_enable.value = True
-        with self._audio_out(board.SPEAKER) as audio:  # pylint: disable=not-callable
-            wavefile = audiocore.WaveFile(
-                open(file_name, "rb")  # pylint: disable=consider-using-with
-            )
+        with self._audio_out(  # pylint: disable=not-callable
+            board.SPEAKER
+        ) as audio, audiocore.WaveFile(open(file_name, "rb")) as wavefile:
             audio.play(wavefile)
             while audio.playing:
                 pass
