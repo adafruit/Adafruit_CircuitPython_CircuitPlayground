@@ -3,7 +3,7 @@ Introduction
 ============
 
 .. image:: https://readthedocs.org/projects/adafruit-circuitpython-circuitplayground/badge/?version=latest
-    :target: https://circuitpython.readthedocs.io/projects/circuitplayground/en/latest/
+    :target: https://docs.circuitpython.org/projects/circuitplayground/en/latest/
     :alt: Documentation Status
 
 .. image :: https://img.shields.io/discord/327254708534116352.svg
@@ -67,7 +67,7 @@ of the CircuitPython Made Easy on Circuit Playground Express and Bluefruit guide
 Documentation
 =============
 
-API documentation for this library can be found on `Read the Docs <https://circuitpython.readthedocs.io/projects/circuitplayground/en/latest/>`_.
+API documentation for this library can be found on `Read the Docs <https://docs.circuitpython.org/projects/circuitplayground/en/latest/>`_.
 
 Contributing
 ============

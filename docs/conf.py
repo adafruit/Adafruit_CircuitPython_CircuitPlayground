@@ -22,10 +22,10 @@ extensions = [
 ]
 
 intersphinx_mapping = {
-    "python": ("https://docs.python.org/3.4", None),
-    "CircuitPython": ("https://circuitpython.readthedocs.io/en/latest/", None),
+    "python": ("https://docs.python.org/3", None),
+    "CircuitPython": ("https://docs.circuitpython.org/en/latest/", None),
     "NeoPixel": (
-        "https://circuitpython.readthedocs.io/projects/neopixel/en/latest/",
+        "https://docs.circuitpython.org/projects/neopixel/en/latest/",
         None,
     ),
 }
