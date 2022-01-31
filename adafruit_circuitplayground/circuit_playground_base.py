@@ -32,6 +32,12 @@ import adafruit_thermistor
 import neopixel
 import touchio
 
+try:
+    from typing import List
+    from microcontroller import Pin
+except ImportError:
+    pass
+
 __version__ = "0.0.0-auto.0"
 __repo__ = "https://github.com/adafruit/Adafruit_CircuitPython_CircuitPlayground.git"
 
@@ -48,6 +54,65 @@ class Photocell:
     def light(self):
         """Light level."""
         return self._photocell.value * 330 // (2 ** 16)
+
+
+class InterableInput:
+
+    def __init__(self, name_list: List[str]):
+        self._input_names = name_list
+        input_pins = [getattr(board, name) for name in name_list]
+        self._inputs = [touchio.TouchIn(pin) for pin in input_pins]
+        self._current_input = 0
+        self._len_inputs = len(name_list)
+
+    def __iter__(self):
+        return self
+
+    def __next__(self):
+        for input_tio in self._inputs:
+            yield input_tio
+
+    def __getitem__(self, index):
+        input_name = self._use_str_name(index)
+        if isinstance(index, str):
+            for name, tio in zip(self._input_names, self._inputs):
+                if name == input_name:
+                    return tio
+            raise ValueError(
+                "The given padname is either not a valid touchpad or was deinitialized"
+                )
+        raise TypeError("Pin must be access either by int index or analog string name")
+
+    def __contains__(self, value):
+        input_name = self._use_str_name(value)
+        return input_name in self._input_names
+
+    def _use_str_name(self, value):
+        if isinstance(value, int):
+            return "A" + str(value)
+        if isinstance(value, str):
+            if value.startswith("A"):
+                return value
+        raise TypeError("Iterable inputs can only be accessed by int index or analog string names")
+
+    def deinit_input(self, input_name):
+        input_name = self._use_str_name(input_name)
+        if input_name in self._input_names:
+            input_index = self._input_names.index(input_name)
+            self._input_names.pop(input_index)
+            selected_tio = self._inputs.pop(input_index)
+            selected_tio.deinit()
+        
+    def init_input(self, input_name):
+        input_name = self._use_str_name(input_name)
+        if input_name not in self._input_names:
+            self._input_names.append(input_name)
+            input_pin = getattr(board, input_name)
+            self._inputs.append(touchio.TouchIn(input_pin))
+
+    @property
+    def names(self):
+        return self._input_names
 
 
 class CircuitPlaygroundBase:  # pylint: disable=too-many-public-methods
@@ -83,16 +148,17 @@ class CircuitPlaygroundBase:  # pylint: disable=too-many-public-methods
         # For example, after `cp.touch_A2`, self._touches is equivalent to:
         # [None, board.A1, touchio.TouchIn(board.A2), board.A3, ...]
         # Slot 0 is not used (A0 is not allowed as a touch pin).
-        self._touches = [
-            None,
-            board.A1,
-            board.A2,
-            board.A3,
-            board.A4,
-            board.A5,
-            board.A6,
-            board.TX,
-        ]
+        self._touches = InterableInput(
+            [
+                "A1",
+                "A2",
+                "A3",
+                "A4",
+                "A5",
+                "A6",
+                "A7",
+            ]
+        )
         self._touch_threshold_adjustment = 0
 
         # Define acceleration:
@@ -351,12 +417,21 @@ class CircuitPlaygroundBase:  # pylint: disable=too-many-public-methods
         return self._lis3dh.shake(shake_threshold=shake_threshold)
 
     def _touch(self, i):
-        if not isinstance(self._touches[i], touchio.TouchIn):
-            # First time referenced. Get the pin from the slot for this touch
-            # and replace it with a TouchIn object for the pin.
-            self._touches[i] = touchio.TouchIn(self._touches[i])
-            self._touches[i].threshold += self._touch_threshold_adjustment
         return self._touches[i].value
+
+    def deinit_touchpad(self, touchpad_pin):
+        self._touches.deinit_input(touchpad_pin)
+
+    def init_touchpad(self, touchpad_pin):
+        self._touches.init_input(touchpad_pin)
+
+    @property
+    def touched(self):
+        return [touch_pad for touch_pad in self._touches if touch_pad.value]
+
+    @property
+    def touched_names(self):
+        list_touched = [touch_name for touch_pad, touch_name in zip(self._touches, self._touches.names) if touch_pad.value]
 
     # We chose these verbose touch_A# names so that beginners could use it without understanding
     # lists and the capital A to match the pin name. The capitalization is not strictly Python
