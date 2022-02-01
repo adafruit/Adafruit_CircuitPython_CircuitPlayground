@@ -459,7 +459,7 @@ class CircuitPlaygroundBase:  # pylint: disable=too-many-public-methods
     @property
     def touchpads(self):
         """A list of all touchpad names currently set up as touchpad inputs"""
-        
+
         return self._touches.names
 
     @property
