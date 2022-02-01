@@ -72,14 +72,12 @@ class InterableInput:
 
     def __getitem__(self, index):
         input_name = self._use_str_name(index)
-        if isinstance(index, str):
-            for name, tio in zip(self._input_names, self._inputs):
-                if name == input_name:
-                    return tio
-            raise ValueError(
-                "The given padname is either not a valid touchpad or was deinitialized"
-                )
-        raise TypeError("Pin must be access either by int index or analog string name")
+        for name, tio in zip(self._input_names, self._inputs):
+            if name == input_name:
+                return tio
+        raise ValueError(
+            "The given padname is either not a valid touchpad or was deinitialized"
+            )
 
     def __contains__(self, value):
         input_name = self._use_str_name(value)
