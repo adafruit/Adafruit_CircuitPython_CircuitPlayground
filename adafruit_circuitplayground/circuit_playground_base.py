@@ -97,7 +97,7 @@ class InterableInput:
                 raise ValueError("Pins available as touchpads are 1-7")
             return "A" + str(value)
         if isinstance(value, str):
-            if not value.startswith("A") and int(value[1:]) not in range (1, 7):
+            if not value.startswith("A") and int(value[1:]) not in range(1, 7):
                 raise ValueError("Pins available as touchpads are A1-A6 and A7/TX")
             return value
         raise TypeError("Iterable inputs can only be accessed by int index or analog string names")
