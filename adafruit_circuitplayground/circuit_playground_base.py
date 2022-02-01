@@ -57,6 +57,10 @@ class Photocell:
 
 
 class InterableInput:
+    """Wrapper class for iterable touchpad inputs
+    
+    :param name_list: A list of pin names to initialize as touchpad inputs
+    """
 
     def __init__(self, name_list: List[str]):
         self._input_names = name_list
@@ -84,6 +88,8 @@ class InterableInput:
         return input_name in self._input_names
 
     def _use_str_name(self, value):
+        """Converts an index into the pin name if needed"""
+
         if value == 7 or value == "A7":
             return "TX"
         if isinstance(value, int):
@@ -97,6 +103,13 @@ class InterableInput:
         raise TypeError("Iterable inputs can only be accessed by int index or analog string names")
 
     def deinit_input(self, input_name):
+        """Deinitialize a given pin as a touchpad input, freeing up the memory and allowing the
+        pin to be used as a different type of input
+        
+        :param input_name: The name or pad number to be deinitialized
+        :type input_name: str|int
+        """
+
         input_name = self._use_str_name(input_name)
         if input_name in self._input_names:
             input_index = self._input_names.index(input_name)
@@ -105,6 +118,12 @@ class InterableInput:
             selected_tio.deinit()
         
     def init_input(self, input_name):
+        """Initializes a given pin as a touchpad input, if not already
+        
+        :param input_name: The name or pad number to be initialized
+        :type input_name: str|int
+        """
+
         input_name = self._use_str_name(input_name)
         if input_name not in self._input_names:
             self._input_names.append(input_name)
@@ -113,6 +132,7 @@ class InterableInput:
 
     @property
     def names(self):
+        """Returns the names of all pins currently set up as touchpad inputs"""
         return self._input_names
 
 
@@ -143,11 +163,9 @@ class CircuitPlaygroundBase:  # pylint: disable=too-many-public-methods
         self._light = Photocell(board.LIGHT)
 
         # Define touch:
-        # Initially, self._touches stores the pin used for a particular touch. When that touch is
-        # used for the first time, the pin is replaced with the corresponding TouchIn object.
-        # This saves a little RAM over using a separate read-only pin tuple.
-        # For example, after `cp.touch_A2`, self._touches is equivalent to:
-        # [None, board.A1, touchio.TouchIn(board.A2), board.A3, ...]
+        # Initially, IterableInput stores the pin used for a particular touch. When that touch is
+        # used for the first time, the stored pin is replaced with the corresponding TouchIn object.
+        # This saves a little RAM over initializing all pins as inputs immediately.
         # Slot 0 is not used (A0 is not allowed as a touch pin).
         self._touches = InterableInput(
             [
@@ -421,17 +439,33 @@ class CircuitPlaygroundBase:  # pylint: disable=too-many-public-methods
         return self._touches[i].value
 
     def deinit_touchpad(self, touchpad_pin):
+        """Deinitializes an input as a touchpad to free it up for use elsewhere
+        
+        :param touchpad_pin: The touchpad name or number to deinitialize
+        :type touchpad_pin: str|int
+        """
+
         self._touches.deinit_input(touchpad_pin)
 
     def init_touchpad(self, touchpad_pin):
+        """Initializes a pin as a touchpad input
+        
+        :param touchpad_pin: The touchpad name or number to initialize
+        :type touchpad_pin: str|int
+        """
+
         self._touches.init_input(touchpad_pin)
 
     @property
     def touchpads(self):
+        """A list of all touchpad names currently set up as touchpad inputs"""
+        
         return self._touches.names
 
     @property
     def touched(self):
+        """A list of touchpad input names currently registering as being touched"""
+
         return [touch_name for touch_pad, touch_name in zip(self._touches, self._touches.names) if touch_pad.value]
 
     # We chose these verbose touch_A# names so that beginners could use it without understanding
