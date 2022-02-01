@@ -71,7 +71,6 @@ class InterableInput:
 
     def __iter__(self):
         for input_tio in self._inputs:
-            print(input_tio)
             yield input_tio
 
     def __getitem__(self, index):
