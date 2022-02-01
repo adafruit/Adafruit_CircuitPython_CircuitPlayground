@@ -84,11 +84,16 @@ class InterableInput:
         return input_name in self._input_names
 
     def _use_str_name(self, value):
+        if value == 7 or value == "A7":
+            return "TX"
         if isinstance(value, int):
+            if value not in range(1, 7):
+                raise ValueError("Pins available as touchpads are 1-7")
             return "A" + str(value)
         if isinstance(value, str):
-            if value.startswith("A"):
-                return value
+            if not value.startswith("A") and int(value[1:]) not in range (1, 7):
+                raise ValueError("Pins available as touchpads are A1-A6 and A7/TX")
+            return value
         raise TypeError("Iterable inputs can only be accessed by int index or analog string names")
 
     def deinit_input(self, input_name):
