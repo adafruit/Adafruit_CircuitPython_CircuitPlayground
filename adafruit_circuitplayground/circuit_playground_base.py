@@ -65,23 +65,33 @@ class InterableInput:
     def __init__(self, name_list: List[str]):
         self._input_names = name_list
         input_pins = [getattr(board, name) for name in name_list]
-        self._inputs = [touchio.TouchIn(pin) for pin in input_pins]
+        self._inputs = [pin for pin in input_pins]
         self._current_input = 0
         self._len_inputs = len(name_list)
 
     def __iter__(self):
         for input_tio in self._inputs:
-            yield input_tio
+            yield self._auto_convert_tio(input_tio)
 
     def __getitem__(self, index):
         input_name = self._use_str_name(index)
         for name, tio in zip(self._input_names, self._inputs):
             if name == input_name:
-                return tio
+                return self._auto_convert_tio(tio)
         raise ValueError(
             "The given padname is either not a valid touchpad or was deinitialized"
             )
 
+    def _auto_convert_tio(self, input_pad):
+        """Automagically turns an existing pin into a touchio.TouchIn as needed, and
+        also returns it
+        """
+
+        if not isinstance(input_pad, touchio.TouchIn):
+            name_index = self._inputs.index(input_pad)
+            self._inputs[name_index] = touchio.TouchIn(self._inputs[name_index])
+            input_pad = self._inputs[name_index]
+        return input_pad
 
     def _use_str_name(self, value):
         """Converts an index into the pin name if needed"""
@@ -111,7 +121,8 @@ class InterableInput:
             input_index = self._input_names.index(input_name)
             self._input_names.pop(input_index)
             selected_tio = self._inputs.pop(input_index)
-            selected_tio.deinit()
+            if isinstance(selected_tio, touchio.TouchIn):
+                selected_tio.deinit()
         
     def init_input(self, input_name):
         """Initializes a given pin as a touchpad input, if not already
@@ -122,9 +133,8 @@ class InterableInput:
 
         input_name = self._use_str_name(input_name)
         if input_name not in self._input_names:
+            self._inputs.append(getattr(board, input_name))
             self._input_names.append(input_name)
-            input_pin = getattr(board, input_name)
-            self._inputs.append(touchio.TouchIn(input_pin))
 
     @property
     def names(self):
