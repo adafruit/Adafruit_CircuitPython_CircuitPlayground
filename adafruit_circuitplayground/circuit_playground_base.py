@@ -427,6 +427,8 @@ class CircuitPlaygroundBase:  # pylint: disable=too-many-public-methods
         self._touches.init_input(touchpad_pin)
 
     @property
+    def touchpads(self):
+        return self._touches.names
 
     @property
     def touched(self):
