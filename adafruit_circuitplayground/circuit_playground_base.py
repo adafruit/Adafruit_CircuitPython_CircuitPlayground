@@ -427,12 +427,10 @@ class CircuitPlaygroundBase:  # pylint: disable=too-many-public-methods
         self._touches.init_input(touchpad_pin)
 
     @property
-    def touched(self):
-        return [touch_pad for touch_pad in self._touches if touch_pad.value]
 
     @property
-    def touched_names(self):
-        list_touched = [touch_name for touch_pad, touch_name in zip(self._touches, self._touches.names) if touch_pad.value]
+    def touched(self):
+        return [touch_name for touch_pad, touch_name in zip(self._touches, self._touches.names) if touch_pad.value]
 
     # We chose these verbose touch_A# names so that beginners could use it without understanding
     # lists and the capital A to match the pin name. The capitalization is not strictly Python
