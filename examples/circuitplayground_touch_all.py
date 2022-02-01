@@ -10,3 +10,6 @@ print(cp.touchpads)
 while True:
     print("Touchpads currently registering a touch:")
     print(cp.touched)
+
+    if all(pad in cp.touched for pad in ("A2", "A3", "A4")):
+        print("This only prints when A2, A3, and A4 are being held at the same time!")
