@@ -32,12 +32,6 @@ import adafruit_thermistor
 import neopixel
 import touchio
 
-try:
-    from typing import List
-    from microcontroller import Pin
-except ImportError:
-    pass
-
 __version__ = "0.0.0-auto.0"
 __repo__ = "https://github.com/adafruit/Adafruit_CircuitPython_CircuitPlayground.git"
 
@@ -62,7 +56,7 @@ class InterableInput:
     :param name_list: A list of pin names to initialize as touchpad inputs
     """
 
-    def __init__(self, name_list: List[str]):
+    def __init__(self, name_list):
         self._input_names = name_list
         input_pins = [getattr(board, name) for name in name_list]
         self._inputs = [pin for pin in input_pins]
