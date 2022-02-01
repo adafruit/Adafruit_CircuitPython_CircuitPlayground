@@ -52,14 +52,14 @@ class Photocell:
 
 class InterableInput:
     """Wrapper class for iterable touchpad inputs
-    
+
     :param name_list: A list of pin names to initialize as touchpad inputs
     """
 
     def __init__(self, name_list):
         self._input_names = name_list
         input_pins = [getattr(board, name) for name in name_list]
-        self._inputs = [pin for pin in input_pins]
+        self._inputs = list(input_pins)
         self._current_input = 0
         self._len_inputs = len(name_list)
 
@@ -74,7 +74,7 @@ class InterableInput:
                 return self._auto_convert_tio(tio)
         raise ValueError(
             "The given padname is either not a valid touchpad or was deinitialized"
-            )
+        )
 
     def _auto_convert_tio(self, input_pad):
         """Automagically turns an existing pin into a touchio.TouchIn as needed, and
@@ -87,10 +87,11 @@ class InterableInput:
             input_pad = self._inputs[name_index]
         return input_pad
 
-    def _use_str_name(self, value):
+    @staticmethod
+    def _use_str_name(value):
         """Converts an index into the pin name if needed"""
 
-        if value == 7 or value == "A7":
+        if value in (7, "A7", "TX"):
             return "TX"
         if isinstance(value, int):
             if value not in range(1, 7):
@@ -100,12 +101,14 @@ class InterableInput:
             if not value.startswith("A") and int(value[1:]) not in range(1, 7):
                 raise ValueError("Pins available as touchpads are A1-A6 and A7/TX")
             return value
-        raise TypeError("Iterable inputs can only be accessed by int index or analog string names")
+        raise TypeError(
+            "Iterable inputs can only be accessed by int index or analog string names"
+        )
 
     def deinit_input(self, input_name):
         """Deinitialize a given pin as a touchpad input, freeing up the memory and allowing the
         pin to be used as a different type of input
-        
+
         :param input_name: The name or pad number to be deinitialized
         :type input_name: str|int
         """
@@ -117,10 +120,10 @@ class InterableInput:
             selected_tio = self._inputs.pop(input_index)
             if isinstance(selected_tio, touchio.TouchIn):
                 selected_tio.deinit()
-        
+
     def init_input(self, input_name):
         """Initializes a given pin as a touchpad input, if not already
-        
+
         :param input_name: The name or pad number to be initialized
         :type input_name: str|int
         """
@@ -223,7 +226,7 @@ class CircuitPlaygroundBase:  # pylint: disable=too-many-public-methods
     @staticmethod
     def _default_tap_threshold(tap):
         if (
-            "nRF52840" in os.uname().machine
+            "nRF52840" in os.uname().machine  # pylint: disable=no-member
         ):  # If we're on a CPB, use a higher tap threshold
             return 100 if tap == 1 else 70
 
@@ -440,7 +443,7 @@ class CircuitPlaygroundBase:  # pylint: disable=too-many-public-methods
 
     def deinit_touchpad(self, touchpad_pin):
         """Deinitializes an input as a touchpad to free it up for use elsewhere
-        
+
         :param touchpad_pin: The touchpad name or number to deinitialize
         :type touchpad_pin: str|int
         """
@@ -449,7 +452,7 @@ class CircuitPlaygroundBase:  # pylint: disable=too-many-public-methods
 
     def init_touchpad(self, touchpad_pin):
         """Initializes a pin as a touchpad input
-        
+
         :param touchpad_pin: The touchpad name or number to initialize
         :type touchpad_pin: str|int
         """
@@ -466,7 +469,11 @@ class CircuitPlaygroundBase:  # pylint: disable=too-many-public-methods
     def touched(self):
         """A list of touchpad input names currently registering as being touched"""
 
-        return [touch_name for touch_pad, touch_name in zip(self._touches, self._touches.names) if touch_pad.value]
+        return [
+            touch_name
+            for touch_pad, touch_name in zip(self._touches, self._touches.names)
+            if touch_pad.value
+        ]
 
     # We chose these verbose touch_A# names so that beginners could use it without understanding
     # lists and the capital A to match the pin name. The capitalization is not strictly Python
