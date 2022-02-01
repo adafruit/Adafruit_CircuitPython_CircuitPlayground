@@ -66,10 +66,8 @@ class InterableInput:
         self._len_inputs = len(name_list)
 
     def __iter__(self):
-        return self
-
-    def __next__(self):
         for input_tio in self._inputs:
+            print(input_tio)
             yield input_tio
 
     def __getitem__(self, index):
