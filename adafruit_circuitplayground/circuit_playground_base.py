@@ -157,7 +157,7 @@ class CircuitPlaygroundBase:  # pylint: disable=too-many-public-methods
                 "A4",
                 "A5",
                 "A6",
-                "A7",
+                "TX",
             ]
         )
         self._touch_threshold_adjustment = 0
