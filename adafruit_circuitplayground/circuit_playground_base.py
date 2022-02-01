@@ -83,9 +83,6 @@ class InterableInput:
             "The given padname is either not a valid touchpad or was deinitialized"
             )
 
-    def __contains__(self, value):
-        input_name = self._use_str_name(value)
-        return input_name in self._input_names
 
     def _use_str_name(self, value):
         """Converts an index into the pin name if needed"""
