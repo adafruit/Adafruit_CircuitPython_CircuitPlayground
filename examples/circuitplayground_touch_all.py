@@ -7,13 +7,13 @@ from adafruit_circuitplayground import cp
 
 
 # You'll need to first use the touchpads individually to register them as active touchpads
-# You don't have to keep the result though
-is_a1_touched = cp.touch_A1  # This result can be saved if you want to use it like below
+# You don't have to use the result though
+is_a1_touched = cp.touch_A1  # This result can be used if you want
 if is_a1_touched:
     print("A1 was touched upon startup!")
-cp.touch_A2  # These work exactly the same as above, but we're not storing the result
-cp.touch_A3
-cp.touch_A4
+is_a2_touched = cp.touch_A2
+is_a3_touched = cp.touch_A3
+is_a4_touched = cp.touch_A4
 
 
 while True:
