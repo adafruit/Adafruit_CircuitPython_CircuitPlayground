@@ -521,15 +521,25 @@ class CircuitPlaygroundBase:  # pylint: disable=too-many-public-methods
         self._touch_threshold_adjustment += adjustment
 
     def _get_active_touchpad_items(self):
-        return [(pinname, touchpad) for pinname, touchpad in self._touches.items() if isinstance(touchpad, touchio.TouchIn)]
+        return [
+            (pinname, touchpad)
+            for pinname, touchpad in self._touches.items()
+            if isinstance(touchpad, touchio.TouchIn)
+        ]
 
     @property
     def touch_pins(self):
-        return [getattr(board, pinname) for pinname, _ in self._get_active_touchpad_items()]
+        return [
+            getattr(board, pinname) for pinname, _ in self._get_active_touchpad_items()
+        ]
 
     @property
     def touched(self):
-        return [getattr(board, pinname) for pinname, touchpad in self._get_active_touchpad_items() if touchpad.value]
+        return [
+            getattr(board, pinname)
+            for pinname, touchpad in self._get_active_touchpad_items()
+            if touchpad.value
+        ]
 
     @property
     def pixels(self):
