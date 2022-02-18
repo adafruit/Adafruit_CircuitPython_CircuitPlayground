@@ -529,12 +529,14 @@ class CircuitPlaygroundBase:  # pylint: disable=too-many-public-methods
 
     @property
     def touch_pins(self):
+        """Return a list of all the pins that are set up as touchpad inputs"""
         return [
             getattr(board, pinname) for pinname, _ in self._get_active_touchpad_items()
         ]
 
     @property
     def touched(self):
+        """Return a list of all the pins that are currently registering a touch"""
         return [
             getattr(board, pinname)
             for pinname, touchpad in self._get_active_touchpad_items()
