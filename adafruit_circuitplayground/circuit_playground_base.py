@@ -522,6 +522,14 @@ class CircuitPlaygroundBase:  # pylint: disable=too-many-public-methods
         self._touch_threshold_adjustment += adjustment
 
     @property
+    def touch_pins(self):
+        return [touch for touch in self._touches if isinstance(touch, touchio.TouchIn)]
+
+    @property
+    def touched(self):
+        return [touch for touch in self.touch_pins if touch.value]
+
+    @property
     def pixels(self):
         """Sequence-like object representing the ten NeoPixels around the outside
         of the Circuit Playground. Each pixel is at a certain index in the sequence
