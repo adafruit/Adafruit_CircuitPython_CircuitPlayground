@@ -15,14 +15,16 @@ is_a2_touched = cp.touch_A2
 is_a3_touched = cp.touch_A3
 is_a4_touched = cp.touch_A4
 
+print("Pads that are currently setup as touchpads:")
+print(cp.touch_pins)
 
 while True:
 
-    print("Pads that are currently setup as touchpads:")
-    print(cp.touch_pins)
+    current_touched = cp.touched
 
-    print("Touchpads currently registering a touch:")
-    print(cp.touched)
+    if current_touched:
+        print("Touchpads currently registering a touch:")
+        print(current_touched)
 
-    if all(pad in cp.touched for pad in (board.A2, board.A3, board.A4)):
+    if all(pad in current_touched for pad in (board.A2, board.A3, board.A4)):
         print("This only prints when A2, A3, and A4 are being held at the same time!")
