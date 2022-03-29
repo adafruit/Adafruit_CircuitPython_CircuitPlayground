@@ -18,7 +18,7 @@ from adafruit_circuitplayground import cp
 
 # Create a 'pwmio' output, to send infrared signals from the IR transmitter
 try:
-    pwm = pwmio.PWMOut(board.IR_TX, frequency=38000, duty_cycle=2 ** 15)
+    pwm = pwmio.PWMOut(board.IR_TX, frequency=38000, duty_cycle=2**15)
 except AttributeError as err:
     raise NotImplementedError(
         "This example does not work with Circuit Playground Bluefruit!"

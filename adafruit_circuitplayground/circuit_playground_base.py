@@ -47,7 +47,7 @@ class Photocell:
     @property
     def light(self):
         """Light level."""
-        return self._photocell.value * 330 // (2 ** 16)
+        return self._photocell.value * 330 // (2**16)
 
 
 class CircuitPlaygroundBase:  # pylint: disable=too-many-public-methods
@@ -683,8 +683,8 @@ class CircuitPlaygroundBase:  # pylint: disable=too-many-public-methods
 
     @staticmethod
     def _sine_sample(length):
-        tone_volume = (2 ** 15) - 1
-        shift = 2 ** 15
+        tone_volume = (2**15) - 1
+        shift = 2**15
         for i in range(length):
             yield int(tone_volume * math.sin(2 * math.pi * (i / length)) + shift)
 
