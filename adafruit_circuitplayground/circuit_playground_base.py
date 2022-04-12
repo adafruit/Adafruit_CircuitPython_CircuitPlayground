@@ -56,11 +56,6 @@ class CircuitPlaygroundBase:  # pylint: disable=too-many-public-methods
     _audio_out = None
 
     def __init__(self):
-        self._a = digitalio.DigitalInOut(board.BUTTON_A)
-        self._a.switch_to_input(pull=digitalio.Pull.DOWN)
-        self._b = digitalio.DigitalInOut(board.BUTTON_B)
-        self._b.switch_to_input(pull=digitalio.Pull.DOWN)
-
         # Define switch:
         self._switch = digitalio.DigitalInOut(board.SLIDE_SWITCH)
         self._switch.switch_to_input(pull=digitalio.Pull.UP)
@@ -113,6 +108,10 @@ class CircuitPlaygroundBase:  # pylint: disable=too-many-public-methods
         # Initialise tap:
         self._detect_taps = 1
         self.detect_taps = 1
+
+        # Initialise buttons:
+        self._a = None
+        self._b = None
 
     @property
     def detect_taps(self):
@@ -566,6 +565,9 @@ class CircuitPlaygroundBase:  # pylint: disable=too-many-public-methods
               if cp.button_a:
                   print("Button A pressed!")
         """
+        if self._a is None:
+            self._a = digitalio.DigitalInOut(board.BUTTON_A)
+            self._a.switch_to_input(pull=digitalio.Pull.DOWN)
         return self._a.value
 
     @property
@@ -585,6 +587,9 @@ class CircuitPlaygroundBase:  # pylint: disable=too-many-public-methods
               if cp.button_b:
                   print("Button B pressed!")
         """
+        if self._b is None:
+            self._b = digitalio.DigitalInOut(board.BUTTON_B)
+            self._b.switch_to_input(pull=digitalio.Pull.DOWN)
         return self._b.value
 
     @property
