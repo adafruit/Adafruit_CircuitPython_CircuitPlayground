@@ -711,9 +711,7 @@ class CircuitPlaygroundBase:  # pylint: disable=too-many-public-methods
             self._wave = array.array("H", self._square_sample(length))
         else:
             self._wave = array.array("H", self._sine_sample(length))
-        self._sample = self._audio_out(  # pylint: disable=not-callable
-            board.SPEAKER
-        )
+        self._sample = self._audio_out(board.SPEAKER)  # pylint: disable=not-callable
         self._wave_sample = audiocore.RawSample(self._wave)
 
     def play_tone(self, frequency, duration, waveform="sine"):
