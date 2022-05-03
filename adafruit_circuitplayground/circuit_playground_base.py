@@ -36,7 +36,6 @@ import touchio
 __version__ = "0.0.0-auto.0"
 __repo__ = "https://github.com/adafruit/Adafruit_CircuitPython_CircuitPlayground.git"
 
-
 class Photocell:
     """Simple driver for analog photocell on the Circuit Playground Express and Bluefruit."""
 
@@ -55,6 +54,8 @@ class CircuitPlaygroundBase:  # pylint: disable=too-many-public-methods
     """Circuit Playground base class."""
 
     _audio_out = None
+    SINE_WAVE = 0
+    SQUARE_WAVE = 1
 
     def __init__(self):
         # Define switch:
@@ -705,23 +706,23 @@ class CircuitPlaygroundBase:  # pylint: disable=too-many-public-methods
         for _ in range(half_length):
             yield 0
 
-    def _generate_sample(self, length=100, waveform="sine"):
+    def _generate_sample(self, length=100, waveform=SINE_WAVE):
         if self._sample is not None:
             return
-        if waveform == "square":
+        if waveform == self.SQUARE_WAVE:
             self._wave = array.array("H", self._square_sample(length))
         else:
             self._wave = array.array("H", self._sine_sample(length))
         self._sample = self._audio_out(board.SPEAKER)  # pylint: disable=not-callable
         self._wave_sample = audiocore.RawSample(self._wave)
 
-    def play_tone(self, frequency, duration, waveform="sine"):
+    def play_tone(self, frequency, duration, waveform=SINE_WAVE):
         """Produce a tone using the speaker. Try changing frequency to change
         the pitch of the tone.
 
         :param int frequency: The frequency of the tone in Hz
         :param float duration: The duration of the tone in seconds
-        :param str waveform: Type of waveform to be generated [sine, square]. Default = sine.
+        :param str waveform: Type of waveform to be generated [SINE_WAVE, SQUARE_WAVE]. Default = SINE_WAVE.
 
         .. image :: ../docs/_static/speaker.jpg
           :alt: Onboard speaker
@@ -739,12 +740,12 @@ class CircuitPlaygroundBase:  # pylint: disable=too-many-public-methods
         time.sleep(duration)
         self.stop_tone()
 
-    def start_tone(self, frequency, waveform="sine"):
+    def start_tone(self, frequency, waveform=SINE_WAVE):
         """Produce a tone using the speaker. Try changing frequency to change
         the pitch of the tone.
 
         :param int frequency: The frequency of the tone in Hz
-        :param str waveform: Type of waveform to be generated [sine, square]. Default = sine.
+        :param str waveform: Type of waveform to be generated [SINE_WAVE, SQUARE_WAVE]. Default = SINE_WAVE.
 
         .. image :: ../docs/_static/speaker.jpg
           :alt: Onboard speaker
