@@ -36,6 +36,7 @@ import touchio
 __version__ = "0.0.0-auto.0"
 __repo__ = "https://github.com/adafruit/Adafruit_CircuitPython_CircuitPlayground.git"
 
+
 class Photocell:
     """Simple driver for analog photocell on the Circuit Playground Express and Bluefruit."""
 
@@ -722,7 +723,9 @@ class CircuitPlaygroundBase:  # pylint: disable=too-many-public-methods
 
         :param int frequency: The frequency of the tone in Hz
         :param float duration: The duration of the tone in seconds
-        :param str waveform: Type of waveform to be generated [SINE_WAVE, SQUARE_WAVE]. Default = SINE_WAVE.
+        :param str waveform: Type of waveform to be generated [SINE_WAVE, SQUARE_WAVE].
+
+        Default is SINE_WAVE.
 
         .. image :: ../docs/_static/speaker.jpg
           :alt: Onboard speaker
@@ -745,7 +748,9 @@ class CircuitPlaygroundBase:  # pylint: disable=too-many-public-methods
         the pitch of the tone.
 
         :param int frequency: The frequency of the tone in Hz
-        :param str waveform: Type of waveform to be generated [SINE_WAVE, SQUARE_WAVE]. Default = SINE_WAVE.
+        :param str waveform: Type of waveform to be generated [SINE_WAVE, SQUARE_WAVE].
+
+        Default is SINE_WAVE.
 
         .. image :: ../docs/_static/speaker.jpg
           :alt: Onboard speaker
