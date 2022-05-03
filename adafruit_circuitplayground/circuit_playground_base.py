@@ -1,5 +1,6 @@
 # SPDX-FileCopyrightText: 2016 Scott Shawcroft for Adafruit Industries
 # SPDX-FileCopyrightText: 2017-2019 Kattni Rembor for Adafruit Industries
+# SPDX-FileCopyrightText: 2022 Ryan Keith for Adafruit Industries
 #
 # SPDX-License-Identifier: MIT
 
@@ -15,7 +16,7 @@ CircuitPython base class for Circuit Playground.
 * `Circuit Playground Express <https://www.adafruit.com/product/3333>`_
 * `Circuit Playground Bluefruit <https://www.adafruit.com/product/4333>`_.
 
-* Author(s): Kattni Rembor, Scott Shawcroft
+* Author(s): Kattni Rembor, Scott Shawcroft, Ryan Keith
 """
 
 import math
