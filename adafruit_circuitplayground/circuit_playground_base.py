@@ -699,9 +699,9 @@ class CircuitPlaygroundBase:  # pylint: disable=too-many-public-methods
         # Square waves are MUCH louder than then sine
         tone_volume = (2**16) - 1
         half_length = length // 2
-        for i in range(half_length):
+        for _ in range(half_length):
             yield tone_volume
-        for i in range(half_length):
+        for _ in range(half_length):
             yield 0
 
     def _generate_sample(self, length=100, waveform="sine"):
