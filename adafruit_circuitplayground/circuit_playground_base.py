@@ -709,16 +709,12 @@ class CircuitPlaygroundBase:  # pylint: disable=too-many-public-methods
             return
         if waveform == "square":
             self._wave = array.array("H", self._square_sample(length))
-            self._sample = self._audio_out(  # pylint: disable=not-callable
-                board.SPEAKER
-            )
-            self._wave_sample = audiocore.RawSample(self._wave)
         else:
             self._wave = array.array("H", self._sine_sample(length))
-            self._sample = self._audio_out(  # pylint: disable=not-callable
-                board.SPEAKER
-            )
-            self._wave_sample = audiocore.RawSample(self._wave)
+        self._sample = self._audio_out(  # pylint: disable=not-callable
+            board.SPEAKER
+        )
+        self._wave_sample = audiocore.RawSample(self._wave)
 
     def play_tone(self, frequency, duration, waveform="sine"):
         """Produce a tone using the speaker. Try changing frequency to change
