@@ -1,5 +1,6 @@
 # SPDX-FileCopyrightText: 2016 Scott Shawcroft for Adafruit Industries
 # SPDX-FileCopyrightText: 2017-2019 Kattni Rembor for Adafruit Industries
+# SPDX-FileCopyrightText: 2022 Ryan Keith for Adafruit Industries
 #
 # SPDX-License-Identifier: MIT
 
@@ -15,7 +16,7 @@ CircuitPython base class for Circuit Playground.
 * `Circuit Playground Express <https://www.adafruit.com/product/3333>`_
 * `Circuit Playground Bluefruit <https://www.adafruit.com/product/4333>`_.
 
-* Author(s): Kattni Rembor, Scott Shawcroft
+* Author(s): Kattni Rembor, Scott Shawcroft, Ryan Keith
 """
 
 import math
@@ -54,6 +55,8 @@ class CircuitPlaygroundBase:  # pylint: disable=too-many-public-methods
     """Circuit Playground base class."""
 
     _audio_out = None
+    SINE_WAVE = 0
+    SQUARE_WAVE = 1
 
     def __init__(self):
         # Define switch:
@@ -102,8 +105,8 @@ class CircuitPlaygroundBase:  # pylint: disable=too-many-public-methods
         self._speaker_enable = digitalio.DigitalInOut(board.SPEAKER_ENABLE)
         self._speaker_enable.switch_to_output(value=False)
         self._sample = None
-        self._sine_wave = None
-        self._sine_wave_sample = None
+        self._wave = None
+        self._wave_sample = None
 
         # Initialise tap:
         self._detect_taps = 1
@@ -689,23 +692,40 @@ class CircuitPlaygroundBase:  # pylint: disable=too-many-public-methods
     @staticmethod
     def _sine_sample(length):
         tone_volume = (2**15) - 1
+        # Amplitude shift up in order to not have negative numbers
         shift = 2**15
         for i in range(length):
             yield int(tone_volume * math.sin(2 * math.pi * (i / length)) + shift)
 
-    def _generate_sample(self, length=100):
+    @staticmethod
+    def _square_sample(length):
+        # Square waves are MUCH louder than then sine
+        tone_volume = (2**16) - 1
+        half_length = length // 2
+        for _ in range(half_length):
+            yield tone_volume
+        for _ in range(half_length):
+            yield 0
+
+    def _generate_sample(self, length=100, waveform=SINE_WAVE):
         if self._sample is not None:
             return
-        self._sine_wave = array.array("H", self._sine_sample(length))
+        if waveform == self.SQUARE_WAVE:
+            self._wave = array.array("H", self._square_sample(length))
+        else:
+            self._wave = array.array("H", self._sine_sample(length))
         self._sample = self._audio_out(board.SPEAKER)  # pylint: disable=not-callable
-        self._sine_wave_sample = audiocore.RawSample(self._sine_wave)
+        self._wave_sample = audiocore.RawSample(self._wave)
 
-    def play_tone(self, frequency, duration):
+    def play_tone(self, frequency, duration, waveform=SINE_WAVE):
         """Produce a tone using the speaker. Try changing frequency to change
         the pitch of the tone.
 
         :param int frequency: The frequency of the tone in Hz
         :param float duration: The duration of the tone in seconds
+        :param str waveform: Type of waveform to be generated [SINE_WAVE, SQUARE_WAVE].
+
+        Default is SINE_WAVE.
 
         .. image :: ../docs/_static/speaker.jpg
           :alt: Onboard speaker
@@ -719,15 +739,18 @@ class CircuitPlaygroundBase:  # pylint: disable=too-many-public-methods
             cp.play_tone(440, 1)
         """
         # Play a tone of the specified frequency (hz).
-        self.start_tone(frequency)
+        self.start_tone(frequency, waveform)
         time.sleep(duration)
         self.stop_tone()
 
-    def start_tone(self, frequency):
+    def start_tone(self, frequency, waveform=SINE_WAVE):
         """Produce a tone using the speaker. Try changing frequency to change
         the pitch of the tone.
 
         :param int frequency: The frequency of the tone in Hz
+        :param str waveform: Type of waveform to be generated [SINE_WAVE, SQUARE_WAVE].
+
+        Default is SINE_WAVE.
 
         .. image :: ../docs/_static/speaker.jpg
           :alt: Onboard speaker
@@ -750,11 +773,11 @@ class CircuitPlaygroundBase:  # pylint: disable=too-many-public-methods
         length = 100
         if length * frequency > 350000:
             length = 350000 // frequency
-        self._generate_sample(length)
+        self._generate_sample(length, waveform)
         # Start playing a tone of the specified frequency (hz).
-        self._sine_wave_sample.sample_rate = int(len(self._sine_wave) * frequency)
+        self._wave_sample.sample_rate = int(len(self._wave) * frequency)
         if not self._sample.playing:
-            self._sample.play(self._sine_wave_sample, loop=True)
+            self._sample.play(self._wave_sample, loop=True)
 
     def stop_tone(self):
         """Use with start_tone to stop the tone produced.
