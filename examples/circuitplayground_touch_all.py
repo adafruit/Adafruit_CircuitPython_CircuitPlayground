@@ -2,6 +2,7 @@
 # SPDX-License-Identifier: MIT
 
 """This example prints to the serial console when you touch the capacitive touch pads."""
+import time
 import board
 from adafruit_circuitplayground import cp
 
@@ -25,6 +26,10 @@ while True:
     if current_touched:
         print("Touchpads currently registering a touch:")
         print(current_touched)
+    else:
+        print("No touchpads are currently regustering a touch.")
 
     if all(pad in current_touched for pad in (board.A2, board.A3, board.A4)):
         print("This only prints when A2, A3, and A4 are being held at the same time!")
+
+    time.sleep(0.25)
