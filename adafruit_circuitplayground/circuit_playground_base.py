@@ -379,7 +379,7 @@ class CircuitPlaygroundBase:  # pylint: disable=too-many-public-methods
               if cp.touch_A1:
                   print('Touched pad A1')
         """
-        return self._touch(1)
+        return self._touch(board.A1)
 
     @property
     def touch_A2(self):  # pylint: disable=invalid-name
@@ -398,7 +398,7 @@ class CircuitPlaygroundBase:  # pylint: disable=too-many-public-methods
               if cp.touch_A2:
                   print('Touched pad A2')
         """
-        return self._touch(2)
+        return self._touch(board.A2)
 
     @property
     def touch_A3(self):  # pylint: disable=invalid-name
@@ -417,7 +417,7 @@ class CircuitPlaygroundBase:  # pylint: disable=too-many-public-methods
               if cp.touch_A3:
                   print('Touched pad A3')
         """
-        return self._touch(3)
+        return self._touch(board.A3)
 
     @property
     def touch_A4(self):  # pylint: disable=invalid-name
@@ -436,7 +436,7 @@ class CircuitPlaygroundBase:  # pylint: disable=too-many-public-methods
               if cp.touch_A4:
                   print('Touched pad A4')
         """
-        return self._touch(4)
+        return self._touch(board.A4)
 
     @property
     def touch_A5(self):  # pylint: disable=invalid-name
@@ -455,7 +455,7 @@ class CircuitPlaygroundBase:  # pylint: disable=too-many-public-methods
               if cp.touch_A5:
                   print('Touched pad A5')
         """
-        return self._touch(5)
+        return self._touch(board.A5)
 
     @property
     def touch_A6(self):  # pylint: disable=invalid-name
@@ -474,7 +474,7 @@ class CircuitPlaygroundBase:  # pylint: disable=too-many-public-methods
               if cp.touch_A6:
                   print('Touched pad A6'
         """
-        return self._touch(6)
+        return self._touch(board.A6)
 
     @property
     def touch_TX(self):  # pylint: disable=invalid-name
@@ -494,7 +494,7 @@ class CircuitPlaygroundBase:  # pylint: disable=too-many-public-methods
               if cp.touch_A7:
                   print('Touched pad A7')
         """
-        return self._touch(7)
+        return self._touch(board.TX)
 
     def adjust_touch_threshold(self, adjustment):
         """Adjust the threshold needed to activate the capacitive touch pads.
