@@ -18,8 +18,11 @@ CircuitPython base class for Circuit Playground.
 
 * Author(s): Kattni Rembor, Scott Shawcroft, Ryan Keith
 """
+import microcontroller
+
 try:
     from typing import Any  # pylint: disable=unused-import
+    from microcontroller import Pin
 except ImportError:
     pass
 
@@ -45,12 +48,12 @@ class Photocell:
     """Simple driver for analog photocell on the Circuit Playground Express and Bluefruit."""
 
     # pylint: disable=too-few-public-methods
-    def __init__(self, pin):
+    def __init__(self, pin: microcontroller.Pin):
         self._photocell = analogio.AnalogIn(pin)
 
     # TODO(tannewt): Calibrate this against another calibrated sensor.
     @property
-    def light(self):
+    def light(self) -> int:
         """Light level."""
         return self._photocell.value * 330 // (2**16)
 
@@ -174,11 +177,11 @@ class CircuitPlaygroundBase:  # pylint: disable=too-many-public-methods
     def configure_tap(  # pylint: disable-msg=too-many-arguments
         self,
         tap: int,
-        accel_range: int=adafruit_lis3dh.RANGE_8_G,
-        threshold: int=None,
-        time_limit: int=None,
-        time_latency: int=50,
-        time_window: int=255,
+        accel_range: int = adafruit_lis3dh.RANGE_8_G,
+        threshold: int = None,
+        time_limit: int = None,
+        time_latency: int = 50,
+        time_window: int = 255,
     ) -> None:
         """Granular configuration of tap parameters. Expose the power of the
         adafruit_lis3dh module.
@@ -322,7 +325,7 @@ class CircuitPlaygroundBase:  # pylint: disable=too-many-public-methods
         """
         return self._lis3dh.acceleration
 
-    def shake(self, shake_threshold: int=30) -> bool:
+    def shake(self, shake_threshold: int = 30) -> bool:
         """Detect when device is shaken.
 
         :param int shake_threshold: The threshold shake must exceed to return true (Default: 30)
@@ -356,7 +359,7 @@ class CircuitPlaygroundBase:  # pylint: disable=too-many-public-methods
         """
         return self._lis3dh.shake(shake_threshold=shake_threshold)
 
-    def _touch(self, i):
+    def _touch(self, i) -> Any:
         if not isinstance(self._touches[i], touchio.TouchIn):
             # First time referenced. Get the pin from the slot for this touch
             # and replace it with a TouchIn object for the pin.
@@ -528,7 +531,7 @@ class CircuitPlaygroundBase:  # pylint: disable=too-many-public-methods
         self._touch_threshold_adjustment += adjustment
 
     @property
-    def pixels(self):
+    def pixels(self) -> neopixel.NeoPixel:
         """Sequence-like object representing the ten NeoPixels around the outside
         of the Circuit Playground. Each pixel is at a certain index in the sequence
         as labeled below. Colors can be RGB hex like 0x110000 for red where each
@@ -556,7 +559,7 @@ class CircuitPlaygroundBase:  # pylint: disable=too-many-public-methods
         return self._pixels
 
     @property
-    def button_a(self):
+    def button_a(self) -> bool:
         """``True`` when Button A is pressed. ``False`` if not.
 
         .. image :: ../docs/_static/button_a.jpg
@@ -578,7 +581,7 @@ class CircuitPlaygroundBase:  # pylint: disable=too-many-public-methods
         return self._a.value
 
     @property
-    def button_b(self):
+    def button_b(self) -> bool:
         """``True`` when Button B is pressed. ``False`` if not.
 
         .. image :: ../docs/_static/button_b.jpg
@@ -600,7 +603,7 @@ class CircuitPlaygroundBase:  # pylint: disable=too-many-public-methods
         return self._b.value
 
     @property
-    def switch(self):
+    def switch(self) -> bool:
         """``True`` when the switch is to the left next to the music notes.
         ``False`` when it is to the right towards the ear.
 
@@ -621,7 +624,7 @@ class CircuitPlaygroundBase:  # pylint: disable=too-many-public-methods
         return self._switch.value
 
     @property
-    def temperature(self):
+    def temperature(self) -> float:
         """The temperature in Celsius.
 
         .. image :: ../docs/_static/thermistor.jpg
@@ -646,7 +649,7 @@ class CircuitPlaygroundBase:  # pylint: disable=too-many-public-methods
         return self._temp.temperature
 
     @property
-    def light(self):
+    def light(self) -> int:
         """The light level.
 
         .. image :: ../docs/_static/light_sensor.jpg
@@ -668,7 +671,7 @@ class CircuitPlaygroundBase:  # pylint: disable=too-many-public-methods
         return self._light.light
 
     @property
-    def red_led(self):
+    def red_led(self) -> bool:
         """The red led next to the USB plug marked D13.
 
         .. image :: ../docs/_static/red_led.jpg
@@ -690,11 +693,11 @@ class CircuitPlaygroundBase:  # pylint: disable=too-many-public-methods
         return self._led.value
 
     @red_led.setter
-    def red_led(self, value):
+    def red_led(self, value) -> None:
         self._led.value = value
 
     @staticmethod
-    def _sine_sample(length):
+    def _sine_sample(length) -> None:
         tone_volume = (2**15) - 1
         # Amplitude shift up in order to not have negative numbers
         shift = 2**15
@@ -702,7 +705,7 @@ class CircuitPlaygroundBase:  # pylint: disable=too-many-public-methods
             yield int(tone_volume * math.sin(2 * math.pi * (i / length)) + shift)
 
     @staticmethod
-    def _square_sample(length):
+    def _square_sample(length) -> None:
         # Square waves are MUCH louder than then sine
         tone_volume = (2**16) - 1
         half_length = length // 2
@@ -711,7 +714,7 @@ class CircuitPlaygroundBase:  # pylint: disable=too-many-public-methods
         for _ in range(half_length):
             yield 0
 
-    def _generate_sample(self, length=100, waveform=SINE_WAVE):
+    def _generate_sample(self, length: int = 100, waveform: int = SINE_WAVE) -> None:
         if self._sample is not None:
             return
         if waveform == self.SQUARE_WAVE:
@@ -721,7 +724,9 @@ class CircuitPlaygroundBase:  # pylint: disable=too-many-public-methods
         self._sample = self._audio_out(board.SPEAKER)  # pylint: disable=not-callable
         self._wave_sample = audiocore.RawSample(self._wave)
 
-    def play_tone(self, frequency, duration, waveform=SINE_WAVE):
+    def play_tone(
+        self, frequency: int, duration: float, waveform: int = SINE_WAVE
+    ) -> None:
         """Produce a tone using the speaker. Try changing frequency to change
         the pitch of the tone.
 
@@ -747,7 +752,7 @@ class CircuitPlaygroundBase:  # pylint: disable=too-many-public-methods
         time.sleep(duration)
         self.stop_tone()
 
-    def start_tone(self, frequency, waveform=SINE_WAVE):
+    def start_tone(self, frequency: int, waveform: int = SINE_WAVE) -> None:
         """Produce a tone using the speaker. Try changing frequency to change
         the pitch of the tone.
 
@@ -783,7 +788,7 @@ class CircuitPlaygroundBase:  # pylint: disable=too-many-public-methods
         if not self._sample.playing:
             self._sample.play(self._wave_sample, loop=True)
 
-    def stop_tone(self):
+    def stop_tone(self) -> None:
         """Use with start_tone to stop the tone produced.
 
         .. image :: ../docs/_static/speaker.jpg
@@ -810,7 +815,7 @@ class CircuitPlaygroundBase:  # pylint: disable=too-many-public-methods
             self._sample = None
         self._speaker_enable.value = False
 
-    def play_file(self, file_name):
+    def play_file(self, file_name: str) -> None:
         """Play a .wav file using the onboard speaker.
 
         :param file_name: The name of your .wav file in quotation marks including .wav
