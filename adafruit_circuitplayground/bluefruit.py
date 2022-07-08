@@ -18,6 +18,10 @@ Implementation Notes
 * `Circuit Playground Bluefruit <https://www.adafruit.com/product/4333>`_
 
 """
+try:
+    import typing  # pylint: disable=unused-import
+except ImportError:
+    pass
 
 import array
 import math
@@ -38,7 +42,7 @@ class Bluefruit(CircuitPlaygroundBase):
 
     _audio_out = audiopwmio.PWMAudioOut
 
-    def __init__(self):
+    def __init__(self) -> None:
         # Only create the cpb module member when we aren't being imported by Sphinx
         if (
             "__module__" in dir(digitalio.DigitalInOut)
@@ -60,7 +64,7 @@ class Bluefruit(CircuitPlaygroundBase):
         self._samples = None
 
     @staticmethod
-    def _normalized_rms(values):
+    def _normalized_rms(values) -> float:
         mean_values = int(sum(values) / len(values))
         return math.sqrt(
             sum(
@@ -71,7 +75,7 @@ class Bluefruit(CircuitPlaygroundBase):
         )
 
     @property
-    def sound_level(self):
+    def sound_level(self) -> float:
         """Obtain the sound level from the microphone (sound sensor).
 
         .. image :: ../docs/_static/microphone.jpg
@@ -92,7 +96,7 @@ class Bluefruit(CircuitPlaygroundBase):
         self._mic.record(self._samples, len(self._samples))
         return self._normalized_rms(self._samples)
 
-    def loud_sound(self, sound_threshold=200):
+    def loud_sound(self, sound_threshold: int = 200) -> bool:
         """Utilise a loud sound as an input.
 
         :param int sound_threshold: Threshold sound level must exceed to return true (Default: 200)
@@ -134,7 +138,7 @@ class Bluefruit(CircuitPlaygroundBase):
 
         return self.sound_level > sound_threshold
 
-    def play_mp3(self, file_name):
+    def play_mp3(self, file_name: str) -> None:
         """Play a .mp3 file using the onboard speaker.
 
         :param file_name: The name of your .mp3 file in quotation marks including .mp3
