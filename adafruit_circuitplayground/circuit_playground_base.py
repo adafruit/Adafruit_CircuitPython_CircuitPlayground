@@ -18,13 +18,6 @@ CircuitPython base class for Circuit Playground.
 
 * Author(s): Kattni Rembor, Scott Shawcroft, Ryan Keith
 """
-import microcontroller
-
-try:
-    from typing import Any  # pylint: disable=unused-import
-    from microcontroller import Pin
-except ImportError:
-    pass
 
 import math
 import array
@@ -39,6 +32,12 @@ import adafruit_lis3dh
 import adafruit_thermistor
 import neopixel
 import touchio
+
+try:
+    from typing import Any  # pylint: disable=unused-import
+    import microcontroller
+except ImportError:
+    pass
 
 __version__ = "0.0.0-auto.0"
 __repo__ = "https://github.com/adafruit/Adafruit_CircuitPython_CircuitPlayground.git"
