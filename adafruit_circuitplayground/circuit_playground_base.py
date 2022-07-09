@@ -350,7 +350,7 @@ class CircuitPlaygroundBase:  # pylint: disable=too-many-public-methods
             touchin = touchio.TouchIn(pin)
             touchin.threshold += self._touch_threshold_adjustment
             self._touches[pin] = touchin
-        return self._touches[pin].value
+        return touchin.value
 
     # We chose these verbose touch_A# names so that beginners could use it without understanding
     # lists and the capital A to match the pin name. The capitalization is not strictly Python
@@ -511,8 +511,7 @@ class CircuitPlaygroundBase:  # pylint: disable=too-many-public-methods
                   print('Touched pad A1')
         """
         for touch_in in self._touches.values():
-            if isinstance(touch_in, touchio.TouchIn):
-                touch_in.threshold += adjustment
+            touch_in.threshold += adjustment
         self._touch_threshold_adjustment += adjustment
 
     @property
