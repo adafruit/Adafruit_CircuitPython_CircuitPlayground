@@ -344,11 +344,12 @@ class CircuitPlaygroundBase:  # pylint: disable=too-many-public-methods
         return self._lis3dh.shake(shake_threshold=shake_threshold)
 
     def _touch(self, pin):
-        if not isinstance(self._touches[pin], touchio.TouchIn):
-            # First time referenced. Get the pin from the slot for this touch
-            # and replace it with a TouchIn object for the pin.
-            self._touches[pin] = touchio.TouchIn(self._touches[pin])
-            self._touches[pin].threshold += self._touch_threshold_adjustment
+        touchin = self._touches.get(pin)
+        if not touchin:
+            # First time referenced. Make TouchIn object for the pin
+            touchin = touchio.TouchIn(pin)
+            touchin.threshold += self._touch_threshold_adjustment
+            self._touches[pin] = touchin
         return self._touches[pin].value
 
     # We chose these verbose touch_A# names so that beginners could use it without understanding
