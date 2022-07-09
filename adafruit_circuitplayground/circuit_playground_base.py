@@ -523,9 +523,7 @@ class CircuitPlaygroundBase:  # pylint: disable=too-many-public-methods
     @property
     def touched(self):
         """Return a list of all the pins that are currently registering a touch"""
-        return [
-            pin for pin, touchpad in self._touches.items() if touchpad.value
-        ]
+        return [pin for pin, touchpad in self._touches.items() if touchpad.value]
 
     @property
     def pixels(self):
