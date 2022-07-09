@@ -81,15 +81,7 @@ class CircuitPlaygroundBase:  # pylint: disable=too-many-public-methods
         # little RAM by only populating the dictionary as needed. For example,
         # after `cp.touch_A2`, self._touches is equivalent to:
         # { board.A2: TouchIn(board.A2) }
-        self._touches = {
-            board.A1: board.A1,
-            board.A2: board.A2,
-            board.A3: board.A3,
-            board.A4: board.A4,
-            board.A5: board.A5,
-            board.A6: board.A6,
-            board.TX: board.TX,
-        }
+        self._touches = {}
         self._touch_threshold_adjustment = 0
 
         # Define acceleration:
