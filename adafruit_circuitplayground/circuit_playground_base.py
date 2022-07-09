@@ -515,13 +515,6 @@ class CircuitPlaygroundBase:  # pylint: disable=too-many-public-methods
                 touch_in.threshold += adjustment
         self._touch_threshold_adjustment += adjustment
 
-    def _get_active_touchpad_items(self):
-        return [
-            (pinname, touchpad)
-            for pinname, touchpad in self._touches.items()
-            if isinstance(touchpad, touchio.TouchIn)
-        ]
-
     @property
     def touch_pins(self):
         """Return a list of all the pins that are set up as touchpad inputs"""
@@ -531,7 +524,7 @@ class CircuitPlaygroundBase:  # pylint: disable=too-many-public-methods
     def touched(self):
         """Return a list of all the pins that are currently registering a touch"""
         return [
-            pin for pin, touchpad in self._get_active_touchpad_items() if touchpad.value
+            pin for pin, touchpad in self._touches.items() if touchpad.value
         ]
 
     @property
