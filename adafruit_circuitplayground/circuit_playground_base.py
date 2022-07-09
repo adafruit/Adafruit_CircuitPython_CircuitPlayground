@@ -75,12 +75,12 @@ class CircuitPlaygroundBase:  # pylint: disable=too-many-public-methods
         self._light = Photocell(board.LIGHT)
 
         # Define touch:
-        # Initially, self._touches stores the pin used for a particular touch. When that touch is
-        # used for the first time, the pin is replaced with the corresponding TouchIn object.
-        # This saves a little RAM over using a separate read-only pin tuple.
-        # For example, after `cp.touch_A2`, self._touches is equivalent to:
-        # [None, board.A1, touchio.TouchIn(board.A2), board.A3, ...]
-        # Slot 0 is not used (A0 is not allowed as a touch pin).
+        # Initially, self._touches is an empty dictionary. When a touch is used
+        # for the first time, the pin is added as a key to the dictionary, with
+        # the corresponding TouchIn object added as the value. This saves a
+        # little RAM by only populating the dictionary as needed. For example,
+        # after `cp.touch_A2`, self._touches is equivalent to:
+        # { board.A2: TouchIn(board.A2) }
         self._touches = {
             board.A1: board.A1,
             board.A2: board.A2,
