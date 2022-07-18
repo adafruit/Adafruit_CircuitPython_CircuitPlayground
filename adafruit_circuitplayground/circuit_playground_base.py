@@ -13,8 +13,8 @@
 
 CircuitPython base class for Circuit Playground.
 
-* 'Circuit Playground Express <https://www.adafruit.com/product/3333>'_
-* 'Circuit Playground Bluefruit <https://www.adafruit.com/product/4333>'_.
+* `Circuit Playground Express <https://www.adafruit.com/product/3333>`_
+* `Circuit Playground Bluefruit <https://www.adafruit.com/product/4333>`_.
 
 * Author(s): Kattni Rembor, Scott Shawcroft, Ryan Keith
 """
@@ -34,7 +34,7 @@ import neopixel
 import touchio
 
 try:
-    from typing import Literal, Optional, Iterator  # pylint: disable=unused-import
+    from typing import Literal, Optional, Iterator
     from microcontroller import Pin
 except ImportError:
     pass
@@ -47,7 +47,7 @@ class Photocell:
     """Simple driver for analog photocell on the Circuit Playground Express and Bluefruit."""
 
     # pylint: disable=too-few-public-methods
-    def __init__(self, pin: Pin):
+    def __init__(self, pin: Pin) -> None:
         self._photocell = analogio.AnalogIn(pin)
 
     # TODO(tannewt): Calibrate this against another calibrated sensor.
@@ -123,7 +123,7 @@ class CircuitPlaygroundBase:  # pylint: disable=too-many-public-methods
         self._b = None
 
     @property
-    def detect_taps(self) -> int:
+    def detect_taps(self) -> Literal[1, 2]:
         """Configure what type of tap is detected by ``cp.tapped``. Use ``1`` for single-tap
         detection and ``2`` for double-tap detection. This does nothing without ``cp.tapped``.
 
