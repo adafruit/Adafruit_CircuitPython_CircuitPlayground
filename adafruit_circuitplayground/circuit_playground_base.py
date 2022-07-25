@@ -34,7 +34,8 @@ import neopixel
 import touchio
 
 try:
-    from typing import Literal, Optional, Iterator
+    from typing import Optional, Iterator
+    from typing_extensions import Literal
     from microcontroller import Pin
 except ImportError:
     pass
@@ -756,7 +757,7 @@ class CircuitPlaygroundBase:  # pylint: disable=too-many-public-methods
         the pitch of the tone.
 
         :param int frequency: The frequency of the tone in Hz
-        :param str waveform: Type of waveform to be generated [SINE_WAVE, SQUARE_WAVE].
+        :param int waveform: Type of waveform to be generated [SINE_WAVE, SQUARE_WAVE].
 
         Default is SINE_WAVE.
 
