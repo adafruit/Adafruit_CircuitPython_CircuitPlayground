@@ -3,7 +3,7 @@
 #
 # SPDX-License-Identifier: MIT
 
-adafruit - circuitpython - lis3dh
-adafruit - circuitpython - thermistor
-adafruit - circuitpython - neopixel
-typing - extensions
+adafruit-circuitpython-lis3dh
+adafruit-circuitpython-thermistor
+adafruit-circuitpython-neopixel
+typing-extensions
