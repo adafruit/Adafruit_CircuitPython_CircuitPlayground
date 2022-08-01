@@ -39,7 +39,7 @@ setup(
         "adafruit-circuitpython-lis3dh",
         "adafruit-circuitpython-thermistor",
         "adafruit-circuitpython-neopixel",
-        "typing-extensions~=4.0",
+        "typing-extensions",
     ],
     # Choose your license
     license="MIT",
