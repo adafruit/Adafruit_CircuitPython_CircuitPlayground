@@ -14,6 +14,10 @@ Introduction
     :target: https://github.com/adafruit/Adafruit_CircuitPython_CircuitPlayground/actions/
     :alt: Build Status
 
+.. image:: https://img.shields.io/badge/code%20style-black-000000.svg
+    :target: https://github.com/psf/black
+    :alt: Code Style: Black
+
 This high level library provides objects that represent Circuit Playground Express and Bluefruit hardware.
 
 .. image :: https://raw.githubusercontent.com/adafruit/Adafruit_CircuitPython_CircuitPlayground/main/docs/_static/circuit_playground_express_small.jpg
