@@ -8,7 +8,7 @@
 # pylint: disable=too-many-instance-attributes, too-many-lines
 
 """
-'adafruit_circuitplayground.circuit_playground_base'
+`adafruit_circuitplayground.circuit_playground_base`
 ====================================================
 
 CircuitPython base class for Circuit Playground.
