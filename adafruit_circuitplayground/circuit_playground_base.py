@@ -33,6 +33,13 @@ import adafruit_thermistor
 import neopixel
 import touchio
 
+try:
+    from typing import Optional, Iterator
+    from typing_extensions import Literal
+    from microcontroller import Pin
+except ImportError:
+    pass
+
 __version__ = "0.0.0-auto.0"
 __repo__ = "https://github.com/adafruit/Adafruit_CircuitPython_CircuitPlayground.git"
 
@@ -41,12 +48,12 @@ class Photocell:
     """Simple driver for analog photocell on the Circuit Playground Express and Bluefruit."""
 
     # pylint: disable=too-few-public-methods
-    def __init__(self, pin):
+    def __init__(self, pin: Pin) -> None:
         self._photocell = analogio.AnalogIn(pin)
 
     # TODO(tannewt): Calibrate this against another calibrated sensor.
     @property
-    def light(self):
+    def light(self) -> int:
         """Light level."""
         return self._photocell.value * 330 // (2**16)
 
@@ -58,7 +65,7 @@ class CircuitPlaygroundBase:  # pylint: disable=too-many-public-methods
     SINE_WAVE = 0
     SQUARE_WAVE = 1
 
-    def __init__(self):
+    def __init__(self) -> None:
         # Define switch:
         self._switch = digitalio.DigitalInOut(board.SLIDE_SWITCH)
         self._switch.switch_to_input(pull=digitalio.Pull.UP)
@@ -117,7 +124,7 @@ class CircuitPlaygroundBase:  # pylint: disable=too-many-public-methods
         self._b = None
 
     @property
-    def detect_taps(self):
+    def detect_taps(self) -> Literal[1, 2]:
         """Configure what type of tap is detected by ``cp.tapped``. Use ``1`` for single-tap
         detection and ``2`` for double-tap detection. This does nothing without ``cp.tapped``.
 
@@ -138,7 +145,7 @@ class CircuitPlaygroundBase:  # pylint: disable=too-many-public-methods
         return self._detect_taps
 
     @staticmethod
-    def _default_tap_threshold(tap):
+    def _default_tap_threshold(tap: Literal[1, 2]) -> int:
         if (
             "nRF52840" in os.uname().machine
         ):  # If we're on a CPB, use a higher tap threshold
@@ -148,7 +155,7 @@ class CircuitPlaygroundBase:  # pylint: disable=too-many-public-methods
         return 90 if tap == 1 else 60
 
     @detect_taps.setter
-    def detect_taps(self, value):
+    def detect_taps(self, value: Literal[1, 2]) -> None:
         self._detect_taps = value
         if value == 1:
             self._lis3dh.set_tap(
@@ -169,13 +176,13 @@ class CircuitPlaygroundBase:  # pylint: disable=too-many-public-methods
 
     def configure_tap(  # pylint: disable-msg=too-many-arguments
         self,
-        tap,
-        accel_range=adafruit_lis3dh.RANGE_8_G,
-        threshold=None,
-        time_limit=None,
-        time_latency=50,
-        time_window=255,
-    ):
+        tap: Literal[0, 1, 2],
+        accel_range: Literal[0, 1, 2, 3] = adafruit_lis3dh.RANGE_8_G,
+        threshold: Optional[int] = None,
+        time_limit: Optional[int] = None,
+        time_latency: int = 50,
+        time_window: int = 255,
+    ) -> None:
         """Granular configuration of tap parameters. Expose the power of the
         adafruit_lis3dh module.
 
@@ -245,7 +252,7 @@ class CircuitPlaygroundBase:  # pylint: disable=too-many-public-methods
         )
 
     @property
-    def tapped(self):
+    def tapped(self) -> bool:
         """True once after a detecting a tap. Requires ``cp.detect_taps``.
 
         .. image :: ../docs/_static/accelerometer.jpg
@@ -297,7 +304,7 @@ class CircuitPlaygroundBase:  # pylint: disable=too-many-public-methods
         return self._lis3dh.tapped
 
     @property
-    def acceleration(self):
+    def acceleration(self) -> adafruit_lis3dh.AccelerationTuple:
         """Obtain data from the x, y and z axes.
 
         .. image :: ../docs/_static/accelerometer.jpg
@@ -318,7 +325,7 @@ class CircuitPlaygroundBase:  # pylint: disable=too-many-public-methods
         """
         return self._lis3dh.acceleration
 
-    def shake(self, shake_threshold=30):
+    def shake(self, shake_threshold: int = 30) -> bool:
         """Detect when device is shaken.
 
         :param int shake_threshold: The threshold shake must exceed to return true (Default: 30)
@@ -352,7 +359,7 @@ class CircuitPlaygroundBase:  # pylint: disable=too-many-public-methods
         """
         return self._lis3dh.shake(shake_threshold=shake_threshold)
 
-    def _touch(self, i):
+    def _touch(self, i) -> bool:
         if not isinstance(self._touches[i], touchio.TouchIn):
             # First time referenced. Get the pin from the slot for this touch
             # and replace it with a TouchIn object for the pin.
@@ -364,7 +371,7 @@ class CircuitPlaygroundBase:  # pylint: disable=too-many-public-methods
     # lists and the capital A to match the pin name. The capitalization is not strictly Python
     # style, so everywhere we use these names, we whitelist the errors using:
     @property
-    def touch_A1(self):  # pylint: disable=invalid-name
+    def touch_A1(self) -> bool:  # pylint: disable=invalid-name
         """Detect touch on capacitive touch pad A1.
 
         .. image :: ../docs/_static/capacitive_touch_pad_A1.jpg
@@ -383,7 +390,7 @@ class CircuitPlaygroundBase:  # pylint: disable=too-many-public-methods
         return self._touch(1)
 
     @property
-    def touch_A2(self):  # pylint: disable=invalid-name
+    def touch_A2(self) -> bool:  # pylint: disable=invalid-name
         """Detect touch on capacitive touch pad A2.
 
         .. image :: ../docs/_static/capacitive_touch_pad_A2.jpg
@@ -402,7 +409,7 @@ class CircuitPlaygroundBase:  # pylint: disable=too-many-public-methods
         return self._touch(2)
 
     @property
-    def touch_A3(self):  # pylint: disable=invalid-name
+    def touch_A3(self) -> bool:  # pylint: disable=invalid-name
         """Detect touch on capacitive touch pad A3.
 
         .. image :: ../docs/_static/capacitive_touch_pad_A3.jpg
@@ -421,7 +428,7 @@ class CircuitPlaygroundBase:  # pylint: disable=too-many-public-methods
         return self._touch(3)
 
     @property
-    def touch_A4(self):  # pylint: disable=invalid-name
+    def touch_A4(self) -> bool:  # pylint: disable=invalid-name
         """Detect touch on capacitive touch pad A4.
 
         .. image :: ../docs/_static/capacitive_touch_pad_A4.jpg
@@ -440,7 +447,7 @@ class CircuitPlaygroundBase:  # pylint: disable=too-many-public-methods
         return self._touch(4)
 
     @property
-    def touch_A5(self):  # pylint: disable=invalid-name
+    def touch_A5(self) -> bool:  # pylint: disable=invalid-name
         """Detect touch on capacitive touch pad A5.
 
         .. image :: ../docs/_static/capacitive_touch_pad_A5.jpg
@@ -459,7 +466,7 @@ class CircuitPlaygroundBase:  # pylint: disable=too-many-public-methods
         return self._touch(5)
 
     @property
-    def touch_A6(self):  # pylint: disable=invalid-name
+    def touch_A6(self) -> bool:  # pylint: disable=invalid-name
         """Detect touch on capacitive touch pad A6.
 
         .. image :: ../docs/_static/capacitive_touch_pad_A6.jpg
@@ -478,7 +485,7 @@ class CircuitPlaygroundBase:  # pylint: disable=too-many-public-methods
         return self._touch(6)
 
     @property
-    def touch_TX(self):  # pylint: disable=invalid-name
+    def touch_TX(self) -> bool:  # pylint: disable=invalid-name
         """Detect touch on capacitive touch pad TX (also known as A7 on the Circuit Playground
         Express) Note: can be called as ``touch_A7`` on Circuit Playground Express.
 
@@ -497,7 +504,7 @@ class CircuitPlaygroundBase:  # pylint: disable=too-many-public-methods
         """
         return self._touch(7)
 
-    def adjust_touch_threshold(self, adjustment):
+    def adjust_touch_threshold(self, adjustment: int) -> None:
         """Adjust the threshold needed to activate the capacitive touch pads.
         Higher numbers make the touch pads less sensitive.
 
@@ -524,7 +531,7 @@ class CircuitPlaygroundBase:  # pylint: disable=too-many-public-methods
         self._touch_threshold_adjustment += adjustment
 
     @property
-    def pixels(self):
+    def pixels(self) -> neopixel.NeoPixel:
         """Sequence-like object representing the ten NeoPixels around the outside
         of the Circuit Playground. Each pixel is at a certain index in the sequence
         as labeled below. Colors can be RGB hex like 0x110000 for red where each
@@ -552,7 +559,7 @@ class CircuitPlaygroundBase:  # pylint: disable=too-many-public-methods
         return self._pixels
 
     @property
-    def button_a(self):
+    def button_a(self) -> bool:
         """``True`` when Button A is pressed. ``False`` if not.
 
         .. image :: ../docs/_static/button_a.jpg
@@ -574,7 +581,7 @@ class CircuitPlaygroundBase:  # pylint: disable=too-many-public-methods
         return self._a.value
 
     @property
-    def button_b(self):
+    def button_b(self) -> bool:
         """``True`` when Button B is pressed. ``False`` if not.
 
         .. image :: ../docs/_static/button_b.jpg
@@ -596,7 +603,7 @@ class CircuitPlaygroundBase:  # pylint: disable=too-many-public-methods
         return self._b.value
 
     @property
-    def switch(self):
+    def switch(self) -> bool:
         """``True`` when the switch is to the left next to the music notes.
         ``False`` when it is to the right towards the ear.
 
@@ -617,7 +624,7 @@ class CircuitPlaygroundBase:  # pylint: disable=too-many-public-methods
         return self._switch.value
 
     @property
-    def temperature(self):
+    def temperature(self) -> float:
         """The temperature in Celsius.
 
         .. image :: ../docs/_static/thermistor.jpg
@@ -642,7 +649,7 @@ class CircuitPlaygroundBase:  # pylint: disable=too-many-public-methods
         return self._temp.temperature
 
     @property
-    def light(self):
+    def light(self) -> int:
         """The light level.
 
         .. image :: ../docs/_static/light_sensor.jpg
@@ -664,7 +671,7 @@ class CircuitPlaygroundBase:  # pylint: disable=too-many-public-methods
         return self._light.light
 
     @property
-    def red_led(self):
+    def red_led(self) -> bool:
         """The red led next to the USB plug marked D13.
 
         .. image :: ../docs/_static/red_led.jpg
@@ -686,11 +693,11 @@ class CircuitPlaygroundBase:  # pylint: disable=too-many-public-methods
         return self._led.value
 
     @red_led.setter
-    def red_led(self, value):
+    def red_led(self, value: bool) -> None:
         self._led.value = value
 
     @staticmethod
-    def _sine_sample(length):
+    def _sine_sample(length: int) -> Iterator[int]:
         tone_volume = (2**15) - 1
         # Amplitude shift up in order to not have negative numbers
         shift = 2**15
@@ -698,7 +705,7 @@ class CircuitPlaygroundBase:  # pylint: disable=too-many-public-methods
             yield int(tone_volume * math.sin(2 * math.pi * (i / length)) + shift)
 
     @staticmethod
-    def _square_sample(length):
+    def _square_sample(length: int) -> Iterator[int]:
         # Square waves are MUCH louder than then sine
         tone_volume = (2**16) - 1
         half_length = length // 2
@@ -707,7 +714,7 @@ class CircuitPlaygroundBase:  # pylint: disable=too-many-public-methods
         for _ in range(half_length):
             yield 0
 
-    def _generate_sample(self, length=100, waveform=SINE_WAVE):
+    def _generate_sample(self, length: int = 100, waveform: int = SINE_WAVE) -> None:
         if self._sample is not None:
             return
         if waveform == self.SQUARE_WAVE:
@@ -717,13 +724,15 @@ class CircuitPlaygroundBase:  # pylint: disable=too-many-public-methods
         self._sample = self._audio_out(board.SPEAKER)  # pylint: disable=not-callable
         self._wave_sample = audiocore.RawSample(self._wave)
 
-    def play_tone(self, frequency, duration, waveform=SINE_WAVE):
+    def play_tone(
+        self, frequency: int, duration: float, waveform: int = SINE_WAVE
+    ) -> None:
         """Produce a tone using the speaker. Try changing frequency to change
         the pitch of the tone.
 
         :param int frequency: The frequency of the tone in Hz
         :param float duration: The duration of the tone in seconds
-        :param str waveform: Type of waveform to be generated [SINE_WAVE, SQUARE_WAVE].
+        :param int waveform: Type of waveform to be generated [SINE_WAVE, SQUARE_WAVE].
 
         Default is SINE_WAVE.
 
@@ -743,12 +752,12 @@ class CircuitPlaygroundBase:  # pylint: disable=too-many-public-methods
         time.sleep(duration)
         self.stop_tone()
 
-    def start_tone(self, frequency, waveform=SINE_WAVE):
+    def start_tone(self, frequency: int, waveform: int = SINE_WAVE) -> None:
         """Produce a tone using the speaker. Try changing frequency to change
         the pitch of the tone.
 
         :param int frequency: The frequency of the tone in Hz
-        :param str waveform: Type of waveform to be generated [SINE_WAVE, SQUARE_WAVE].
+        :param int waveform: Type of waveform to be generated [SINE_WAVE, SQUARE_WAVE].
 
         Default is SINE_WAVE.
 
@@ -779,7 +788,7 @@ class CircuitPlaygroundBase:  # pylint: disable=too-many-public-methods
         if not self._sample.playing:
             self._sample.play(self._wave_sample, loop=True)
 
-    def stop_tone(self):
+    def stop_tone(self) -> None:
         """Use with start_tone to stop the tone produced.
 
         .. image :: ../docs/_static/speaker.jpg
@@ -806,7 +815,7 @@ class CircuitPlaygroundBase:  # pylint: disable=too-many-public-methods
             self._sample = None
         self._speaker_enable.value = False
 
-    def play_file(self, file_name):
+    def play_file(self, file_name: str) -> None:
         """Play a .wav file using the onboard speaker.
 
         :param file_name: The name of your .wav file in quotation marks including .wav
