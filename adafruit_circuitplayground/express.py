@@ -33,7 +33,7 @@ from adafruit_circuitplayground.circuit_playground_base import (  # pylint: disa
 )
 
 
-__version__ = "0.0.0-auto.0"
+__version__ = "0.0.0+auto.0"
 __repo__ = "https://github.com/adafruit/Adafruit_CircuitPython_CircuitPlayground.git"
 
 
