@@ -34,7 +34,7 @@ import neopixel
 import touchio
 
 try:
-    from typing import Optional, Iterator
+    from typing import Optional, Iterator, List
     from typing_extensions import Literal
     from microcontroller import Pin
 except ImportError:
@@ -82,22 +82,13 @@ class CircuitPlaygroundBase:  # pylint: disable=too-many-public-methods
         self._light = Photocell(board.LIGHT)
 
         # Define touch:
-        # Initially, self._touches stores the pin used for a particular touch. When that touch is
-        # used for the first time, the pin is replaced with the corresponding TouchIn object.
-        # This saves a little RAM over using a separate read-only pin tuple.
-        # For example, after `cp.touch_A2`, self._touches is equivalent to:
-        # [None, board.A1, touchio.TouchIn(board.A2), board.A3, ...]
-        # Slot 0 is not used (A0 is not allowed as a touch pin).
-        self._touches = [
-            None,
-            board.A1,
-            board.A2,
-            board.A3,
-            board.A4,
-            board.A5,
-            board.A6,
-            board.TX,
-        ]
+        # Initially, self._touches is an empty dictionary. When a touch is used
+        # for the first time, the pin is added as a key to the dictionary, with
+        # the corresponding TouchIn object added as the value. This saves a
+        # little RAM by only populating the dictionary as needed. For example,
+        # after `cp.touch_A2`, self._touches is equivalent to:
+        # { board.A2: TouchIn(board.A2) }
+        self._touches = {}
         self._touch_threshold_adjustment = 0
 
         # Define acceleration:
@@ -359,13 +350,14 @@ class CircuitPlaygroundBase:  # pylint: disable=too-many-public-methods
         """
         return self._lis3dh.shake(shake_threshold=shake_threshold)
 
-    def _touch(self, i) -> bool:
-        if not isinstance(self._touches[i], touchio.TouchIn):
-            # First time referenced. Get the pin from the slot for this touch
-            # and replace it with a TouchIn object for the pin.
-            self._touches[i] = touchio.TouchIn(self._touches[i])
-            self._touches[i].threshold += self._touch_threshold_adjustment
-        return self._touches[i].value
+    def _touch(self, pin: Pin) -> bool:
+        touchin = self._touches.get(pin)
+        if not touchin:
+            # First time referenced. Make TouchIn object for the pin
+            touchin = touchio.TouchIn(pin)
+            touchin.threshold += self._touch_threshold_adjustment
+            self._touches[pin] = touchin
+        return touchin.value
 
     # We chose these verbose touch_A# names so that beginners could use it without understanding
     # lists and the capital A to match the pin name. The capitalization is not strictly Python
@@ -387,7 +379,7 @@ class CircuitPlaygroundBase:  # pylint: disable=too-many-public-methods
               if cp.touch_A1:
                   print('Touched pad A1')
         """
-        return self._touch(1)
+        return self._touch(board.A1)
 
     @property
     def touch_A2(self) -> bool:  # pylint: disable=invalid-name
@@ -406,7 +398,7 @@ class CircuitPlaygroundBase:  # pylint: disable=too-many-public-methods
               if cp.touch_A2:
                   print('Touched pad A2')
         """
-        return self._touch(2)
+        return self._touch(board.A2)
 
     @property
     def touch_A3(self) -> bool:  # pylint: disable=invalid-name
@@ -425,7 +417,7 @@ class CircuitPlaygroundBase:  # pylint: disable=too-many-public-methods
               if cp.touch_A3:
                   print('Touched pad A3')
         """
-        return self._touch(3)
+        return self._touch(board.A3)
 
     @property
     def touch_A4(self) -> bool:  # pylint: disable=invalid-name
@@ -444,7 +436,7 @@ class CircuitPlaygroundBase:  # pylint: disable=too-many-public-methods
               if cp.touch_A4:
                   print('Touched pad A4')
         """
-        return self._touch(4)
+        return self._touch(board.A4)
 
     @property
     def touch_A5(self) -> bool:  # pylint: disable=invalid-name
@@ -463,7 +455,7 @@ class CircuitPlaygroundBase:  # pylint: disable=too-many-public-methods
               if cp.touch_A5:
                   print('Touched pad A5')
         """
-        return self._touch(5)
+        return self._touch(board.A5)
 
     @property
     def touch_A6(self) -> bool:  # pylint: disable=invalid-name
@@ -482,7 +474,7 @@ class CircuitPlaygroundBase:  # pylint: disable=too-many-public-methods
               if cp.touch_A6:
                   print('Touched pad A6'
         """
-        return self._touch(6)
+        return self._touch(board.A6)
 
     @property
     def touch_TX(self) -> bool:  # pylint: disable=invalid-name
@@ -502,7 +494,7 @@ class CircuitPlaygroundBase:  # pylint: disable=too-many-public-methods
               if cp.touch_A7:
                   print('Touched pad A7')
         """
-        return self._touch(7)
+        return self._touch(board.TX)
 
     def adjust_touch_threshold(self, adjustment: int) -> None:
         """Adjust the threshold needed to activate the capacitive touch pads.
@@ -525,10 +517,19 @@ class CircuitPlaygroundBase:  # pylint: disable=too-many-public-methods
               if cp.touch_A1:
                   print('Touched pad A1')
         """
-        for touch_in in self._touches:
-            if isinstance(touch_in, touchio.TouchIn):
-                touch_in.threshold += adjustment
+        for touch_in in self._touches.values():
+            touch_in.threshold += adjustment
         self._touch_threshold_adjustment += adjustment
+
+    @property
+    def touch_pins(self) -> List[Pin]:
+        """A list of all the pins that are set up as touchpad inputs"""
+        return list(self._touches.keys())
+
+    @property
+    def touched(self) -> List[Pin]:
+        """A list of all the pins that are currently registering a touch"""
+        return [pin for pin, touchpad in self._touches.items() if touchpad.value]
 
     @property
     def pixels(self) -> neopixel.NeoPixel:
