@@ -27,7 +27,7 @@ while True:
         print("Touchpads currently registering a touch:")
         print(current_touched)
     else:
-        print("No touchpads are currently regustering a touch.")
+        print("No touchpads are currently registering a touch.")
 
     if all(pad in current_touched for pad in (board.A2, board.A3, board.A4)):
         print("This only prints when A2, A3, and A4 are being held at the same time!")
