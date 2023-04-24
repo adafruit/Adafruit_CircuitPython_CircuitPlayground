@@ -10,3 +10,5 @@ if sys.platform == "nRF52840":
     from .bluefruit import cpb as cp
 elif sys.platform == "Atmel SAMD21":
     from .express import cpx as cp
+else:
+    raise ImportError(f"{sys.platform} not supported by this lib")
