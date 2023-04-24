@@ -46,6 +46,7 @@ autodoc_mock_imports = [
     "audiopwmio",
     "audiobusio",
     "audiomp3",
+    "circuit_playground_base",
 ]
 
 # Add any paths that contain templates here, relative to this directory.
