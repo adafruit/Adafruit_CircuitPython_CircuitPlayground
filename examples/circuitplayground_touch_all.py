@@ -20,7 +20,6 @@ print("Pads that are currently setup as touchpads:")
 print(cp.touch_pins)
 
 while True:
-
     current_touched = cp.touched
 
     if current_touched:
