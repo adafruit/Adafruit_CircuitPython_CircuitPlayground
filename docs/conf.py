@@ -18,6 +18,7 @@ sys.path.insert(0, os.path.abspath("mocks"))
 # ones.
 extensions = [
     "sphinx.ext.autodoc",
+    "sphinxcontrib.jquery",
     "sphinx.ext.intersphinx",
     "sphinx.ext.viewcode",
 ]
