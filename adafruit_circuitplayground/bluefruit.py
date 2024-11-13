@@ -61,7 +61,7 @@ class Bluefruit(CircuitPlaygroundBase):
             sample_rate=16000,
             bit_depth=16,
         )
-        self._samples = None
+        self._mic_samples = None
 
     @staticmethod
     def _normalized_rms(values) -> float:
@@ -91,10 +91,10 @@ class Bluefruit(CircuitPlaygroundBase):
           while True:
               print(cpb.sound_level)
         """
-        if self._sample is None:
-            self._samples = array.array("H", [0] * 160)
-        self._mic.record(self._samples, len(self._samples))
-        return self._normalized_rms(self._samples)
+        if self._mic_samples is None:
+            self._mic_samples = array.array("H", [0] * 160)
+        self._mic.record(self._mic_samples, len(self._mic_samples))
+        return self._normalized_rms(self._mic_samples)
 
     def loud_sound(self, sound_threshold: int = 200) -> bool:
         """Utilise a loud sound as an input.
