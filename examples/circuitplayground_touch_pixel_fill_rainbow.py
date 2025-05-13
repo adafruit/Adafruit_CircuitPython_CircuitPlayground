@@ -4,7 +4,9 @@
 """This example uses the capacitive touch pads on the Circuit Playground. They are located around
 the outer edge of the board and are labeled A1-A6 and TX. (A0 is not a touch pad.) This example
 lights up all the NeoPixels a different color of the rainbow for each pad touched!"""
+
 import time
+
 from adafruit_circuitplayground import cp
 
 cp.pixels.brightness = 0.3

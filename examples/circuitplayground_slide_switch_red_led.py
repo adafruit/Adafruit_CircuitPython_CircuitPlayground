@@ -2,10 +2,8 @@
 # SPDX-License-Identifier: MIT
 
 """This example uses the slide switch to control the little red LED."""
-from adafruit_circuitplayground import cp
 
-# This code is written to be readable versus being Pylint compliant.
-# pylint: disable=simplifiable-if-statement
+from adafruit_circuitplayground import cp
 
 while True:
     if cp.switch:

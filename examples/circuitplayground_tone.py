@@ -2,6 +2,7 @@
 # SPDX-License-Identifier: MIT
 
 """This example plays a different tone for each button, while the button is pressed."""
+
 from adafruit_circuitplayground import cp
 
 while True:

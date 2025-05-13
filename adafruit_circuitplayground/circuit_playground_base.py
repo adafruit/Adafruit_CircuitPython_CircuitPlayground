@@ -5,7 +5,6 @@
 # SPDX-License-Identifier: MIT
 
 # We have a lot of attributes for this complex library, as well as a lot of documentation.
-# pylint: disable=too-many-instance-attributes, too-many-lines
 
 """
 `adafruit_circuitplayground.circuit_playground_base`
@@ -19,24 +18,26 @@ CircuitPython base class for Circuit Playground.
 * Author(s): Kattni Rembor, Scott Shawcroft, Ryan Keith
 """
 
-import math
 import array
-import time
+import math
 import os
-import audiocore
+import time
+
+import adafruit_lis3dh
+import adafruit_thermistor
 import analogio
+import audiocore
 import board
 import busio
 import digitalio
-import adafruit_lis3dh
-import adafruit_thermistor
 import neopixel
 import touchio
 
 try:
-    from typing import Optional, Iterator, List
-    from typing_extensions import Literal
+    from typing import Iterator, List, Optional
+
     from microcontroller import Pin
+    from typing_extensions import Literal
 except ImportError:
     pass
 
@@ -47,7 +48,6 @@ __repo__ = "https://github.com/adafruit/Adafruit_CircuitPython_CircuitPlayground
 class Photocell:
     """Simple driver for analog photocell on the Circuit Playground Express and Bluefruit."""
 
-    # pylint: disable=too-few-public-methods
     def __init__(self, pin: Pin) -> None:
         self._photocell = analogio.AnalogIn(pin)
 
@@ -58,7 +58,7 @@ class Photocell:
         return self._photocell.value * 330 // (2**16)
 
 
-class CircuitPlaygroundBase:  # pylint: disable=too-many-public-methods
+class CircuitPlaygroundBase:
     """Circuit Playground base class."""
 
     _audio_out = None
@@ -76,9 +76,7 @@ class CircuitPlaygroundBase:  # pylint: disable=too-many-public-methods
         self._pixels = neopixel.NeoPixel(board.NEOPIXEL, 10)
 
         # Define sensors:
-        self._temp = adafruit_thermistor.Thermistor(
-            board.TEMPERATURE, 10000, 10000, 25, 3950
-        )
+        self._temp = adafruit_thermistor.Thermistor(board.TEMPERATURE, 10000, 10000, 25, 3950)
         self._light = Photocell(board.LIGHT)
 
         # Define touch:
@@ -94,9 +92,7 @@ class CircuitPlaygroundBase:  # pylint: disable=too-many-public-methods
         # Define acceleration:
         self._i2c = busio.I2C(board.ACCELEROMETER_SCL, board.ACCELEROMETER_SDA)
         self._int1 = digitalio.DigitalInOut(board.ACCELEROMETER_INTERRUPT)
-        self._lis3dh = adafruit_lis3dh.LIS3DH_I2C(
-            self._i2c, address=0x19, int1=self._int1
-        )
+        self._lis3dh = adafruit_lis3dh.LIS3DH_I2C(self._i2c, address=0x19, int1=self._int1)
         self._lis3dh.range = adafruit_lis3dh.RANGE_8_G
 
         # Define audio:
@@ -137,9 +133,7 @@ class CircuitPlaygroundBase:  # pylint: disable=too-many-public-methods
 
     @staticmethod
     def _default_tap_threshold(tap: Literal[1, 2]) -> int:
-        if (
-            "nRF52840" in os.uname().machine
-        ):  # If we're on a CPB, use a higher tap threshold
+        if "nRF52840" in os.uname().machine:  # If we're on a CPB, use a higher tap threshold
             return 100 if tap == 1 else 70
 
         # If we're on a CPX
@@ -165,7 +159,7 @@ class CircuitPlaygroundBase:  # pylint: disable=too-many-public-methods
                 time_window=255,
             )
 
-    def configure_tap(  # pylint: disable-msg=too-many-arguments
+    def configure_tap(
         self,
         tap: Literal[0, 1, 2],
         accel_range: Literal[0, 1, 2, 3] = adafruit_lis3dh.RANGE_8_G,
@@ -210,12 +204,12 @@ class CircuitPlaygroundBase:  # pylint: disable=too-many-public-methods
 
         self._detect_taps = tap
 
-        if accel_range not in [
+        if accel_range not in {
             adafruit_lis3dh.RANGE_2_G,
             adafruit_lis3dh.RANGE_4_G,
             adafruit_lis3dh.RANGE_8_G,
             adafruit_lis3dh.RANGE_16_G,
-        ]:
+        }:
             accel_range = adafruit_lis3dh.RANGE_8_G
         self._lis3dh.range = accel_range
 
@@ -363,7 +357,7 @@ class CircuitPlaygroundBase:  # pylint: disable=too-many-public-methods
     # lists and the capital A to match the pin name. The capitalization is not strictly Python
     # style, so everywhere we use these names, we whitelist the errors using:
     @property
-    def touch_A1(self) -> bool:  # pylint: disable=invalid-name
+    def touch_A1(self) -> bool:
         """Detect touch on capacitive touch pad A1.
 
         .. image :: ../docs/_static/capacitive_touch_pad_A1.jpg
@@ -382,7 +376,7 @@ class CircuitPlaygroundBase:  # pylint: disable=too-many-public-methods
         return self._touch(board.A1)
 
     @property
-    def touch_A2(self) -> bool:  # pylint: disable=invalid-name
+    def touch_A2(self) -> bool:
         """Detect touch on capacitive touch pad A2.
 
         .. image :: ../docs/_static/capacitive_touch_pad_A2.jpg
@@ -401,7 +395,7 @@ class CircuitPlaygroundBase:  # pylint: disable=too-many-public-methods
         return self._touch(board.A2)
 
     @property
-    def touch_A3(self) -> bool:  # pylint: disable=invalid-name
+    def touch_A3(self) -> bool:
         """Detect touch on capacitive touch pad A3.
 
         .. image :: ../docs/_static/capacitive_touch_pad_A3.jpg
@@ -420,7 +414,7 @@ class CircuitPlaygroundBase:  # pylint: disable=too-many-public-methods
         return self._touch(board.A3)
 
     @property
-    def touch_A4(self) -> bool:  # pylint: disable=invalid-name
+    def touch_A4(self) -> bool:
         """Detect touch on capacitive touch pad A4.
 
         .. image :: ../docs/_static/capacitive_touch_pad_A4.jpg
@@ -439,7 +433,7 @@ class CircuitPlaygroundBase:  # pylint: disable=too-many-public-methods
         return self._touch(board.A4)
 
     @property
-    def touch_A5(self) -> bool:  # pylint: disable=invalid-name
+    def touch_A5(self) -> bool:
         """Detect touch on capacitive touch pad A5.
 
         .. image :: ../docs/_static/capacitive_touch_pad_A5.jpg
@@ -458,7 +452,7 @@ class CircuitPlaygroundBase:  # pylint: disable=too-many-public-methods
         return self._touch(board.A5)
 
     @property
-    def touch_A6(self) -> bool:  # pylint: disable=invalid-name
+    def touch_A6(self) -> bool:
         """Detect touch on capacitive touch pad A6.
 
         .. image :: ../docs/_static/capacitive_touch_pad_A6.jpg
@@ -477,7 +471,7 @@ class CircuitPlaygroundBase:  # pylint: disable=too-many-public-methods
         return self._touch(board.A6)
 
     @property
-    def touch_TX(self) -> bool:  # pylint: disable=invalid-name
+    def touch_TX(self) -> bool:
         """Detect touch on capacitive touch pad TX (also known as A7 on the Circuit Playground
         Express) Note: can be called as ``touch_A7`` on Circuit Playground Express.
 
@@ -722,12 +716,10 @@ class CircuitPlaygroundBase:  # pylint: disable=too-many-public-methods
             self._wave = array.array("H", self._square_sample(length))
         else:
             self._wave = array.array("H", self._sine_sample(length))
-        self._sample = self._audio_out(board.SPEAKER)  # pylint: disable=not-callable
+        self._sample = self._audio_out(board.SPEAKER)
         self._wave_sample = audiocore.RawSample(self._wave)
 
-    def play_tone(
-        self, frequency: int, duration: float, waveform: int = SINE_WAVE
-    ) -> None:
+    def play_tone(self, frequency: int, duration: float, waveform: int = SINE_WAVE) -> None:
         """Produce a tone using the speaker. Try changing frequency to change
         the pitch of the tone.
 
@@ -839,9 +831,9 @@ class CircuitPlaygroundBase:  # pylint: disable=too-many-public-methods
         # Play a specified file.
         self.stop_tone()
         self._speaker_enable.value = True
-        with self._audio_out(  # pylint: disable=not-callable
-            board.SPEAKER
-        ) as audio, audiocore.WaveFile(open(file_name, "rb")) as wavefile:
+        with self._audio_out(board.SPEAKER) as audio, audiocore.WaveFile(
+            open(file_name, "rb")
+        ) as wavefile:
             audio.play(wavefile)
             while audio.playing:
                 pass

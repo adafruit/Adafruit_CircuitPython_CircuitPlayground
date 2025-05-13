@@ -9,8 +9,10 @@ a white pixel as if gravity were pulling it.
 Flip the switch left (toward the notes) to turn on debugging messages and
 slow down the action. See a code walkthrough here: https://youtu.be/sZ4tNOUKRpw
 """
-import time
+
 import math
+import time
+
 from adafruit_circuitplayground import cp
 
 PIXEL_SPACING_ANGLE = 30
@@ -31,9 +33,7 @@ def compute_pixel_angles():
     accelerometer’s (x, y) values give an angle of 300°. Rotated clockwise 1/12 turn (30°), so
     that pixel 1 is at the bottom, the angle is 330°.
     """
-    return [
-        (300 + PIXEL_SPACING_ANGLE * n) % 360 for n in range(12) if n not in (5, 11)
-    ]
+    return [(300 + PIXEL_SPACING_ANGLE * n) % 360 for n in range(12) if n not in {5, 11}]
 
 
 def degrees_between(a1, a2):
@@ -74,24 +74,19 @@ while True:
     down_angle = positive_degrees(angle_in_degrees(accel_x, accel_y))
     magnitude_limit = STANDARD_GRAVITY
     normalized_magnitude = (
-        min(math.sqrt(accel_x * accel_x + accel_y * accel_y), magnitude_limit)
-        / magnitude_limit
+        min(math.sqrt(accel_x * accel_x + accel_y * accel_y), magnitude_limit) / magnitude_limit
     )
 
     pixels_lit = []
     for i, pixel_position in enumerate(pixel_positions):
-        pe = pixel_brightness(
-            degrees_between(pixel_position, down_angle), normalized_magnitude
-        )
+        pe = pixel_brightness(degrees_between(pixel_position, down_angle), normalized_magnitude)
         cp.pixels[i] = (pe, pe, pe) if pe else BACKGROUND_COLOR
         if pe:
             pixels_lit.append((i, pe))
 
     if debug:
-        lit_formatted = ", ".join(("{}: {:>3d}".format(p, i) for p, i in pixels_lit))
+        lit_formatted = ", ".join((f"{p}: {i:>3d}" for p, i in pixels_lit))
         print(
-            "x: {:>6.2f}, y: {:>6.2f}, angle: {:>6.2f}, mag: {:>3.2f}, pixels: [{}]".format(
-                accel_x, accel_y, down_angle, normalized_magnitude, lit_formatted
-            )
+            f"x: {accel_x:>6.2f}, y: {accel_y:>6.2f}, angle: {down_angle:>6.2f}, mag: {normalized_magnitude:>3.2f}, pixels: [{lit_formatted}]"  # noqa: E501
         )
         time.sleep(0.5)

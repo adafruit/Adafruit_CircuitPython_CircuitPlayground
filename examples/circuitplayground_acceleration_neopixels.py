@@ -5,6 +5,7 @@
 left to see the NeoPixels light up in colors related to the accelerometer! The Circuit Playground
 has an accelerometer in the center that returns (x, y, z) acceleration values. This program uses
 those values to light up the NeoPixels based on those acceleration values."""
+
 from adafruit_circuitplayground import cp
 
 # Main loop gets x, y and z axis acceleration, prints the values, and turns on

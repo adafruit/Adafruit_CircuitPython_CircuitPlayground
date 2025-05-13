@@ -17,21 +17,21 @@ CircuitPython helper for Circuit Playground Express.
 """
 
 import sys
-import digitalio
+
 import audioio
+import digitalio
 
 try:
-    lib_index = sys.path.index("/lib")  # pylint: disable=invalid-name
+    lib_index = sys.path.index("/lib")
     if lib_index < sys.path.index(".frozen"):
         # Prefer frozen modules over those in /lib.
         sys.path.insert(lib_index, ".frozen")
 except ValueError:
     # Don't change sys.path if it doesn't contain "lib" or ".frozen".
     pass
-from adafruit_circuitplayground.circuit_playground_base import (  # pylint: disable=wrong-import-position
+from adafruit_circuitplayground.circuit_playground_base import (
     CircuitPlaygroundBase,
 )
-
 
 __version__ = "0.0.0+auto.0"
 __repo__ = "https://github.com/adafruit/Adafruit_CircuitPython_CircuitPlayground.git"
@@ -60,9 +60,7 @@ class Express(CircuitPlaygroundBase):
     @property
     def _unsupported(self):
         """This feature is not supported on Circuit Playground Express."""
-        raise NotImplementedError(
-            "This feature is not supported on Circuit Playground Express."
-        )
+        raise NotImplementedError("This feature is not supported on Circuit Playground Express.")
 
     # The following is a list of the features available in other Circuit Playground modules but
     # not available for Circuit Playground Express. If called while using a Circuit Playground
@@ -72,7 +70,7 @@ class Express(CircuitPlaygroundBase):
     play_mp3 = _unsupported
 
 
-cpx = Express()  # pylint: disable=invalid-name
+cpx = Express()
 """Object that is automatically created on import.
 
    To use, simply import it from the module:

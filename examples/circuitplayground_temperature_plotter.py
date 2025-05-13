@@ -4,7 +4,9 @@
 """If you're using Mu, this example will plot the temperature in C and F on the plotter! Click
 "Plotter" to open it, and place your finger over the sensor to see the numbers change. The
 sensor is located next to the picture of the thermometer on the CPX."""
+
 import time
+
 from adafruit_circuitplayground import cp
 
 while True:

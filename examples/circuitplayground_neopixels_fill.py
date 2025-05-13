@@ -2,6 +2,7 @@
 # SPDX-License-Identifier: MIT
 
 """This example lights up all the NeoPixel LEDs red."""
+
 from adafruit_circuitplayground import cp
 
 while True:

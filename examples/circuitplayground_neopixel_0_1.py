@@ -2,6 +2,7 @@
 # SPDX-License-Identifier: MIT
 
 """This example lights up the first and second NeoPixel, red and blue respectively."""
+
 from adafruit_circuitplayground import cp
 
 cp.pixels.brightness = 0.3

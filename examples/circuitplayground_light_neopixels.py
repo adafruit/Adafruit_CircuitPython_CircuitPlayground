@@ -9,6 +9,7 @@ to watch the number decrease.
 """
 
 import time
+
 from adafruit_circuitplayground import cp
 
 cp.pixels.auto_write = False

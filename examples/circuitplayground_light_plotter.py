@@ -4,7 +4,9 @@
 """If you're using Mu, this example will plot the light levels from the light sensor (located next
 to the eye) on your Circuit Playground. Try shining a flashlight on your Circuit Playground, or
 covering the light sensor to see the plot increase and decrease."""
+
 import time
+
 from adafruit_circuitplayground import cp
 
 while True:

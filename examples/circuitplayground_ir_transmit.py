@@ -9,10 +9,13 @@ THIS EXAMPLE WORKS WITH CIRCUIT PLAYGROUND EXPRESS ONLY.
 This example uses the IR transmitter found near the center of the board. Works with another Circuit
 Playground Express running the circuitplayground_ir_receive.py example. Press the buttons to light
 up the NeoPixels on the RECEIVING Circuit Playground Express!"""
+
 import time
-import pulseio
-import board
+
 import adafruit_irremote
+import board
+import pulseio
+
 from adafruit_circuitplayground import cp
 
 # Create a 'PulseOut' output, to send infrared signals from the IR transmitter

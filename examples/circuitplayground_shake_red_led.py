@@ -2,6 +2,7 @@
 # SPDX-License-Identifier: MIT
 
 """This example flashes the little red LED when the Circuit Playground is shaken."""
+
 from adafruit_circuitplayground import cp
 
 while True:
