@@ -6,6 +6,7 @@ This example plays mp3 audio files from the built-in speaker when the A or B but
 
 NOTE: This example does NOT support Circuit Playground Express.
 """
+
 from adafruit_circuitplayground import cp
 
 while True:

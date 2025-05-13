@@ -3,7 +3,9 @@
 
 """This is the "Hello, world!" of CircuitPython: Blinky! This example blinks the little red LED on
 and off!"""
+
 import time
+
 from adafruit_circuitplayground import cp
 
 while True:

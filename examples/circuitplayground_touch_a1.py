@@ -2,6 +2,7 @@
 # SPDX-License-Identifier: MIT
 
 """This example prints to the serial console when you touch capacitive touch pad A1."""
+
 from adafruit_circuitplayground import cp
 
 while True:

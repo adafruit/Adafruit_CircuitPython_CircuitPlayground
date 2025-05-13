@@ -4,10 +4,13 @@
 """This example uses the sound sensor, located next to the picture of the ear on your board, to
 light up the NeoPixels as a sound meter. Try talking to your Circuit Playground or clapping, etc,
 to see the NeoPixels light up!"""
+
 import array
 import math
-import board
+
 import audiobusio
+import board
+
 from adafruit_circuitplayground import cp
 
 
@@ -17,16 +20,13 @@ def constrain(value, floor, ceiling):
 
 def log_scale(input_value, input_min, input_max, output_min, output_max):
     normalized_input_value = (input_value - input_min) / (input_max - input_min)
-    return output_min + math.pow(normalized_input_value, 0.630957) * (
-        output_max - output_min
-    )
+    return output_min + math.pow(normalized_input_value, 0.630957) * (output_max - output_min)
 
 
 def normalized_rms(values):
     minbuf = int(sum(values) / len(values))
     return math.sqrt(
-        sum(float(sample - minbuf) * (sample - minbuf) for sample in values)
-        / len(values)
+        sum(float(sample - minbuf) * (sample - minbuf) for sample in values) / len(values)
     )
 
 

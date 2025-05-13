@@ -2,8 +2,11 @@
 # SPDX-License-Identifier: MIT
 
 """This example lights up the NeoPixels with a rainbow swirl."""
+
 import time
+
 from rainbowio import colorwheel
+
 from adafruit_circuitplayground import cp
 
 

@@ -5,7 +5,7 @@ class EventQueue:
     def __init__(self):
         self.overflowed = False
 
-    def get(self):
+    def get(self):  # noqa: PLR6301
         return None
 
 

@@ -7,7 +7,9 @@ Try snapping or clapping near the board to trigger the LEDs.
 
 NOTE: This example does NOT support Circuit Playground Express.
 """
+
 import time
+
 from adafruit_circuitplayground import cp
 
 while True:

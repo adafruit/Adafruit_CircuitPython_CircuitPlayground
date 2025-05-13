@@ -7,7 +7,9 @@ the thermometer on the board. Try warming up the board to watch the number of Ne
 increase, or cooling it down to see the number decrease. You can set the min and max temperatures
 to make it more or less sensitive to temperature changes.
 """
+
 import time
+
 from adafruit_circuitplayground import cp
 
 cp.pixels.auto_write = False

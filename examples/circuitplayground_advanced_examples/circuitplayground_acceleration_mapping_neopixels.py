@@ -17,6 +17,7 @@ This video walks you through the code: https://youtu.be/eNpPLbYx-iA
 """
 
 import time
+
 from adafruit_circuitplayground import cp
 
 cp.pixels.brightness = 0.2  # Adjust overall brightness as desired, between 0 and 1
@@ -32,15 +33,15 @@ def color_amount(accel_component):
 
 
 def format_acceleration():
-    return ", ".join(("{:>6.2f}".format(axis_value) for axis_value in acceleration))
+    return ", ".join(f"{axis_value:>6.2f}" for axis_value in acceleration)
 
 
 def format_rgb():
-    return ", ".join(("{:>3d}".format(rgb_amount) for rgb_amount in rgb_amounts))
+    return ", ".join(f"{rgb_amount:>3d}" for rgb_amount in rgb_amounts)
 
 
 def log_values():
-    print("({}) ==> ({})".format(format_acceleration(), format_rgb()))
+    print(f"({format_acceleration()}) ==> ({format_rgb()})")
 
 
 while True:

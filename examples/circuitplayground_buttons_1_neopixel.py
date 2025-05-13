@@ -3,6 +3,7 @@
 
 """This example lights up the third NeoPixel while button A is being pressed, and lights up the
 eighth NeoPixel while button B is being pressed."""
+
 from adafruit_circuitplayground import cp
 
 cp.pixels.brightness = 0.3

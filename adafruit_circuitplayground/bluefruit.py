@@ -18,20 +18,22 @@ Implementation Notes
 * `Circuit Playground Bluefruit <https://www.adafruit.com/product/4333>`_
 
 """
+
 try:
-    import typing  # pylint: disable=unused-import
+    import typing
 except ImportError:
     pass
 
 import array
 import math
-import digitalio
-import board
-import audiopwmio
-import audiomp3
-import audiobusio
-from adafruit_circuitplayground.circuit_playground_base import CircuitPlaygroundBase
 
+import audiobusio
+import audiomp3
+import audiopwmio
+import board
+import digitalio
+
+from adafruit_circuitplayground.circuit_playground_base import CircuitPlaygroundBase
 
 __version__ = "0.0.0+auto.0"
 __repo__ = "https://github.com/adafruit/Adafruit_CircuitPython_CircuitPlayground.git"
@@ -67,10 +69,7 @@ class Bluefruit(CircuitPlaygroundBase):
     def _normalized_rms(values) -> float:
         mean_values = int(sum(values) / len(values))
         return math.sqrt(
-            sum(
-                float(sample - mean_values) * (sample - mean_values)
-                for sample in values
-            )
+            sum(float(sample - mean_values) * (sample - mean_values) for sample in values)
             / len(values)
         )
 
@@ -164,7 +163,7 @@ class Bluefruit(CircuitPlaygroundBase):
             self._speaker_enable.value = True
             with self._audio_out(board.SPEAKER) as audio, audiomp3.MP3Decoder(
                 open(file_name, "rb")
-            ) as mp3file:  # pylint: disable=not-callable
+            ) as mp3file:
                 audio.play(mp3file)
                 while audio.playing:
                     pass
@@ -173,7 +172,7 @@ class Bluefruit(CircuitPlaygroundBase):
             raise ValueError("Filetype must be mp3")
 
 
-cpb = Bluefruit()  # pylint: disable=invalid-name
+cpb = Bluefruit()
 """Object that is automatically created on import.
 
    To use, simply import it from the module:

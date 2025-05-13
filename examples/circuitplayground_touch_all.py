@@ -2,10 +2,12 @@
 # SPDX-License-Identifier: MIT
 
 """This example prints to the serial console when you touch the capacitive touch pads."""
-import time
-import board
-from adafruit_circuitplayground import cp
 
+import time
+
+import board
+
+from adafruit_circuitplayground import cp
 
 # You'll need to first use the touchpads individually to register them as active touchpads
 # You don't have to use the result though

@@ -8,7 +8,9 @@ board to see the values change.
 
 NOTE: This example does NOT support Circuit Playground Express.
 """
+
 import time
+
 from adafruit_circuitplayground import cp
 
 while True:

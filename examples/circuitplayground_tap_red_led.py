@@ -3,7 +3,9 @@
 
 """This example turns on the little red LED and prints to the serial console when you double-tap
 the Circuit Playground!"""
+
 import time
+
 from adafruit_circuitplayground import cp
 
 # Change to 1 for detecting a single-tap!

@@ -4,7 +4,9 @@
 """This example uses the temperature sensor on the Circuit Playground, located next to the image of
 a thermometer on the board. It prints the temperature in both C and F to the serial console. Try
 putting your finger over the sensor to see the numbers change!"""
+
 import time
+
 from adafruit_circuitplayground import cp
 
 while True:
