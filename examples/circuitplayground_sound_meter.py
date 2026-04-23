@@ -63,7 +63,7 @@ while True:
         if c >= peak:
             peak = min(c, 10 - 1)
         elif peak > 0:
-            peak = peak - 1
+            peak -= 1
         if peak > 0:
             cp.pixels[int(peak)] = (80, 0, 255)
     cp.pixels.show()
