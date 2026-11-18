@@ -133,7 +133,8 @@ class CircuitPlaygroundBase:
 
     @staticmethod
     def _default_tap_threshold(tap: Literal[1, 2]) -> int:
-        if "nrf52840" in os.uname().machine.lower():  # If we're on a CPB, use a higher tap threshold
+        if "nrf52840" in os.uname().machine.lower():
+            # If we're on a CPB, use a higher tap threshold
             return 100 if tap == 1 else 70
 
         # If we're on a CPX
